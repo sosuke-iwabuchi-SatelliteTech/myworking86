@@ -164,6 +164,11 @@ function restartGame() {
     startGame(currentLevel);
 }
 
+function goToTop() {
+    document.getElementById('result-screen').classList.add('hidden');
+    document.getElementById('welcome-screen').classList.remove('hidden');
+}
+
 // Simple sound effect placeholder (browsers often block auto-audio, so this is optional/enhancement)
 function playSound(type) {
     // In a real app, we'd use Audio objects here.
