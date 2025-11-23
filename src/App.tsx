@@ -31,7 +31,8 @@ function App() {
         saveRecord({
             timestamp: Date.now(),
             score,
-            level
+            level,
+            time
         });
 
         // Update local history state so the welcome screen button updates immediately if we go back

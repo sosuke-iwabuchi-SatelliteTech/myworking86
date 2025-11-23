@@ -1,4 +1,5 @@
 import { HistoryRecord } from '../types';
+import { formatTime } from '../utils/format';
 
 interface HistoryScreenProps {
     history: HistoryRecord[];
@@ -13,6 +14,13 @@ function formatDate(timestamp: number): string {
     const hours = d.getHours().toString().padStart(2, '0');
     const minutes = d.getMinutes().toString().padStart(2, '0');
     return `${year}/${month}/${day} ${hours}:${minutes}`;
+}
+
+function getCrown(time?: number) {
+    if (!time) return null;
+    if (time <= 20000) return '🥇';
+    if (time <= 25000) return '🥈';
+    return null;
 }
 
 export default function HistoryScreen({ history, onBack }: HistoryScreenProps) {
@@ -35,9 +43,17 @@ export default function HistoryScreen({ history, onBack }: HistoryScreenProps) {
                                         {record.level === 1 ? '1ねんせい' : '2ねんせい'}
                                     </div>
                                 </div>
-                                <div className="text-right">
-                                    <span className="text-2xl font-black text-brand-orange">{record.score}</span>
-                                    <span className="text-xs font-bold text-slate-400 ml-1">点</span>
+                                <div className="text-right flex flex-col items-end">
+                                    <div>
+                                        <span className="text-2xl font-black text-brand-orange">{record.score}</span>
+                                        <span className="text-xs font-bold text-slate-400 ml-1">点</span>
+                                    </div>
+                                    {record.time && (
+                                        <div className="text-slate-500 font-mono text-xs mt-1 flex items-center gap-1">
+                                            <span>{getCrown(record.time)}</span>
+                                            <span>{formatTime(record.time)}</span>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         ))}

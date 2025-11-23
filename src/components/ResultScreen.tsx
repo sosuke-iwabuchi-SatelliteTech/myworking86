@@ -1,18 +1,10 @@
+import { formatTime } from '../utils/format';
+
 interface ResultScreenProps {
     score: number;
     finalTime: number;
     onRestart: () => void;
     onGoToTop: () => void;
-}
-
-function formatTime(ms: number): string {
-    const totalSeconds = Math.floor(ms / 1000);
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    const milliseconds = Math.floor((ms % 1000) / 10);
-
-    const pad = (num: number) => num.toString().padStart(2, '0');
-    return `${pad(minutes)}:${pad(seconds)}.${pad(milliseconds)}`;
 }
 
 export default function ResultScreen({ score, finalTime, onRestart, onGoToTop }: ResultScreenProps) {

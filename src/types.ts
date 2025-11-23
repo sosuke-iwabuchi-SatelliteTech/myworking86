@@ -5,6 +5,7 @@ export interface HistoryRecord {
     timestamp: number;
     score: number;
     level: GameLevel;
+    time?: number; // Time taken in milliseconds
 }
 
 export interface GeometryData {
