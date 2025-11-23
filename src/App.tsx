@@ -1,14 +1,22 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import WelcomeScreen from './components/WelcomeScreen';
 import QuizScreen from './components/QuizScreen';
 import ResultScreen from './components/ResultScreen';
-import { GameLevel, Screen } from './types';
+import HistoryScreen from './components/HistoryScreen';
+import { GameLevel, Screen, HistoryRecord } from './types';
+import { getHistory, saveRecord } from './utils/storage';
 
 function App() {
     const [screen, setScreen] = useState<Screen>('welcome');
     const [level, setLevel] = useState<GameLevel>(1);
     const [finalScore, setFinalScore] = useState(0);
     const [finalTime, setFinalTime] = useState(0);
+    const [history, setHistory] = useState<HistoryRecord[]>([]);
+
+    useEffect(() => {
+        // Load history on mount to determine button state
+        setHistory(getHistory());
+    }, []);
 
     const handleStartGame = (selectedLevel: GameLevel) => {
         setLevel(selectedLevel);
@@ -18,6 +26,17 @@ function App() {
     const handleQuizComplete = (score: number, time: number) => {
         setFinalScore(score);
         setFinalTime(time);
+
+        // Save record
+        saveRecord({
+            timestamp: Date.now(),
+            score,
+            level
+        });
+
+        // Update local history state so the welcome screen button updates immediately if we go back
+        setHistory(getHistory());
+
         setScreen('result');
     };
 
@@ -29,10 +48,27 @@ function App() {
         setScreen('welcome');
     };
 
+    const handleShowHistory = () => {
+        setHistory(getHistory()); // Refresh just in case
+        setScreen('history');
+    };
+
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-blue-50">
             <div className="w-full max-w-md p-6">
-                {screen === 'welcome' && <WelcomeScreen onStartGame={handleStartGame} />}
+                {screen === 'welcome' && (
+                    <WelcomeScreen
+                        onStartGame={handleStartGame}
+                        onShowHistory={handleShowHistory}
+                        hasHistory={history.length > 0}
+                    />
+                )}
+                {screen === 'history' && (
+                    <HistoryScreen
+                        history={history}
+                        onBack={handleGoToTop}
+                    />
+                )}
                 {screen === 'quiz' && (
                     <QuizScreen
                         key={`${level}-${Date.now()}`}

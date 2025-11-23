@@ -2,9 +2,11 @@ import { GameLevel } from '../types';
 
 interface WelcomeScreenProps {
     onStartGame: (level: GameLevel) => void;
+    onShowHistory: () => void;
+    hasHistory: boolean;
 }
 
-export default function WelcomeScreen({ onStartGame }: WelcomeScreenProps) {
+export default function WelcomeScreen({ onStartGame, onShowHistory, hasHistory }: WelcomeScreenProps) {
     return (
         <div className="bg-white rounded-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] p-8 text-center transform transition-all hover:scale-[1.02] duration-300 border-4 border-white ring-4 ring-blue-100">
             <div className="mb-8 relative">
@@ -30,6 +32,17 @@ export default function WelcomeScreen({ onStartGame }: WelcomeScreenProps) {
                     className="w-full bg-brand-blue hover:bg-blue-300 text-slate-800 font-black text-2xl py-4 rounded-2xl shadow-[0_6px_0_rgb(74,168,209)] active:shadow-[0_0px_0_rgb(74,168,209)] active:translate-y-[6px] transition-all"
                 >
                     2ねんせい (九九)
+                </button>
+                <button
+                    onClick={onShowHistory}
+                    disabled={!hasHistory}
+                    className={`w-full font-black text-xl py-4 rounded-2xl transition-all ${
+                        hasHistory
+                        ? 'bg-slate-200 hover:bg-slate-300 text-slate-600 shadow-[0_6px_0_rgb(170,178,189)] active:shadow-[0_0px_0_rgb(170,178,189)] active:translate-y-[6px]'
+                        : 'bg-slate-100 text-slate-400 cursor-not-allowed border-2 border-slate-200'
+                    }`}
+                >
+                    履歴を見る
                 </button>
             </div>
         </div>

@@ -1,5 +1,11 @@
 export type GameLevel = 1 | 2;
-export type Screen = 'welcome' | 'quiz' | 'result';
+export type Screen = 'welcome' | 'quiz' | 'result' | 'history';
+
+export interface HistoryRecord {
+    timestamp: number;
+    score: number;
+    level: GameLevel;
+}
 
 export interface Question {
     text: string;
