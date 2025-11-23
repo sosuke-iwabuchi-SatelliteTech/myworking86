@@ -93,6 +93,8 @@ function checkAnswer(selected, btnElement) {
     const feedbackOverlay = document.getElementById('feedback-overlay');
     const feedbackIcon = document.getElementById('feedback-icon');
 
+    let nextQuestionDelay = 1500;
+
     if (selected === correctAnswer) {
         score += 10;
         btnElement.classList.remove('bg-slate-100', 'text-slate-700', 'border-slate-200');
@@ -101,6 +103,7 @@ function checkAnswer(selected, btnElement) {
         feedbackIcon.innerText = '⭕';
         feedbackIcon.className = 'text-8xl text-brand-green filter drop-shadow-lg transform scale-100 transition-transform duration-300';
         playSound('correct');
+        nextQuestionDelay = 500;
     } else {
         btnElement.classList.remove('bg-slate-100', 'text-slate-700', 'border-slate-200');
         btnElement.classList.add('bg-brand-red', 'text-white', 'border-brand-red', 'shadow-[0_4px_0_rgb(255,73,73)]');
@@ -126,7 +129,7 @@ function checkAnswer(selected, btnElement) {
         feedbackIcon.classList.remove('scale-100');
         feedbackIcon.classList.add('scale-0');
         generateQuestion();
-    }, 1500);
+    }, nextQuestionDelay);
 }
 
 function updateScoreDisplay() {
