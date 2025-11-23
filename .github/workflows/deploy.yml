@@ -18,8 +18,7 @@ jobs:
           port: 22
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
-            source /home/sheephorne/.bash_profile
             cd /var/www/app
             git pull
-            npm install
-            npm run build
+            /usr/local/bin/npm install
+            /usr/local/bin/npm run build
