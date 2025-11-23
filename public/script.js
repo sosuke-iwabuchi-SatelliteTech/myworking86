@@ -165,6 +165,7 @@ function restartGame() {
 }
 
 function goToTop() {
+    document.getElementById('quiz-screen').classList.add('hidden');
     document.getElementById('result-screen').classList.add('hidden');
     document.getElementById('welcome-screen').classList.remove('hidden');
 }
