@@ -341,7 +341,7 @@ export default function QuizScreen({ level, onQuizComplete, onGoToTop }: QuizScr
                             key={option}
                             onClick={() => handleAnswer(option)}
                             disabled={isAnswering}
-                            className={`${buttonClass} font-bold text-3xl py-6 rounded-2xl shadow-sm border-2 transition-all active:scale-95`}
+                            className={`${buttonClass} font-bold text-3xl py-2 rounded-2xl shadow-sm border-2 transition-all active:scale-95`}
                         >
                             {option}
                         </button>
