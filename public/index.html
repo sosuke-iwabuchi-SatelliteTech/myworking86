@@ -1,1 +1,152 @@
-HELLO WORLD!
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>さんすうクイズ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"M PLUS Rounded 1c"', 'sans-serif'],
+                    },
+                    colors: {
+                        'brand-yellow': '#FFD93D',
+                        'brand-orange': '#FF8E3C',
+                        'brand-red': '#FF4949',
+                        'brand-blue': '#6AD2FF',
+                        'brand-green': '#6BCB77',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body
+    class="bg-blue-50 min-h-screen flex items-center justify-center font-sans overflow-hidden selection:bg-brand-yellow selection:text-brand-orange">
+
+    <div class="w-full max-w-md p-6">
+
+        <!-- Welcome Screen -->
+        <div id="welcome-screen"
+            class="bg-white rounded-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] p-8 text-center transform transition-all hover:scale-[1.02] duration-300 border-4 border-white ring-4 ring-blue-100">
+            <div class="mb-8 relative">
+                <div class="absolute -top-16 left-1/2 transform -translate-x-1/2 text-6xl animate-bounce">
+                    🎓
+                </div>
+                <h1 class="text-4xl font-extrabold text-slate-800 mt-8 mb-2 tracking-tight">さんすう<br><span
+                        class="text-brand-blue">クイズ</span></h1>
+                <p class="text-slate-500 font-bold text-lg">レベルをえらんでね！</p>
+            </div>
+
+            <div class="space-y-4">
+                <button onclick="startGame(1)"
+                    class="w-full bg-brand-yellow hover:bg-yellow-300 text-slate-800 font-black text-2xl py-4 rounded-2xl shadow-[0_6px_0_rgb(217,179,16)] active:shadow-[0_0px_0_rgb(217,179,16)] active:translate-y-[6px] transition-all">
+                    1ねんせい (たしざん・ひきざん)
+                </button>
+                <button onclick="startGame(2)"
+                    class="w-full bg-brand-blue hover:bg-blue-300 text-slate-800 font-black text-2xl py-4 rounded-2xl shadow-[0_6px_0_rgb(74,168,209)] active:shadow-[0_0px_0_rgb(74,168,209)] active:translate-y-[6px] transition-all">
+                    2ねんせい (九九)
+                </button>
+            </div>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen"
+            class="hidden bg-white rounded-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] p-8 pb-20 text-center border-4 border-white ring-4 ring-purple-100 relative overflow-hidden">
+            <!-- Progress Bar -->
+            <div class="absolute top-0 left-0 w-full h-3 bg-slate-100">
+                <div id="progress-bar" class="h-full bg-brand-green transition-all duration-500" style="width: 0%">
+                </div>
+            </div>
+
+            <!-- Timer Display -->
+            <div class="mt-4 mb-2 flex justify-center">
+                <div class="bg-slate-800 text-brand-yellow px-6 py-2 rounded-xl font-mono text-3xl font-bold tracking-wider shadow-sm border-2 border-slate-700">
+                    <span id="timer-display">00:00.00</span>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center mb-8 mt-2">
+                <div class="bg-slate-100 px-4 py-2 rounded-full font-bold text-slate-600">
+                    もんだい <span id="question-number" class="text-brand-blue text-xl">1</span>/10
+                </div>
+                <div class="bg-yellow-50 px-4 py-2 rounded-full font-bold text-yellow-600 border-2 border-yellow-100">
+                    スコア: <span id="current-score">0</span>
+                </div>
+            </div>
+
+            <div class="mb-10 relative">
+                <div id="question-text" class="text-6xl font-black text-slate-800 tracking-wider">
+                    <!-- Question goes here -->
+                </div>
+                <!-- Feedback Overlay -->
+                <div id="feedback-overlay"
+                    class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 transition-opacity duration-300">
+                    <span id="feedback-icon"
+                        class="text-8xl filter drop-shadow-lg transform scale-0 transition-transform duration-300"></span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4" id="answer-options">
+                <!-- Options generated by JS -->
+            </div>
+
+            <button onclick="goToTop()"
+                class="absolute bottom-3 right-3 bg-slate-100 hover:bg-slate-200 text-slate-400 hover:text-slate-600 rounded-full p-2 transition-all"
+                aria-label="トップにもどる">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+                    stroke="currentColor" class="w-8 h-8">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="result-screen"
+            class="hidden bg-white rounded-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] p-8 text-center border-4 border-white ring-4 ring-brand-yellow relative">
+            <div class="absolute -top-12 left-1/2 transform -translate-x-1/2 text-7xl">
+                🏆
+            </div>
+            <h2 class="text-3xl font-bold text-slate-800 mt-8 mb-6">けっかはっぴょう！</h2>
+
+            <div class="bg-slate-50 rounded-2xl p-6 mb-8 border-2 border-slate-100">
+                <p class="text-slate-500 font-bold mb-2">あなたのスコア</p>
+                <div class="text-6xl font-black text-brand-orange mb-2">
+                    <span id="final-score">0</span><span class="text-3xl text-slate-400">点</span>
+                </div>
+
+                <div class="mb-4 pt-4 border-t-2 border-slate-200">
+                    <p class="text-slate-500 font-bold mb-1">かかったじかん</p>
+                    <div class="text-4xl font-black text-slate-700 font-mono">
+                        <span id="final-time">00:00.00</span>
+                    </div>
+                </div>
+
+                <p id="result-message" class="text-xl font-bold text-brand-blue">すごい！</p>
+            </div>
+
+            <button onclick="restartGame()"
+                class="w-full bg-brand-green hover:bg-green-400 text-white font-black text-xl py-4 rounded-2xl shadow-[0_6px_0_rgb(86,168,98)] active:shadow-[0_0px_0_rgb(86,168,98)] active:translate-y-[6px] transition-all">
+                もういちど あそぶ
+            </button>
+            <button onclick="goToTop()"
+                class="w-full bg-brand-blue hover:bg-blue-300 text-slate-800 font-black text-xl py-4 rounded-2xl shadow-[0_6px_0_rgb(74,168,209)] active:shadow-[0_0px_0_rgb(74,168,209)] active:translate-y-[6px] transition-all mt-4">
+                さいしょにもどる
+            </button>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
