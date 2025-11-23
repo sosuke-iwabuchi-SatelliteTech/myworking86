@@ -34,13 +34,18 @@ export default function WelcomeScreen({ onStartGame, onShowHistory, hasHistory }
                     2ねんせい (九九)
                 </button>
                 <button
+                    onClick={() => onStartGame(3)}
+                    className="w-full bg-brand-green hover:bg-green-300 text-slate-800 font-black text-2xl py-4 rounded-2xl shadow-[0_6px_0_rgb(86,168,98)] active:shadow-[0_0px_0_rgb(86,168,98)] active:translate-y-[6px] transition-all"
+                >
+                    4ねんせい (図形の面積)
+                </button>
+                <button
                     onClick={onShowHistory}
                     disabled={!hasHistory}
-                    className={`w-full font-black text-xl py-4 rounded-2xl transition-all ${
-                        hasHistory
-                        ? 'bg-slate-200 hover:bg-slate-300 text-slate-600 shadow-[0_6px_0_rgb(170,178,189)] active:shadow-[0_0px_0_rgb(170,178,189)] active:translate-y-[6px]'
-                        : 'bg-slate-100 text-slate-400 cursor-not-allowed border-2 border-slate-200'
-                    }`}
+                    className={`w-full font-black text-xl py-4 rounded-2xl transition-all ${hasHistory
+                            ? 'bg-slate-200 hover:bg-slate-300 text-slate-600 shadow-[0_6px_0_rgb(170,178,189)] active:shadow-[0_0px_0_rgb(170,178,189)] active:translate-y-[6px]'
+                            : 'bg-slate-100 text-slate-400 cursor-not-allowed border-2 border-slate-200'
+                        }`}
                 >
                     履歴を見る
                 </button>
