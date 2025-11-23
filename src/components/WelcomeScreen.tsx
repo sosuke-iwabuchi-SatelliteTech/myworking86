@@ -31,6 +31,12 @@ export default function WelcomeScreen({ onStartGame }: WelcomeScreenProps) {
                 >
                     2ねんせい (九九)
                 </button>
+                <button
+                    onClick={() => onStartGame(3)}
+                    className="w-full bg-brand-green hover:bg-green-300 text-slate-800 font-black text-2xl py-4 rounded-2xl shadow-[0_6px_0_rgb(86,168,98)] active:shadow-[0_0px_0_rgb(86,168,98)] active:translate-y-[6px] transition-all"
+                >
+                    4ねんせい (図形の面積)
+                </button>
             </div>
         </div>
     );

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { GameLevel, Question } from '../types';
+import { GameLevel, Question, GeometryData } from '../types';
 
 interface QuizScreenProps {
     level: GameLevel;
@@ -7,9 +7,10 @@ interface QuizScreenProps {
     onGoToTop: () => void;
 }
 
-function generateQuestion(level: GameLevel): Question {
+export function generateQuestion(level: GameLevel): Question {
     let text = '';
     let correctAnswer = 0;
+    let geometry: GeometryData | undefined;
 
     if (level === 1) {
         const isAddition = Math.random() > 0.5;
@@ -30,13 +31,51 @@ function generateQuestion(level: GameLevel): Question {
         const num2 = Math.floor(Math.random() * 9) + 1;
         correctAnswer = num1 * num2;
         text = `${num1} × ${num2} = ?`;
+    } else if (level === 3) {
+        const shapeType = Math.random();
+
+        if (shapeType < 0.33) {
+             // Rectangle
+             const w = Math.floor(Math.random() * 8) + 2;
+             const h = Math.floor(Math.random() * 8) + 2;
+             correctAnswer = w * h;
+             text = "面積は？";
+             geometry = { shape: 'rectangle', dimensions: { width: w, height: h } };
+        } else if (shapeType < 0.66) {
+             // Triangle
+             let w = Math.floor(Math.random() * 8) + 2;
+             let h = Math.floor(Math.random() * 8) + 2;
+             if ((w * h) % 2 !== 0) {
+                 w += 1;
+             }
+             correctAnswer = (w * h) / 2;
+             text = "面積は？";
+             geometry = { shape: 'triangle', dimensions: { width: w, height: h } };
+        } else {
+             // Trapezoid
+             let upper = Math.floor(Math.random() * 6) + 2;
+             let lower = upper + Math.floor(Math.random() * 5) + 2;
+             let h = Math.floor(Math.random() * 6) + 2;
+
+             // Ensure area is integer: (upper + lower) * h must be even
+             if (((upper + lower) * h) % 2 !== 0) {
+                 h++; // h was odd, now even. product is even.
+             }
+
+             correctAnswer = ((upper + lower) * h) / 2;
+             text = "面積は？";
+             geometry = { shape: 'trapezoid', dimensions: { width: lower, height: h, upper: upper } };
+        }
     }
 
     // Generate options
     const options = new Set([correctAnswer]);
     while (options.size < 4) {
-        const wrong = correctAnswer + Math.floor(Math.random() * 10) - 5;
-        if (wrong >= 0 && wrong !== correctAnswer) {
+        let wrong = correctAnswer + Math.floor(Math.random() * 10) - 5;
+        // Make sure wrong answer is not negative
+        if (wrong < 0) wrong = Math.abs(wrong) + 1;
+
+        if (wrong !== correctAnswer) {
             options.add(wrong);
         }
     }
@@ -45,7 +84,101 @@ function generateQuestion(level: GameLevel): Question {
         text,
         correctAnswer,
         options: Array.from(options).sort(() => Math.random() - 0.5),
+        geometry
     };
+}
+
+function GeometryDisplay({ geometry }: { geometry: GeometryData }) {
+    const { shape, dimensions } = geometry;
+    const viewBoxWidth = 300;
+    const viewBoxHeight = 220;
+
+    // Scale logic
+    // We want the shape to fit nicely in the viewbox.
+    // Let's assume the max input dimension is around 15.
+    // We map 15 units to approx 140px (allowing 20px padding).
+    const scale = 14;
+    const cx = viewBoxWidth / 2;
+    const cy = viewBoxHeight / 2;
+
+    const strokeColor = "#334155"; // slate-700
+    const fillColor = "#e0f2fe"; // sky-100
+    const labelColor = "#1e293b"; // slate-800
+
+    let content;
+
+    if (shape === 'rectangle') {
+        const w = dimensions.width! * scale;
+        const h = dimensions.height! * scale;
+        const x = cx - w / 2;
+        const y = cy - h / 2;
+
+        content = (
+            <>
+                <rect x={x} y={y} width={w} height={h} fill={fillColor} stroke={strokeColor} strokeWidth="3" />
+                {/* Width Label */}
+                <text x={cx} y={y - 10} textAnchor="middle" fill={labelColor} fontSize="16" fontWeight="bold">{dimensions.width}cm</text>
+                {/* Height Label */}
+                <text x={x - 10} y={cy} textAnchor="end" dominantBaseline="middle" fill={labelColor} fontSize="16" fontWeight="bold">{dimensions.height}cm</text>
+            </>
+        );
+    } else if (shape === 'triangle') {
+        const w = dimensions.width! * scale;
+        const h = dimensions.height! * scale;
+        const xBase = cx - w / 2;
+        const yBase = cy + h / 2;
+        const xPeak = cx - w/4; // Slightly offset peak
+
+        content = (
+            <>
+                <polygon points={`${xBase},${yBase} ${xBase + w},${yBase} ${xPeak},${yBase - h}`} fill={fillColor} stroke={strokeColor} strokeWidth="3" />
+                {/* Height Line */}
+                <line x1={xPeak} y1={yBase} x2={xPeak} y2={yBase - h} stroke={strokeColor} strokeWidth="2" strokeDasharray="4 4" />
+                {/* Right Angle Marker at base of height */}
+                <polyline points={`${xPeak},${yBase} ${xPeak + 10},${yBase} ${xPeak + 10},${yBase - 10} ${xPeak},${yBase - 10}`} fill="none" stroke={strokeColor} strokeWidth="1" />
+
+                {/* Base Label */}
+                <text x={cx} y={yBase + 20} textAnchor="middle" fill={labelColor} fontSize="16" fontWeight="bold">{dimensions.width}cm</text>
+                {/* Height Label */}
+                <text x={xPeak - 5} y={cy} textAnchor="end" dominantBaseline="middle" fill={labelColor} fontSize="16" fontWeight="bold">{dimensions.height}cm</text>
+            </>
+        );
+    } else if (shape === 'trapezoid') {
+        const wBottom = dimensions.width! * scale;
+        const wTop = dimensions.upper! * scale;
+        const h = dimensions.height! * scale;
+
+        const xBottomStart = cx - wBottom / 2;
+        const yBottom = cy + h / 2;
+        const xTopStart = cx - wTop / 2;
+        const yTop = cy - h / 2;
+
+        content = (
+            <>
+                <polygon points={`${xBottomStart},${yBottom} ${xBottomStart + wBottom},${yBottom} ${xTopStart + wTop},${yTop} ${xTopStart},${yTop}`} fill={fillColor} stroke={strokeColor} strokeWidth="3" />
+
+                {/* Height Line */}
+                <line x1={xTopStart} y1={yTop} x2={xTopStart} y2={yBottom} stroke={strokeColor} strokeWidth="2" strokeDasharray="4 4" />
+                {/* Right Angle Marker */}
+                <polyline points={`${xTopStart},${yBottom} ${xTopStart + 10},${yBottom} ${xTopStart + 10},${yBottom - 10} ${xTopStart},${yBottom - 10}`} fill="none" stroke={strokeColor} strokeWidth="1" />
+
+                {/* Bottom Base Label */}
+                <text x={cx} y={yBottom + 20} textAnchor="middle" fill={labelColor} fontSize="16" fontWeight="bold">{dimensions.width}cm</text>
+                {/* Top Base Label */}
+                <text x={cx} y={yTop - 10} textAnchor="middle" fill={labelColor} fontSize="16" fontWeight="bold">{dimensions.upper}cm</text>
+                {/* Height Label */}
+                <text x={xTopStart - 5} y={cy} textAnchor="end" dominantBaseline="middle" fill={labelColor} fontSize="16" fontWeight="bold">{dimensions.height}cm</text>
+            </>
+        );
+    }
+
+    return (
+        <div className="flex justify-center mb-6">
+            <svg width={viewBoxWidth} height={viewBoxHeight} viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`} className="bg-white rounded-xl">
+                {content}
+            </svg>
+        </div>
+    );
 }
 
 function formatTime(ms: number): string {
@@ -148,6 +281,7 @@ export default function QuizScreen({ level, onQuizComplete, onGoToTop }: QuizScr
             </div>
 
             <div className="mb-10 relative">
+                {question.geometry && <GeometryDisplay geometry={question.geometry} />}
                 <div className="text-6xl font-black text-slate-800 tracking-wider">
                     {question.text}
                 </div>
