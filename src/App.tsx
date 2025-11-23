@@ -54,7 +54,7 @@ function App() {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-blue-50">
+        <div className="flex flex-col items-center justify-start pt-12 min-h-screen bg-blue-50">
             <div className="w-full max-w-md p-6">
                 {screen === 'welcome' && (
                     <WelcomeScreen
