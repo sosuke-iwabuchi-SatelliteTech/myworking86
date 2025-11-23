@@ -4,6 +4,9 @@ const totalQuestions = 10;
 let correctAnswer = 0;
 let isAnswering = false; // Prevent double clicking
 let currentLevel = 1; // 1: Addition/Subtraction, 2: Multiplication
+let timerInterval;
+let startTime;
+let finalTime = 0;
 
 function startGame(level) {
     if (level) {
@@ -16,7 +19,35 @@ function startGame(level) {
     currentQuestionIndex = 0;
     score = 0;
     updateScoreDisplay();
+    startTimer();
     generateQuestion();
+}
+
+function startTimer() {
+    startTime = Date.now();
+    timerInterval = setInterval(updateTimerDisplay, 10);
+}
+
+function stopTimer() {
+    clearInterval(timerInterval);
+    finalTime = Date.now() - startTime;
+    updateTimerDisplay(); // Ensure the display shows the final time
+}
+
+function updateTimerDisplay() {
+    const currentTime = Date.now();
+    const elapsedTime = timerInterval ? currentTime - startTime : finalTime;
+    document.getElementById('timer-display').innerText = formatTime(elapsedTime);
+}
+
+function formatTime(ms) {
+    const totalSeconds = Math.floor(ms / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    const milliseconds = Math.floor((ms % 1000) / 10); // 2 digits
+
+    const pad = (num) => num.toString().padStart(2, '0');
+    return `${pad(minutes)}:${pad(seconds)}.${pad(milliseconds)}`;
 }
 
 function generateQuestion() {
@@ -90,6 +121,11 @@ function checkAnswer(selected, btnElement) {
     if (isAnswering) return;
     isAnswering = true;
 
+    // Stop timer immediately if this is the last question
+    if (currentQuestionIndex === totalQuestions) {
+        stopTimer();
+    }
+
     const feedbackOverlay = document.getElementById('feedback-overlay');
     const feedbackIcon = document.getElementById('feedback-icon');
 
@@ -146,6 +182,7 @@ function endGame() {
     document.getElementById('quiz-screen').classList.add('hidden');
     document.getElementById('result-screen').classList.remove('hidden');
     document.getElementById('final-score').innerText = score;
+    document.getElementById('final-time').innerText = formatTime(finalTime);
 
     const msg = document.getElementById('result-message');
     if (score === 100) {
@@ -165,6 +202,7 @@ function restartGame() {
 }
 
 function goToTop() {
+    clearInterval(timerInterval);
     document.getElementById('quiz-screen').classList.add('hidden');
     document.getElementById('result-screen').classList.add('hidden');
     document.getElementById('welcome-screen').classList.remove('hidden');
