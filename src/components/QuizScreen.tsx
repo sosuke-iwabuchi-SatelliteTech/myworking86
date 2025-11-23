@@ -93,13 +93,42 @@ function GeometryDisplay({ geometry }: { geometry: GeometryData }) {
     const viewBoxWidth = 300;
     const viewBoxHeight = 220;
 
-    // Scale logic
-    // We want the shape to fit nicely in the viewbox.
-    // Let's assume the max input dimension is around 15.
-    // We map 15 units to approx 140px (allowing 20px padding).
-    const scale = 14;
-    const cx = viewBoxWidth / 2;
-    const cy = viewBoxHeight / 2;
+    // Determine logical dimensions based on shape
+    let logicWidth = 0;
+    let logicHeight = 0;
+
+    if (shape === 'rectangle') {
+        logicWidth = dimensions.width!;
+        logicHeight = dimensions.height!;
+    } else if (shape === 'triangle') {
+        logicWidth = dimensions.width!;
+        logicHeight = dimensions.height!;
+    } else if (shape === 'trapezoid') {
+        logicWidth = Math.max(dimensions.width!, dimensions.upper || 0);
+        logicHeight = dimensions.height!;
+    }
+
+    // Define padding to accommodate labels
+    // Left: for height label (e.g. "8cm")
+    // Right: small padding
+    // Top: for upper base label (trapezoid)
+    // Bottom: for width label
+    const paddingLeft = 60;
+    const paddingRight = 30;
+    const paddingTop = 40;
+    const paddingBottom = 40;
+
+    const availableWidth = viewBoxWidth - (paddingLeft + paddingRight);
+    const availableHeight = viewBoxHeight - (paddingTop + paddingBottom);
+
+    // Calculate scale to maximize fit within available area
+    const scaleX = availableWidth / logicWidth;
+    const scaleY = availableHeight / logicHeight;
+    const scale = Math.min(scaleX, scaleY);
+
+    // Center logic based on available area (plus offset for padding)
+    const cx = paddingLeft + availableWidth / 2;
+    const cy = paddingTop + availableHeight / 2;
 
     const strokeColor = "#334155"; // slate-700
     const fillColor = "#e0f2fe"; // sky-100
@@ -117,7 +146,7 @@ function GeometryDisplay({ geometry }: { geometry: GeometryData }) {
             <>
                 <rect x={x} y={y} width={w} height={h} fill={fillColor} stroke={strokeColor} strokeWidth="3" />
                 {/* Width Label */}
-                <text x={cx} y={y - 10} textAnchor="middle" fill={labelColor} fontSize="16" fontWeight="bold">{dimensions.width}cm</text>
+                <text x={cx} y={y + h + 20} textAnchor="middle" fill={labelColor} fontSize="16" fontWeight="bold">{dimensions.width}cm</text>
                 {/* Height Label */}
                 <text x={x - 10} y={cy} textAnchor="end" dominantBaseline="middle" fill={labelColor} fontSize="16" fontWeight="bold">{dimensions.height}cm</text>
             </>
