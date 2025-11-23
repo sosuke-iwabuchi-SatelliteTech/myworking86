@@ -19,7 +19,9 @@ jobs:
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
             source /home/${{ secrets.SERVER_USER }}/.bash_profile
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
             cd /var/www/app
             git pull
-            /usr/local/bin/npm install
-            /usr/local/bin/npm run build
+            npm install
+            npm run build
