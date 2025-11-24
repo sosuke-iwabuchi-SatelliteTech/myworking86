@@ -3,8 +3,9 @@ import WelcomeScreen from './components/WelcomeScreen';
 import QuizScreen from './components/QuizScreen';
 import ResultScreen from './components/ResultScreen';
 import HistoryScreen from './components/HistoryScreen';
-import { GameLevel, Screen, HistoryRecord } from './types';
-import { getHistory, saveRecord, clearHistory } from './utils/storage';
+import SettingsScreen from './components/SettingsScreen';
+import { GameLevel, Screen, HistoryRecord, GameSettings } from './types';
+import { getHistory, saveRecord, clearHistory, getSettings } from './utils/storage';
 import { LEVEL_IDS } from './constants';
 
 function App() {
@@ -13,10 +14,12 @@ function App() {
     const [finalScore, setFinalScore] = useState(0);
     const [finalTime, setFinalTime] = useState(0);
     const [history, setHistory] = useState<HistoryRecord[]>([]);
+    const [settings, setSettings] = useState<GameSettings>({ showTimer: true });
 
     useEffect(() => {
         // Load history on mount to determine button state
         setHistory(getHistory());
+        setSettings(getSettings());
     }, []);
 
     const handleStartGame = (selectedLevel: GameLevel) => {
@@ -60,6 +63,14 @@ function App() {
         setHistory([]);
     };
 
+    const handleGoToSettings = () => {
+        setScreen('settings');
+    };
+
+    const handleSettingsChange = (newSettings: GameSettings) => {
+        setSettings(newSettings);
+    };
+
     return (
         <div className="flex flex-col items-center pt-1 min-h-screen bg-blue-50">
             <div className="w-full max-w-md p-6">
@@ -68,6 +79,7 @@ function App() {
                         onStartGame={handleStartGame}
                         onShowHistory={handleShowHistory}
                         hasHistory={history.length > 0}
+                        onGoToSettings={handleGoToSettings}
                     />
                 )}
                 {screen === 'history' && (
@@ -77,12 +89,19 @@ function App() {
                         onClearHistory={handleClearHistory}
                     />
                 )}
+                {screen === 'settings' && (
+                    <SettingsScreen
+                        onBack={handleGoToTop}
+                        onSettingsChange={handleSettingsChange}
+                    />
+                )}
                 {screen === 'quiz' && (
                     <QuizScreen
                         key={`${level}-${Date.now()}`}
                         level={level}
                         onQuizComplete={handleQuizComplete}
                         onGoToTop={handleGoToTop}
+                        showTimer={settings.showTimer}
                     />
                 )}
                 {screen === 'result' && (

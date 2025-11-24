@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { HistoryRecord } from '../types';
-import { formatTime } from '../utils/format';
+import { formatTime, getMedal } from '../utils/format';
 import { LEVEL_NAMES } from '../constants';
 
 interface HistoryScreenProps {
@@ -17,13 +17,6 @@ function formatDate(timestamp: number): string {
     const hours = d.getHours().toString().padStart(2, '0');
     const minutes = d.getMinutes().toString().padStart(2, '0');
     return `${year}/${month}/${day} ${hours}:${minutes}`;
-}
-
-function getCrown(time?: number) {
-    if (!time) return null;
-    if (time <= 20000) return '🥇';
-    if (time <= 25000) return '🥈';
-    return null;
 }
 
 export default function HistoryScreen({ history, onBack, onClearHistory }: HistoryScreenProps) {
@@ -60,7 +53,7 @@ export default function HistoryScreen({ history, onBack, onClearHistory }: Histo
                                     </div>
                                     {record.time && (
                                         <div className="text-slate-500 font-mono text-xs mt-1 flex items-center gap-1">
-                                            <span>{getCrown(record.time)}</span>
+                                            <span>{getMedal(record.score, record.time)}</span>
                                             <span>{formatTime(record.time)}</span>
                                         </div>
                                     )}
