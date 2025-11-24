@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { HistoryRecord } from '../types';
 import { formatTime } from '../utils/format';
 
 interface HistoryScreenProps {
     history: HistoryRecord[];
     onBack: () => void;
+    onClearHistory: () => void;
 }
 
 function formatDate(timestamp: number): string {
@@ -23,7 +25,14 @@ function getCrown(time?: number) {
     return null;
 }
 
-export default function HistoryScreen({ history, onBack }: HistoryScreenProps) {
+export default function HistoryScreen({ history, onBack, onClearHistory }: HistoryScreenProps) {
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+    const handleDelete = () => {
+        onClearHistory();
+        setShowDeleteModal(false);
+    };
+
     return (
         <div className="bg-white rounded-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] p-8 text-center border-4 border-white ring-4 ring-brand-blue relative max-w-lg w-full">
             <h2 className="text-3xl font-bold text-slate-800 mb-6">これまでのせいせき</h2>
@@ -67,6 +76,39 @@ export default function HistoryScreen({ history, onBack }: HistoryScreenProps) {
             >
                 もどる
             </button>
+
+            {history.length > 0 && (
+                <button
+                    onClick={() => setShowDeleteModal(true)}
+                    className="w-full mt-4 py-3 text-red-500 font-bold text-sm hover:bg-red-50 rounded-xl transition-colors"
+                >
+                    履歴をすべて消す
+                </button>
+            )}
+
+            {showDeleteModal && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+                    <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl animate-in fade-in zoom-in duration-200">
+                        <h3 className="text-xl font-bold text-slate-800 mb-4 text-center">
+                            ほんとうに すべての<br />きろくを けしますか？
+                        </h3>
+                        <div className="flex flex-col gap-3">
+                            <button
+                                onClick={handleDelete}
+                                className="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-3 rounded-xl shadow-md active:scale-95 transition-all"
+                            >
+                                けす
+                            </button>
+                            <button
+                                onClick={() => setShowDeleteModal(false)}
+                                className="w-full bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-3 rounded-xl active:scale-95 transition-all"
+                            >
+                                やめる
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

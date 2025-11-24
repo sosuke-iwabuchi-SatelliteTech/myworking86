@@ -33,3 +33,11 @@ export function saveRecord(record: HistoryRecord): void {
         console.error('Failed to save history', e);
     }
 }
+
+export function clearHistory(): void {
+    try {
+        localStorage.removeItem(STORAGE_KEY);
+    } catch (e) {
+        console.error('Failed to clear history', e);
+    }
+}

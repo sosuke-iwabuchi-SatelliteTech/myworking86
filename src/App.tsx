@@ -4,7 +4,7 @@ import QuizScreen from './components/QuizScreen';
 import ResultScreen from './components/ResultScreen';
 import HistoryScreen from './components/HistoryScreen';
 import { GameLevel, Screen, HistoryRecord } from './types';
-import { getHistory, saveRecord } from './utils/storage';
+import { getHistory, saveRecord, clearHistory } from './utils/storage';
 
 function App() {
     const [screen, setScreen] = useState<Screen>('welcome');
@@ -54,6 +54,11 @@ function App() {
         setScreen('history');
     };
 
+    const handleClearHistory = () => {
+        clearHistory();
+        setHistory([]);
+    };
+
     return (
         <div className="flex flex-col items-center pt-1 min-h-screen bg-blue-50">
             <div className="w-full max-w-md p-6">
@@ -68,6 +73,7 @@ function App() {
                     <HistoryScreen
                         history={history}
                         onBack={handleGoToTop}
+                        onClearHistory={handleClearHistory}
                     />
                 )}
                 {screen === 'quiz' && (
