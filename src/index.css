@@ -57,3 +57,10 @@ body {
     transform: translateX(10px);
   }
 }
+
+/* Touch device optimization: Only apply hover effect on devices that support hover */
+@media (hover: hover) {
+  .answer-btn-hover:hover {
+    background-color: #dbeafe; /* tailwind blue-100 */
+  }
+}
