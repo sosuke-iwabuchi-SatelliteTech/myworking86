@@ -1,94 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { GameLevel, Question, GeometryData } from '../types';
-import { LEVEL_IDS } from '../constants';
 import { formatTime } from '../utils/format';
+import { QuestionFactory } from '../questions/QuestionFactory';
 
 interface QuizScreenProps {
     level: GameLevel;
     onQuizComplete: (score: number, finalTime: number) => void;
     onGoToTop: () => void;
     showTimer: boolean;
-}
-
-export function generateQuestion(level: GameLevel): Question {
-    let text = '';
-    let correctAnswer = 0;
-    let geometry: GeometryData | undefined;
-
-    if (level === LEVEL_IDS.GRADE_1_CALC) {
-        const isAddition = Math.random() > 0.5;
-
-        if (isAddition) {
-            const num1 = Math.floor(Math.random() * 10) + 1;
-            const num2 = Math.floor(Math.random() * 10) + 1;
-            correctAnswer = num1 + num2;
-            text = `${num1} + ${num2} = ?`;
-        } else {
-            const num1 = Math.floor(Math.random() * 15) + 5;
-            const num2 = Math.floor(Math.random() * num1);
-            correctAnswer = num1 - num2;
-            text = `${num1} - ${num2} = ?`;
-        }
-    } else if (level === LEVEL_IDS.GRADE_2_KUKU) {
-        const num1 = Math.floor(Math.random() * 9) + 1;
-        const num2 = Math.floor(Math.random() * 9) + 1;
-        correctAnswer = num1 * num2;
-        text = `${num1} × ${num2} = ?`;
-    } else if (level === LEVEL_IDS.GRADE_4_GEOMETRY) {
-        const shapeType = Math.random();
-
-        if (shapeType < 0.33) {
-             // Rectangle
-             const w = Math.floor(Math.random() * 8) + 2;
-             const h = Math.floor(Math.random() * 8) + 2;
-             correctAnswer = w * h;
-             text = "たて × よこ";
-             geometry = { shape: 'rectangle', dimensions: { width: w, height: h } };
-        } else if (shapeType < 0.66) {
-             // Triangle
-             let w = Math.floor(Math.random() * 8) + 2;
-             let h = Math.floor(Math.random() * 8) + 2;
-             if ((w * h) % 2 !== 0) {
-                 w += 1;
-             }
-             correctAnswer = (w * h) / 2;
-             text = "ていへん × たかさ ÷ 2";
-             geometry = { shape: 'triangle', dimensions: { width: w, height: h } };
-        } else {
-             // Trapezoid
-             let upper = Math.floor(Math.random() * 6) + 2;
-             let lower = upper + Math.floor(Math.random() * 5) + 2;
-             let h = Math.floor(Math.random() * 6) + 2;
-
-             // Ensure area is integer: (upper + lower) * h must be even
-             if (((upper + lower) * h) % 2 !== 0) {
-                 h++; // h was odd, now even. product is even.
-             }
-
-             correctAnswer = ((upper + lower) * h) / 2;
-             text = "（じょうてい ＋ かてい）× たかさ ÷ 2";
-             geometry = { shape: 'trapezoid', dimensions: { width: lower, height: h, upper: upper } };
-        }
-    }
-
-    // Generate options
-    const options = new Set([correctAnswer]);
-    while (options.size < 4) {
-        let wrong = correctAnswer + Math.floor(Math.random() * 10) - 5;
-        // Make sure wrong answer is not negative
-        if (wrong < 0) wrong = Math.abs(wrong) + 1;
-
-        if (wrong !== correctAnswer) {
-            options.add(wrong);
-        }
-    }
-
-    return {
-        text,
-        correctAnswer,
-        options: Array.from(options).sort(() => Math.random() - 0.5),
-        geometry
-    };
 }
 
 function GeometryDisplay({ geometry }: { geometry: GeometryData }) {
@@ -216,7 +135,7 @@ function GeometryDisplay({ geometry }: { geometry: GeometryData }) {
 export default function QuizScreen({ level, onQuizComplete, onGoToTop, showTimer }: QuizScreenProps) {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(1);
     const [score, setScore] = useState(0);
-    const [question, setQuestion] = useState<Question>(generateQuestion(level));
+    const [question, setQuestion] = useState<Question>(() => QuestionFactory.create(level).generate());
     const [isAnswering, setIsAnswering] = useState(false);
     const [feedback, setFeedback] = useState<{ show: boolean; isCorrect: boolean }>({ show: false, isCorrect: false });
     const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
@@ -282,7 +201,7 @@ export default function QuizScreen({ level, onQuizComplete, onGoToTop, showTimer
             } else {
                 // Next question
                 setCurrentQuestionIndex(prev => prev + 1);
-                setQuestion(generateQuestion(level));
+                setQuestion(QuestionFactory.create(level).generate());
             }
         }, nextQuestionDelay);
     };
