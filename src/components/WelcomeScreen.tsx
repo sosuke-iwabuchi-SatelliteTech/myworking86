@@ -1,4 +1,5 @@
 import { GameLevel } from '../types';
+import { LEVEL_IDS } from '../constants';
 
 interface WelcomeScreenProps {
     onStartGame: (level: GameLevel) => void;
@@ -22,19 +23,19 @@ export default function WelcomeScreen({ onStartGame, onShowHistory, hasHistory }
 
             <div className="space-y-4">
                 <button
-                    onClick={() => onStartGame(1)}
+                    onClick={() => onStartGame(LEVEL_IDS.GRADE_1_CALC)}
                     className="w-full bg-brand-yellow hover:bg-yellow-300 text-slate-800 font-black text-2xl py-4 rounded-2xl shadow-[0_6px_0_rgb(217,179,16)] active:shadow-[0_0px_0_rgb(217,179,16)] active:translate-y-[6px] transition-all"
                 >
                     1ねんせい (たしざん・ひきざん)
                 </button>
                 <button
-                    onClick={() => onStartGame(2)}
+                    onClick={() => onStartGame(LEVEL_IDS.GRADE_2_KUKU)}
                     className="w-full bg-brand-blue hover:bg-blue-300 text-slate-800 font-black text-2xl py-4 rounded-2xl shadow-[0_6px_0_rgb(74,168,209)] active:shadow-[0_0px_0_rgb(74,168,209)] active:translate-y-[6px] transition-all"
                 >
                     2ねんせい (九九)
                 </button>
                 <button
-                    onClick={() => onStartGame(3)}
+                    onClick={() => onStartGame(LEVEL_IDS.GRADE_4_GEOMETRY)}
                     className="w-full bg-brand-green hover:bg-green-300 text-slate-800 font-black text-2xl py-4 rounded-2xl shadow-[0_6px_0_rgb(86,168,98)] active:shadow-[0_0px_0_rgb(86,168,98)] active:translate-y-[6px] transition-all"
                 >
                     4ねんせい (図形の面積)
