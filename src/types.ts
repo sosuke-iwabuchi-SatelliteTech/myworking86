@@ -1,4 +1,6 @@
-export type GameLevel = 1 | 2 | 3;
+import { LEVEL_IDS } from './constants';
+
+export type GameLevel = typeof LEVEL_IDS[keyof typeof LEVEL_IDS];
 export type Screen = 'welcome' | 'quiz' | 'result' | 'history';
 
 export interface HistoryRecord {

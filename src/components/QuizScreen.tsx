@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { GameLevel, Question, GeometryData } from '../types';
+import { LEVEL_IDS } from '../constants';
 import { formatTime } from '../utils/format';
 
 interface QuizScreenProps {
@@ -13,7 +14,7 @@ export function generateQuestion(level: GameLevel): Question {
     let correctAnswer = 0;
     let geometry: GeometryData | undefined;
 
-    if (level === 1) {
+    if (level === LEVEL_IDS.GRADE_1_CALC) {
         const isAddition = Math.random() > 0.5;
 
         if (isAddition) {
@@ -27,12 +28,12 @@ export function generateQuestion(level: GameLevel): Question {
             correctAnswer = num1 - num2;
             text = `${num1} - ${num2} = ?`;
         }
-    } else if (level === 2) {
+    } else if (level === LEVEL_IDS.GRADE_2_KUKU) {
         const num1 = Math.floor(Math.random() * 9) + 1;
         const num2 = Math.floor(Math.random() * 9) + 1;
         correctAnswer = num1 * num2;
         text = `${num1} × ${num2} = ?`;
-    } else if (level === 3) {
+    } else if (level === LEVEL_IDS.GRADE_4_GEOMETRY) {
         const shapeType = Math.random();
 
         if (shapeType < 0.33) {
@@ -349,7 +350,7 @@ export default function QuizScreen({ level, onQuizComplete, onGoToTop }: QuizScr
                     const isCorrect = option === question.correctAnswer;
                     const showCorrect = selectedAnswer !== null && !feedback.isCorrect && isCorrect;
 
-                    let buttonClass = 'bg-slate-100 hover:bg-blue-100 text-slate-700 border-slate-200';
+                    let buttonClass = 'bg-slate-100 answer-btn-hover text-slate-700 border-slate-200';
 
                     if (isSelected && feedback.isCorrect) {
                         buttonClass = 'bg-brand-green text-white border-brand-green shadow-[0_4px_0_rgb(86,168,98)]';

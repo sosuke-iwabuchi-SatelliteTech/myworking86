@@ -5,10 +5,11 @@ import ResultScreen from './components/ResultScreen';
 import HistoryScreen from './components/HistoryScreen';
 import { GameLevel, Screen, HistoryRecord } from './types';
 import { getHistory, saveRecord, clearHistory } from './utils/storage';
+import { LEVEL_IDS } from './constants';
 
 function App() {
     const [screen, setScreen] = useState<Screen>('welcome');
-    const [level, setLevel] = useState<GameLevel>(1);
+    const [level, setLevel] = useState<GameLevel>(LEVEL_IDS.GRADE_1_CALC);
     const [finalScore, setFinalScore] = useState(0);
     const [finalTime, setFinalTime] = useState(0);
     const [history, setHistory] = useState<HistoryRecord[]>([]);
