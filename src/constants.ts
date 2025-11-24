@@ -9,3 +9,5 @@ export const LEVEL_NAMES: Record<string, string> = {
     [LEVEL_IDS.GRADE_2_KUKU]: '2ねんせい 九九',
     [LEVEL_IDS.GRADE_4_GEOMETRY]: '4ねんせい 図形の面積',
 };
+
+export const SETTINGS_STORAGE_KEY = 'quiz_settings';

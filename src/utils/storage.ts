@@ -1,5 +1,5 @@
-import { HistoryRecord, GameLevel } from '../types';
-import { LEVEL_IDS } from '../constants';
+import { HistoryRecord, GameLevel, GameSettings } from '../types';
+import { LEVEL_IDS, SETTINGS_STORAGE_KEY } from '../constants';
 
 const STORAGE_KEY = 'quiz_history';
 const MAX_HISTORY_ITEMS = 10;
@@ -54,5 +54,26 @@ export function clearHistory(): void {
         localStorage.removeItem(STORAGE_KEY);
     } catch (e) {
         console.error('Failed to clear history', e);
+    }
+}
+
+export function getSettings(): GameSettings {
+    try {
+        const json = localStorage.getItem(SETTINGS_STORAGE_KEY);
+        if (!json) {
+            return { showTimer: true };
+        }
+        return JSON.parse(json);
+    } catch (e) {
+        console.error('Failed to parse settings', e);
+        return { showTimer: true };
+    }
+}
+
+export function saveSettings(settings: GameSettings): void {
+    try {
+        localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(settings));
+    } catch (e) {
+        console.error('Failed to save settings', e);
     }
 }

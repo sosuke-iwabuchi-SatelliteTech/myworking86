@@ -1,7 +1,7 @@
 import { LEVEL_IDS } from './constants';
 
 export type GameLevel = typeof LEVEL_IDS[keyof typeof LEVEL_IDS];
-export type Screen = 'welcome' | 'quiz' | 'result' | 'history';
+export type Screen = 'welcome' | 'quiz' | 'result' | 'history' | 'settings';
 
 export interface HistoryRecord {
     timestamp: number;
@@ -34,4 +34,8 @@ export interface GameState {
     totalQuestions: number;
     startTime: number | null;
     finalTime: number;
+}
+
+export interface GameSettings {
+    showTimer: boolean;
 }

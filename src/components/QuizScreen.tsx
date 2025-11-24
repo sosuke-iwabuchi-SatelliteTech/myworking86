@@ -7,6 +7,7 @@ interface QuizScreenProps {
     level: GameLevel;
     onQuizComplete: (score: number, finalTime: number) => void;
     onGoToTop: () => void;
+    showTimer: boolean;
 }
 
 export function generateQuestion(level: GameLevel): Question {
@@ -212,7 +213,7 @@ function GeometryDisplay({ geometry }: { geometry: GeometryData }) {
     );
 }
 
-export default function QuizScreen({ level, onQuizComplete, onGoToTop }: QuizScreenProps) {
+export default function QuizScreen({ level, onQuizComplete, onGoToTop, showTimer }: QuizScreenProps) {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(1);
     const [score, setScore] = useState(0);
     const [question, setQuestion] = useState<Question>(generateQuestion(level));
@@ -309,11 +310,16 @@ export default function QuizScreen({ level, onQuizComplete, onGoToTop }: QuizScr
             </div>
 
             {/* Timer Display */}
-            <div className="mt-4 mb-2 flex justify-center">
-                <div className="bg-slate-800 text-brand-yellow px-6 py-2 rounded-xl font-mono text-3xl font-bold tracking-wider shadow-sm border-2 border-slate-700">
-                    {formatTime(elapsedTime)}
+            {showTimer && (
+                <div className="mt-4 mb-2 flex justify-center">
+                    <div className="bg-slate-800 text-brand-yellow px-6 py-2 rounded-xl font-mono text-3xl font-bold tracking-wider shadow-sm border-2 border-slate-700">
+                        {formatTime(elapsedTime)}
+                    </div>
                 </div>
-            </div>
+            )}
+
+            {/* Spacer if timer is hidden to keep layout consistent, or just remove margin */}
+            {!showTimer && <div className="mt-8"></div>}
 
             <div className="flex justify-between items-center mb-8 mt-2">
                 <div className="bg-slate-100 px-4 py-2 rounded-full font-bold text-slate-600">
