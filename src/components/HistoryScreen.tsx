@@ -1,5 +1,6 @@
 import { HistoryRecord } from '../types';
 import { formatTime } from '../utils/format';
+import { LEVEL_NAMES } from '../constants';
 
 interface HistoryScreenProps {
     history: HistoryRecord[];
@@ -40,7 +41,7 @@ export default function HistoryScreen({ history, onBack }: HistoryScreenProps) {
                                         {formatDate(record.timestamp)}
                                     </div>
                                     <div className="font-bold text-slate-600 text-sm">
-                                        {record.level === 1 ? '1ねんせい' : '2ねんせい'}
+                                        {LEVEL_NAMES[record.level] || record.level}
                                     </div>
                                 </div>
                                 <div className="text-right flex flex-col items-end">

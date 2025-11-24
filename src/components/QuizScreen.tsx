@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { GameLevel, Question, GeometryData } from '../types';
+import { LEVEL_IDS } from '../constants';
 import { formatTime } from '../utils/format';
 
 interface QuizScreenProps {
@@ -13,7 +14,7 @@ export function generateQuestion(level: GameLevel): Question {
     let correctAnswer = 0;
     let geometry: GeometryData | undefined;
 
-    if (level === 1) {
+    if (level === LEVEL_IDS.GRADE_1_CALC) {
         const isAddition = Math.random() > 0.5;
 
         if (isAddition) {
@@ -27,12 +28,12 @@ export function generateQuestion(level: GameLevel): Question {
             correctAnswer = num1 - num2;
             text = `${num1} - ${num2} = ?`;
         }
-    } else if (level === 2) {
+    } else if (level === LEVEL_IDS.GRADE_2_KUKU) {
         const num1 = Math.floor(Math.random() * 9) + 1;
         const num2 = Math.floor(Math.random() * 9) + 1;
         correctAnswer = num1 * num2;
         text = `${num1} × ${num2} = ?`;
-    } else if (level === 3) {
+    } else if (level === LEVEL_IDS.GRADE_4_GEOMETRY) {
         const shapeType = Math.random();
 
         if (shapeType < 0.33) {
