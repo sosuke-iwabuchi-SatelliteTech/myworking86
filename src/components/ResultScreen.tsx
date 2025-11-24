@@ -1,4 +1,4 @@
-import { formatTime } from '../utils/format';
+import { formatTime, getMedal } from '../utils/format';
 
 interface ResultScreenProps {
     score: number;
@@ -19,10 +19,12 @@ export default function ResultScreen({ score, finalTime, onRestart, onGoToTop }:
         messageClass = "text-xl font-bold text-brand-orange";
     }
 
+    const medal = getMedal(score, finalTime);
+
     return (
         <div className="bg-white rounded-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] p-8 text-center border-4 border-white ring-4 ring-brand-yellow relative">
             <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 text-7xl">
-                🏆
+                {medal ? <span className="medal-anim">{medal}</span> : '🏆'}
             </div>
             <h2 className="text-3xl font-bold text-slate-800 mt-8 mb-6">けっかはっぴょう！</h2>
 

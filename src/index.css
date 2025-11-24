@@ -58,6 +58,26 @@ body {
   }
 }
 
+@keyframes medalPulse {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.medal-anim {
+  display: inline-block;
+  animation: medalPulse 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
 /* Touch device optimization: Only apply hover effect on devices that support hover */
 @media (hover: hover) {
   .answer-btn-hover:hover {
