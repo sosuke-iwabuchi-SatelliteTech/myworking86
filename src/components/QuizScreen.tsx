@@ -219,13 +219,26 @@ export default function QuizScreen({ level, onQuizComplete, onGoToTop }: QuizScr
     const [feedback, setFeedback] = useState<{ show: boolean; isCorrect: boolean }>({ show: false, isCorrect: false });
     const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
     const [elapsedTime, setElapsedTime] = useState(0);
+    const [countdown, setCountdown] = useState(3);
     const startTimeRef = useRef<number>(Date.now());
     const timerIntervalRef = useRef<number | null>(null);
 
     const totalQuestions = 10;
 
+    // Countdown effect
+    useEffect(() => {
+        if (countdown > 0) {
+            const timer = setTimeout(() => {
+                setCountdown(prev => prev - 1);
+            }, 1000);
+            return () => clearTimeout(timer);
+        }
+    }, [countdown]);
+
     // Timer effect
     useEffect(() => {
+        if (countdown > 0) return;
+
         startTimeRef.current = Date.now();
         timerIntervalRef.current = window.setInterval(() => {
             setElapsedTime(Date.now() - startTimeRef.current);
@@ -236,7 +249,7 @@ export default function QuizScreen({ level, onQuizComplete, onGoToTop }: QuizScr
                 clearInterval(timerIntervalRef.current);
             }
         };
-    }, []);
+    }, [countdown]);
 
     const handleAnswer = (selected: number) => {
         if (isAnswering) return;
@@ -273,6 +286,16 @@ export default function QuizScreen({ level, onQuizComplete, onGoToTop }: QuizScr
     };
 
     const progress = ((currentQuestionIndex - 1) / totalQuestions) * 100;
+
+    if (countdown > 0) {
+        return (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-blue-50">
+                <div className="text-9xl font-black text-brand-blue animate-pulse">
+                    {countdown}
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="bg-white rounded-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] p-8 pb-20 text-center border-4 border-white ring-4 ring-purple-100 relative overflow-hidden">
