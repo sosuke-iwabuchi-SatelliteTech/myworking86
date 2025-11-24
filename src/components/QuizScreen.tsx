@@ -40,7 +40,7 @@ export function generateQuestion(level: GameLevel): Question {
              const w = Math.floor(Math.random() * 8) + 2;
              const h = Math.floor(Math.random() * 8) + 2;
              correctAnswer = w * h;
-             text = "面積は？";
+             text = "たて × よこ";
              geometry = { shape: 'rectangle', dimensions: { width: w, height: h } };
         } else if (shapeType < 0.66) {
              // Triangle
@@ -50,7 +50,7 @@ export function generateQuestion(level: GameLevel): Question {
                  w += 1;
              }
              correctAnswer = (w * h) / 2;
-             text = "面積は？";
+             text = "ていへん × たかさ ÷ 2";
              geometry = { shape: 'triangle', dimensions: { width: w, height: h } };
         } else {
              // Trapezoid
@@ -64,7 +64,7 @@ export function generateQuestion(level: GameLevel): Question {
              }
 
              correctAnswer = ((upper + lower) * h) / 2;
-             text = "面積は？";
+             text = "（じょうてい ＋ かてい）× たかさ ÷ 2";
              geometry = { shape: 'trapezoid', dimensions: { width: lower, height: h, upper: upper } };
         }
     }
@@ -302,7 +302,7 @@ export default function QuizScreen({ level, onQuizComplete, onGoToTop }: QuizScr
 
             <div className="mb-10 relative">
                 {question.geometry && <GeometryDisplay geometry={question.geometry} />}
-                <div className="text-6xl font-black text-slate-800 tracking-wider">
+                <div className={`${question.geometry ? 'text-3xl text-slate-500' : 'text-6xl text-slate-800'} font-black tracking-wider`}>
                     {question.text}
                 </div>
 
