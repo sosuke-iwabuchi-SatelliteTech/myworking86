@@ -349,7 +349,7 @@ export default function QuizScreen({ level, onQuizComplete, onGoToTop }: QuizScr
                     const isCorrect = option === question.correctAnswer;
                     const showCorrect = selectedAnswer !== null && !feedback.isCorrect && isCorrect;
 
-                    let buttonClass = 'bg-slate-100 hover:bg-blue-100 text-slate-700 border-slate-200';
+                    let buttonClass = 'bg-slate-100 answer-btn-hover text-slate-700 border-slate-200';
 
                     if (isSelected && feedback.isCorrect) {
                         buttonClass = 'bg-brand-green text-white border-brand-green shadow-[0_4px_0_rgb(86,168,98)]';
