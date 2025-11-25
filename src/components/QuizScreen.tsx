@@ -193,7 +193,7 @@ export default function QuizScreen({ level, onQuizComplete, onGoToTop, showTimer
         const nextQuestionDelay = isCorrect ? 500 : 1500;
 
         setTimeout(() => {
-            setFeedback({ show: false, isCorrect: false });
+            setFeedback(prev => ({ ...prev, show: false }));
             setSelectedAnswer(null);
             setIsAnswering(false);
 
@@ -256,39 +256,41 @@ export default function QuizScreen({ level, onQuizComplete, onGoToTop, showTimer
             </div>
 
             <div className="flex flex-col">
-                <div className="flex justify-center items-start gap-8">
-                    {!question.showCalculationPad &&
-                        <div className="flex-1">
-                            <div className="mb-6 relative">
-                                {question.geometry && <GeometryDisplay geometry={question.geometry} />}
-                                <div className={`text-6xl ${question.geometry ? 'text-xs text-slate-300' : 'text-slate-800'} font-black tracking-wider min-h-[80px] flex items-center justify-center`}>
-                                    {question.text}
-                                </div>
-
-                                {/* Feedback Overlay */}
-                                <div
-                                    className={`absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-300 ${feedback.show ? 'opacity-100' : 'opacity-0'
-                                        }`}
-                                >
-                                    <span
-                                        className={`text-8xl filter drop-shadow-lg transform transition-transform duration-300 ${feedback.show ? 'scale-100' : 'scale-0'
-                                            } ${feedback.isCorrect ? 'text-brand-green' : 'text-brand-red'}`}
-                                    >
-                                        {feedback.isCorrect ? '⭕' : '❌'}
-                                    </span>
+                <div className="relative"> {/* New container for relative positioning */}
+                    <div className="flex justify-center items-start gap-8">
+                        {!question.showCalculationPad &&
+                            <div className="flex-1">
+                                <div className="mb-6">
+                                    {question.geometry && <GeometryDisplay geometry={question.geometry} />}
+                                    <div className={`text-6xl ${question.geometry ? 'text-xs text-slate-300' : 'text-slate-800'} font-black tracking-wider min-h-[80px] flex items-center justify-center`}>
+                                        {question.text}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    }
-                    {question.showCalculationPad && multiplicationNumbers && (
-                        <div className="flex-1">
-                            <CalculationPad
-                                key={currentQuestionIndex}
-                                num1={multiplicationNumbers.num1}
-                                num2={multiplicationNumbers.num2}
-                            />
-                        </div>
-                    )}
+                        }
+                        {question.showCalculationPad && multiplicationNumbers && (
+                            <div className="flex-1">
+                                <CalculationPad
+                                    key={currentQuestionIndex}
+                                    num1={multiplicationNumbers.num1}
+                                    num2={multiplicationNumbers.num2}
+                                />
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Feedback Overlay */}
+                    <div
+                        className={`absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-300 ${feedback.show ? 'opacity-100' : 'opacity-0'
+                            }`}
+                    >
+                        <span
+                            className={`text-8xl filter drop-shadow-lg transform transition-transform duration-300 ${feedback.show ? 'scale-100' : 'scale-0'
+                                } ${feedback.isCorrect ? 'text-brand-green' : 'text-brand-red'}`}
+                        >
+                            {feedback.isCorrect ? '⭕' : '❌'}
+                        </span>
+                    </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4 mt-4">
                     {question.options.map((option) => {
