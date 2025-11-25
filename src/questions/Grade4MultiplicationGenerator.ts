@@ -1,20 +1,20 @@
-import { Question } from "../types";
+import { Question, AnswerMode } from "../types";
 import { QuestionGenerator } from "./QuestionGenerator";
 import { sample, shuffle } from "../utils/array";
 
 export class Grade4MultiplicationGenerator implements QuestionGenerator {
-  generate(): Question {
+  generate(answerMode: AnswerMode): Question {
     const num1 = Math.floor(Math.random() * 90) + 10;
     const num2 = Math.floor(Math.random() * 90) + 10;
     const correctAnswer = num1 * num2;
 
-    const options = this.generateOptions(correctAnswer);
+    const options =
+      answerMode === "choice" ? this.generateOptions(correctAnswer) : [];
 
     return {
       text: `${num1} x ${num2}`,
       correctAnswer: correctAnswer,
       options: shuffle(options),
-      showCalculationPad: true,
       num1: num1,
       num2: num2,
     };

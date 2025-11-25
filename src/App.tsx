@@ -4,7 +4,14 @@ import QuizScreen from "./components/QuizScreen";
 import ResultScreen from "./components/ResultScreen";
 import HistoryScreen from "./components/HistoryScreen";
 import SettingsScreen from "./components/SettingsScreen";
-import { GameLevel, Screen, HistoryRecord, GameSettings } from "./types";
+import SelectAnswerModeScreen from "./components/SelectAnswerModeScreen";
+import {
+  GameLevel,
+  Screen,
+  HistoryRecord,
+  GameSettings,
+  AnswerMode,
+} from "./types";
 import {
   getHistory,
   saveRecord,
@@ -16,6 +23,7 @@ import { GRADES } from "./constants";
 function App() {
   const [screen, setScreen] = useState<Screen>("welcome");
   const [level, setLevel] = useState<GameLevel>("grade-1-calc");
+  const [answerMode, setAnswerMode] = useState<AnswerMode>("choice");
   const [finalScore, setFinalScore] = useState(0);
   const [finalTime, setFinalTime] = useState(0);
   const [history, setHistory] = useState<HistoryRecord[]>([]);
@@ -29,6 +37,23 @@ function App() {
 
   const handleStartGame = (selectedLevel: GameLevel) => {
     setLevel(selectedLevel);
+    const selectedGrade = GRADES.find((g) =>
+      g.levels.some((l) => l.id === selectedLevel)
+    );
+    const selectedLevelInfo = selectedGrade?.levels.find(
+      (l) => l.id === selectedLevel
+    );
+
+    if (selectedLevelInfo?.calculationPadAvailable) {
+      setScreen("selectAnswerMode");
+    } else {
+      setAnswerMode("choice");
+      setScreen("quiz");
+    }
+  };
+
+  const handleAnswerModeSelect = (mode: AnswerMode) => {
+    setAnswerMode(mode);
     setScreen("quiz");
   };
 
@@ -106,10 +131,17 @@ function App() {
             onSettingsChange={handleSettingsChange}
           />
         )}
+        {screen === "selectAnswerMode" && (
+          <SelectAnswerModeScreen
+            onSelect={handleAnswerModeSelect}
+            onBack={handleGoToTop}
+          />
+        )}
         {screen === "quiz" && (
           <QuizScreen
-            key={`${level}-${Date.now()}`}
+            key={`${level}-${answerMode}-${Date.now()}`}
             level={level}
+            answerMode={answerMode}
             onQuizComplete={handleQuizComplete}
             onGoToTop={handleGoToTop}
             showTimer={settings.showTimer}

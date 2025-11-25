@@ -1,7 +1,14 @@
 import { GRADES } from "./constants";
 
 export type GameLevel = (typeof GRADES)[number]["levels"][number]["id"];
-export type Screen = "welcome" | "quiz" | "result" | "history" | "settings";
+export type Screen =
+  | "welcome"
+  | "quiz"
+  | "result"
+  | "history"
+  | "settings"
+  | "selectAnswerMode";
+export type AnswerMode = "choice" | "calculationPad";
 
 export interface HistoryRecord {
   timestamp: number;
@@ -25,7 +32,6 @@ export interface Question {
   correctAnswer: number;
   options: number[];
   geometry?: GeometryData;
-  showCalculationPad?: boolean;
   num1?: number;
   num2?: number;
 }

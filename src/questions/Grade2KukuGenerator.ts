@@ -1,8 +1,8 @@
-import { Question } from '../types';
+import { Question, AnswerMode } from '../types';
 import { QuestionGenerator } from './QuestionGenerator';
 
 export class Grade2KukuGenerator implements QuestionGenerator {
-    generate(): Question {
+    generate(answerMode: AnswerMode): Question {
         const num1 = Math.floor(Math.random() * 9) + 1;
         const num2 = Math.floor(Math.random() * 9) + 1;
         const correctAnswer = num1 * num2;
