@@ -1,3 +1,7 @@
+/**
+ * アプリケーションで利用可能な学年とレベルの定義。
+ * 各学年には、その学年でプレイできるレベル（単元）のリストが含まれています。
+ */
 export const GRADES = [
   {
     grade: 1,
@@ -35,4 +39,7 @@ export const GRADES = [
   },
 ];
 
+/**
+ * localStorageに設定を保存する際のキー
+ */
 export const SETTINGS_STORAGE_KEY = "quiz_settings";

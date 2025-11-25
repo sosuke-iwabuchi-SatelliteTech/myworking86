@@ -1,9 +1,14 @@
-import { HistoryRecord, GameLevel, GameSettings } from "../types";
+import { HistoryRecord, GameSettings } from "../types";
 import { SETTINGS_STORAGE_KEY } from "../constants";
 
 const STORAGE_KEY = "quiz_history";
 const MAX_HISTORY_ITEMS = 10;
 
+/**
+ * localStorageからクイズの履歴を取得します。
+ * パースに失敗した場合は空の配列を返します。
+ * @returns クイズ履歴レコードの配列
+ */
 export function getHistory(): HistoryRecord[] {
   try {
     const json = localStorage.getItem(STORAGE_KEY);
@@ -17,6 +22,11 @@ export function getHistory(): HistoryRecord[] {
   }
 }
 
+/**
+ * 新しいクイズの記録を履歴に保存します。
+ * 履歴は新しいものが先頭になるようにソートされ、最大10件まで保持されます。
+ * @param record 保存する新しい履歴レコード
+ */
 export function saveRecord(record: HistoryRecord): void {
   const history = getHistory();
   // Add new record
@@ -35,6 +45,9 @@ export function saveRecord(record: HistoryRecord): void {
   }
 }
 
+/**
+ * localStorageからすべてのクイズ履歴を削除します。
+ */
 export function clearHistory(): void {
   try {
     localStorage.removeItem(STORAGE_KEY);
@@ -43,6 +56,11 @@ export function clearHistory(): void {
   }
 }
 
+/**
+ * localStorageからゲーム設定を取得します。
+ * 設定が存在しない場合やパースに失敗した場合は、デフォルト設定を返します。
+ * @returns ゲーム設定オブジェクト
+ */
 export function getSettings(): GameSettings {
   try {
     const json = localStorage.getItem(SETTINGS_STORAGE_KEY);
@@ -56,6 +74,10 @@ export function getSettings(): GameSettings {
   }
 }
 
+/**
+ * ゲーム設定をlocalStorageに保存します。
+ * @param settings 保存するゲーム設定オブジェクト
+ */
 export function saveSettings(settings: GameSettings): void {
   try {
     localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(settings));

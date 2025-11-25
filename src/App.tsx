@@ -13,6 +13,11 @@ import {
 } from "./utils/storage";
 import { GRADES } from "./constants";
 
+/**
+ * アプリケーションのメインコンポーネント。
+ * 画面の状態（スクリーン）を管理し、各画面コンポーネントの表示を切り替えます。
+ * また、ゲームの状態（レベル、スコアなど）や履歴データも管理します。
+ */
 function App() {
   const [screen, setScreen] = useState<Screen>("welcome");
   const [level, setLevel] = useState<GameLevel>("grade-1-calc");

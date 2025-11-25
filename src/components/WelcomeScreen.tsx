@@ -2,13 +2,34 @@ import { useState } from "react";
 import { GameLevel } from "../types";
 import { GRADES } from "../constants";
 
+/**
+ * WelcomeScreenコンポーネントのprops
+ */
 interface WelcomeScreenProps {
+  /**
+   * ゲーム開始ボタンがクリックされたときに呼び出されるコールバック関数
+   * @param level 選択されたゲームレベルID
+   */
   onStartGame: (level: GameLevel) => void;
+  /**
+   * 履歴表示ボタンがクリックされたときに呼び出されるコールバック関数
+   */
   onShowHistory: () => void;
+  /**
+   * 履歴が存在するかどうかを示すフラグ
+   */
   hasHistory: boolean;
+  /**
+   * 設定画面へ遷移するボタンがクリックされたときに呼び出されるコールバック関数
+   */
   onGoToSettings: () => void;
 }
 
+/**
+ * アプリケーションの開始画面（ウェルカム画面）を表示するコンポーネント。
+ * 学年選択とレベル選択のUIを提供し、ゲームの開始や履歴の表示をトリガーします。
+ * @param {WelcomeScreenProps} props - コンポーネントのprops
+ */
 export default function WelcomeScreen({
   onStartGame,
   onShowHistory,

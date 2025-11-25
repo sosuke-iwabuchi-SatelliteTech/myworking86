@@ -1,29 +1,37 @@
 import { Question } from '../types';
 import { QuestionGenerator } from './QuestionGenerator';
 
+/**
+ * 2年生レベルの九九問題を生成するクラス。
+ */
 export class Grade2KukuGenerator implements QuestionGenerator {
-    generate(): Question {
-        const num1 = Math.floor(Math.random() * 9) + 1;
-        const num2 = Math.floor(Math.random() * 9) + 1;
-        const correctAnswer = num1 * num2;
-        const text = `${num1} × ${num2} = ?`;
+  /**
+   * 1桁同士の掛け算（九九）の問題を1つ生成します。
+   * 問題には4つの選択肢が含まれ、そのうち1つが正解です。
+   * @returns 生成された問題オブジェクト
+   */
+  generate(): Question {
+    const num1 = Math.floor(Math.random() * 9) + 1;
+    const num2 = Math.floor(Math.random() * 9) + 1;
+    const correctAnswer = num1 * num2;
+    const text = `${num1} × ${num2} = ?`;
 
-        // Generate options
-        const options = new Set([correctAnswer]);
-        while (options.size < 4) {
-            let wrong = correctAnswer + Math.floor(Math.random() * 10) - 5;
-            // Make sure wrong answer is not negative
-            if (wrong < 0) wrong = Math.abs(wrong) + 1;
+    // Generate options
+    const options = new Set([correctAnswer]);
+    while (options.size < 4) {
+      let wrong = correctAnswer + Math.floor(Math.random() * 10) - 5;
+      // Make sure wrong answer is not negative
+      if (wrong < 0) wrong = Math.abs(wrong) + 1;
 
-            if (wrong !== correctAnswer) {
-                options.add(wrong);
-            }
-        }
-
-        return {
-            text,
-            correctAnswer,
-            options: Array.from(options).sort(() => Math.random() - 0.5),
-        };
+      if (wrong !== correctAnswer) {
+        options.add(wrong);
+      }
     }
+
+    return {
+      text,
+      correctAnswer,
+      options: Array.from(options).sort(() => Math.random() - 0.5),
+    };
+  }
 }

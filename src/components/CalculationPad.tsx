@@ -1,10 +1,24 @@
 import React, { useState } from "react";
 
+/**
+ * 計算パッドコンポーネントのprops
+ */
 interface CalculationPadProps {
+  /**
+   * 掛け算の最初の数値（被乗数）
+   */
   num1: number;
+  /**
+   * 掛け算の2番目の数値（乗数）
+   */
   num2: number;
 }
 
+/**
+ * 掛け算の筆算（ひっさん）を補助するための計算パッドコンポーネント。
+ * ユーザーが計算過程をメモとして入力できるグリッドと、数字入力用のテンキーを提供します。
+ * @param {CalculationPadProps} props - コンポーネントのprops
+ */
 const CalculationPad: React.FC<CalculationPadProps> = ({ num1, num2 }) => {
   const [grid, setGrid] = useState<string[][]>(
     Array(3)
@@ -116,10 +130,11 @@ const CalculationPad: React.FC<CalculationPadProps> = ({ num1, num2 }) => {
                   <div
                     key={colIndex}
                     onClick={() => handleCellClick(rowIndex, colIndex)}
-                    className={`w-12 h-12 text-2xl flex items-center justify-center border-2 rounded ${activeCell?.row === rowIndex && activeCell?.col === colIndex
-                      ? "border-blue-500 bg-blue-100"
-                      : "border-gray-300"
-                      } cursor-pointer`}
+                    className={`w-12 h-12 text-2xl flex items-center justify-center border-2 rounded ${
+                      activeCell?.row === rowIndex && activeCell?.col === colIndex
+                        ? "border-blue-500 bg-blue-100"
+                        : "border-gray-300"
+                    } cursor-pointer`}
                   >
                     {cell}
                   </div>
