@@ -1,29 +1,24 @@
-import { Question } from '../types';
-import { QuestionGenerator } from './QuestionGenerator';
-import { sample, shuffle } from '../utils/array';
+import { Question, AnswerMode } from "../types";
+import { QuestionGenerator } from "./QuestionGenerator";
+import { sample, shuffle } from "../utils/array";
 
 /**
  * 4年生レベルの掛け算問題（2桁 × 2桁）を生成するクラス。
  * 計算パッドを表示する設定が含まれます。
  */
 export class Grade4MultiplicationGenerator implements QuestionGenerator {
-  /**
-   * 2桁同士の掛け算問題を1つ生成します。
-   * 問題には4つの選択肢が含まれ、計算パッドが表示されるように設定されます。
-   * @returns 生成された掛け算問題オブジェクト
-   */
-  generate(): Question {
+  generate(answerMode: AnswerMode): Question {
     const num1 = Math.floor(Math.random() * 90) + 10;
     const num2 = Math.floor(Math.random() * 90) + 10;
     const correctAnswer = num1 * num2;
 
-    const options = this.generateOptions(correctAnswer);
+    const options =
+      answerMode === "choice" ? this.generateOptions(correctAnswer) : [];
 
     return {
       text: `${num1} x ${num2}`,
       correctAnswer: correctAnswer,
       options: shuffle(options),
-      showCalculationPad: true,
       num1: num1,
       num2: num2,
     };

@@ -1,20 +1,15 @@
-import { Question } from '../types';
+import { Question, AnswerMode } from '../types';
 import { QuestionGenerator } from './QuestionGenerator';
 
 /**
  * 2年生レベルの九九問題を生成するクラス。
  */
 export class Grade2KukuGenerator implements QuestionGenerator {
-  /**
-   * 1桁同士の掛け算（九九）の問題を1つ生成します。
-   * 問題には4つの選択肢が含まれ、そのうち1つが正解です。
-   * @returns 生成された問題オブジェクト
-   */
-  generate(): Question {
-    const num1 = Math.floor(Math.random() * 9) + 1;
-    const num2 = Math.floor(Math.random() * 9) + 1;
-    const correctAnswer = num1 * num2;
-    const text = `${num1} × ${num2} = ?`;
+    generate(answerMode: AnswerMode): Question {
+        const num1 = Math.floor(Math.random() * 9) + 1;
+        const num2 = Math.floor(Math.random() * 9) + 1;
+        const correctAnswer = num1 * num2;
+        const text = `${num1} × ${num2} = ?`;
 
     // Generate options
     const options = new Set([correctAnswer]);

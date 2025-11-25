@@ -34,6 +34,7 @@ export const GRADES = [
       {
         id: "grade-4-multiplication",
         name: "2桁のかけ算",
+        calculationPadAvailable: true,
       },
     ],
   },

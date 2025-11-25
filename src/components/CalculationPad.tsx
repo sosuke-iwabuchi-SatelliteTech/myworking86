@@ -12,14 +12,14 @@ interface CalculationPadProps {
    * 掛け算の2番目の数値（乗数）
    */
   num2: number;
+  onSubmit: (answer: number) => void;
 }
 
-/**
- * 掛け算の筆算（ひっさん）を補助するための計算パッドコンポーネント。
- * ユーザーが計算過程をメモとして入力できるグリッドと、数字入力用のテンキーを提供します。
- * @param {CalculationPadProps} props - コンポーネントのprops
- */
-const CalculationPad: React.FC<CalculationPadProps> = ({ num1, num2 }) => {
+const CalculationPad: React.FC<CalculationPadProps> = ({
+  num1,
+  num2,
+  onSubmit,
+}) => {
   const [grid, setGrid] = useState<string[][]>(
     Array(3)
       .fill(null)
@@ -84,6 +84,13 @@ const CalculationPad: React.FC<CalculationPadProps> = ({ num1, num2 }) => {
 
   const handleNextClick = () => {
     advanceCursor();
+  };
+
+  const handleSubmit = () => {
+    const answerString = grid[2].join("");
+    if (answerString) {
+      onSubmit(parseInt(answerString, 10));
+    }
   };
 
   const num1Digits = num1.toString().padStart(4, " ").split("");
@@ -168,7 +175,7 @@ const CalculationPad: React.FC<CalculationPadProps> = ({ num1, num2 }) => {
         {/* Row 4 */}
         <button onClick={handleBackspaceClick} className="w-full h-12 text-xl bg-yellow-500 text-white border rounded-lg hover:bg-yellow-600">もどる</button>
         <button onClick={() => handleNumpadClick('0')} className="w-full h-12 text-2xl bg-white border rounded-lg hover:bg-gray-200">0</button>
-        <button onClick={handleNextClick} className="w-full h-12 text-xl bg-green-500 text-white border rounded-lg hover:bg-green-600">次へ</button>
+        <button onClick={handleSubmit} className="w-full h-12 text-xl bg-blue-500 text-white border rounded-lg hover:bg-blue-600">こたえ</button>
       </div>
     </div>
   );

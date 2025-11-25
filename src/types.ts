@@ -5,11 +5,14 @@ import { GRADES } from "./constants";
  * `constants.ts`の`GRADES`定義から動的に生成されます。
  */
 export type GameLevel = (typeof GRADES)[number]["levels"][number]["id"];
-
-/**
- * アプリケーションで表示可能な画面の種類を表す型。
- */
-export type Screen = "welcome" | "quiz" | "result" | "history" | "settings";
+export type Screen =
+  | "welcome"
+  | "quiz"
+  | "result"
+  | "history"
+  | "settings"
+  | "selectAnswerMode";
+export type AnswerMode = "choice" | "calculationPad";
 
 /**
  * 1回のクイズゲームの履歴レコードを表すインターフェース。
@@ -84,13 +87,6 @@ export interface Question {
    * 図形問題の場合の図形データ
    */
   geometry?: GeometryData;
-  /**
-   * 計算パッドを表示するかどうか
-   */
-  showCalculationPad?: boolean;
-  /**
-   * 計算パッドで使用する1番目の数値
-   */
   num1?: number;
   /**
    * 計算パッドで使用する2番目の数値

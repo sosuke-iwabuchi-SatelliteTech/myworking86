@@ -1,4 +1,4 @@
-import { Question, GeometryData } from '../types';
+import { Question, GeometryData, AnswerMode } from '../types';
 import { QuestionGenerator } from './QuestionGenerator';
 
 /**
@@ -6,15 +6,10 @@ import { QuestionGenerator } from './QuestionGenerator';
  * 長方形、三角形、台形の面積を求める問題をランダムに生成します。
  */
 export class Grade4GeometryGenerator implements QuestionGenerator {
-  /**
-   * 長方形、三角形、または台形の面積を計算する図形問題を1つ生成します。
-   * 問題には、計算式、図形データ、および4つの選択肢が含まれます。
-   * @returns 生成された図形問題オブジェクト
-   */
-  generate(): Question {
-    let text = '';
-    let correctAnswer = 0;
-    let geometry: GeometryData | undefined;
+    generate(answerMode: AnswerMode): Question {
+        let text = '';
+        let correctAnswer = 0;
+        let geometry: GeometryData | undefined;
 
     const shapeType = Math.random();
 

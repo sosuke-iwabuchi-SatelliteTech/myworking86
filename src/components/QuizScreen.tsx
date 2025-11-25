@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { GameLevel, Question, GeometryData } from '../types';
+import { GameLevel, Question, GeometryData, AnswerMode } from '../types';
 import { formatTime } from '../utils/format';
 import { QuestionFactory } from '../questions/QuestionFactory';
 import CalculationPad from './CalculationPad';
@@ -8,24 +8,11 @@ import CalculationPad from './CalculationPad';
  * QuizScreenコンポーネントのprops
  */
 interface QuizScreenProps {
-  /**
-   * 現在のゲームレベルID
-   */
-  level: GameLevel;
-  /**
-   * クイズが完了したときに呼び出されるコールバック関数
-   * @param score 最終スコア
-   * @param finalTime 最終的な経過時間（ミリ秒）
-   */
-  onQuizComplete: (score: number, finalTime: number) => void;
-  /**
-   * トップ画面に戻るボタンがクリックされたときに呼び出されるコールバック関数
-   */
-  onGoToTop: () => void;
-  /**
-   * タイマーを表示するかどうかを示すフラグ
-   */
-  showTimer: boolean;
+    level: GameLevel;
+    answerMode: AnswerMode;
+    onQuizComplete: (score: number, finalTime: number) => void;
+    onGoToTop: () => void;
+    showTimer: boolean;
 }
 
 /**
@@ -216,37 +203,38 @@ function GeometryDisplay({ geometry }: { geometry: GeometryData }) {
   );
 }
 
-/**
- * クイズのメイン画面を表示および管理するコンポーネント。
- * 問題の表示、回答の処理、タイマー、スコア、進行状況の管理を行います。
- * @param {QuizScreenProps} props - コンポーネントのprops
- */
-export default function QuizScreen({ level, onQuizComplete, onGoToTop, showTimer }: QuizScreenProps) {
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(1);
-  const [score, setScore] = useState(0);
-  const [question, setQuestion] = useState<Question>(() => QuestionFactory.create(level).generate());
-  const [isAnswering, setIsAnswering] = useState(false);
-  const [feedback, setFeedback] = useState<{ show: boolean; isCorrect: boolean }>({ show: false, isCorrect: false });
-  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
-  const [elapsedTime, setElapsedTime] = useState(0);
-  const [countdown, setCountdown] = useState(3);
-  const startTimeRef = useRef<number>(Date.now());
-  const timerIntervalRef = useRef<number | null>(null);
+export default function QuizScreen({ level, answerMode, onQuizComplete, onGoToTop, showTimer }: QuizScreenProps) {
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(1);
+    const [score, setScore] = useState(0);
+    const [question, setQuestion] = useState<Question>(() => QuestionFactory.create(level).generate(answerMode));
+    const [isAnswering, setIsAnswering] = useState(false);
+    const [feedback, setFeedback] = useState<{ show: boolean; isCorrect: boolean }>({ show: false, isCorrect: false });
+    const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+    const [elapsedTime, setElapsedTime] = useState(0);
+    const [countdown, setCountdown] = useState(3);
+    const startTimeRef = useRef<number>(Date.now());
+    const timerIntervalRef = useRef<number | null>(null);
 
-  const totalQuestions = 10;
+    const totalQuestions = 10;
 
-  const multiplicationNumbers =
-    question.showCalculationPad && question.num1 && question.num2 ? { num1: question.num1, num2: question.num2 } : null;
+    const multiplicationNumbers =
+        answerMode === 'calculationPad' && question.num1 && question.num2
+            ? { num1: question.num1, num2: question.num2 }
+            : null;
 
-  // Countdown effect
-  useEffect(() => {
-    if (countdown > 0) {
-      const timer = setTimeout(() => {
-        setCountdown((prev) => prev - 1);
-      }, 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [countdown]);
+    // Countdown effect
+    useEffect(() => {
+        if (countdown > 0) {
+            const timer = setTimeout(() => {
+                setCountdown(prev => prev - 1);
+            }, 1000);
+            return () => clearTimeout(timer);
+        }
+    }, [countdown]);
+
+    // Timer effect
+    useEffect(() => {
+        if (countdown > 0) return;
 
   // Timer effect
   useEffect(() => {
@@ -272,9 +260,27 @@ export default function QuizScreen({ level, onQuizComplete, onGoToTop, showTimer
     const isCorrect = selected === question.correctAnswer;
     setFeedback({ show: true, isCorrect });
 
-    if (isCorrect) {
-      setScore((prev) => prev + 10);
-    }
+        const nextQuestionDelay = isCorrect ? 500 : 1500;
+
+        setTimeout(() => {
+            setFeedback({ show: false, isCorrect: false });
+            setSelectedAnswer(null);
+            setIsAnswering(false);
+
+            if (currentQuestionIndex >= totalQuestions) {
+                // Quiz complete
+                if (timerIntervalRef.current) {
+                    clearInterval(timerIntervalRef.current);
+                }
+                const finalTime = Date.now() - startTimeRef.current;
+                onQuizComplete(isCorrect ? score + 10 : score, finalTime);
+            } else {
+                // Next question
+                setCurrentQuestionIndex(prev => prev + 1);
+                setQuestion(QuestionFactory.create(level).generate(answerMode));
+            }
+        }, nextQuestionDelay);
+    };
 
     const nextQuestionDelay = isCorrect ? 500 : 1500;
 
@@ -383,7 +389,82 @@ export default function QuizScreen({ level, onQuizComplete, onGoToTop, showTimer
             const isCorrect = option === question.correctAnswer;
             const showCorrect = selectedAnswer !== null && !feedback.isCorrect && isCorrect;
 
-            let buttonClass = 'bg-slate-100 answer-btn-hover text-slate-700 border-slate-200';
+            <div className="flex justify-between items-center mb-8 mt-2">
+                <div className="bg-slate-100 px-4 py-2 rounded-full font-bold text-slate-600">
+                    もんだい <span className="text-brand-blue text-xl">{currentQuestionIndex}</span>/10
+                </div>
+                <div className="bg-yellow-50 px-4 py-2 rounded-full font-bold text-yellow-600 border-2 border-yellow-100">
+                    スコア: <span>{score}</span>
+                </div>
+            </div>
+
+            <div className="flex flex-col">
+                <div className="flex justify-center items-start gap-8">
+                    <div className="flex-1">
+                        <div className="mb-6 relative">
+                            {question.geometry && <GeometryDisplay geometry={question.geometry} />}
+                            <div className={`text-6xl ${question.geometry ? 'text-xs text-slate-300' : 'text-slate-800'} font-black tracking-wider min-h-[80px] flex items-center justify-center`}>
+                                {question.text}
+                            </div>
+
+                            {/* Feedback Overlay */}
+                            <div
+                                className={`absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-300 ${feedback.show ? 'opacity-100' : 'opacity-0'
+                                    }`}
+                            >
+                                <span
+                                    className={`text-8xl filter drop-shadow-lg transform transition-transform duration-300 ${feedback.show ? 'scale-100' : 'scale-0'
+                                        } ${feedback.isCorrect ? 'text-brand-green' : 'text-brand-red'}`}
+                                >
+                                    {feedback.isCorrect ? '⭕' : '❌'}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {answerMode === 'choice' && (
+                    <div className="grid grid-cols-2 gap-4 mt-4">
+                        {question.options.map((option) => {
+                            const isSelected = selectedAnswer === option;
+                            const isCorrect = option === question.correctAnswer;
+                            const showCorrect = selectedAnswer !== null && !feedback.isCorrect && isCorrect;
+
+                            let buttonClass = 'bg-slate-100 answer-btn-hover text-slate-700 border-slate-200';
+
+                            if (isSelected && feedback.isCorrect) {
+                                buttonClass = 'bg-brand-green text-white border-brand-green shadow-[0_4px_0_rgb(86,168,98)]';
+                            } else if (isSelected && !feedback.isCorrect) {
+                                buttonClass = 'bg-brand-red text-white border-brand-red shadow-[0_4px_0_rgb(255,73,73)]';
+                            } else if (showCorrect) {
+                                buttonClass = 'bg-green-50 text-slate-700 border-slate-200 ring-4 ring-brand-green';
+                            }
+
+                            return (
+                                <button
+                                    key={option}
+                                    onClick={() => handleAnswer(option)}
+                                    disabled={isAnswering}
+                                    className={`${buttonClass} font-bold text-3xl py-2 rounded-2xl shadow-sm border-2 transition-all active:scale-95`}
+                                >
+                                    {option}
+                                </button>
+                            );
+                        })}
+                    </div>
+                )}
+
+                {answerMode === 'calculationPad' && multiplicationNumbers && (
+                    <div className="mt-4">
+                        <CalculationPad
+                            key={currentQuestionIndex}
+                            num1={multiplicationNumbers.num1}
+                            num2={multiplicationNumbers.num2}
+                            onSubmit={handleAnswer}
+                        />
+                    </div>
+                )}
+            </div>
 
             if (isSelected && feedback.isCorrect) {
               buttonClass = 'bg-brand-green text-white border-brand-green shadow-[0_4px_0_rgb(86,168,98)]';

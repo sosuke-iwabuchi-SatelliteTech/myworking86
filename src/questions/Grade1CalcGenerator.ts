@@ -1,19 +1,14 @@
-import { Question } from '../types';
+import { Question, AnswerMode } from '../types';
 import { QuestionGenerator } from './QuestionGenerator';
 
 /**
  * 1年生レベルの計算問題（簡単な足し算と引き算）を生成するクラス。
  */
 export class Grade1CalcGenerator implements QuestionGenerator {
-  /**
-   * 1年生レベルの足し算または引き算の問題を1つ生成します。
-   * 問題には4つの選択肢が含まれ、そのうち1つが正解です。
-   * @returns 生成された問題オブジェクト
-   */
-  generate(): Question {
-    let text = '';
-    let correctAnswer = 0;
-    const isAddition = Math.random() > 0.5;
+    generate(answerMode: AnswerMode): Question {
+        let text = '';
+        let correctAnswer = 0;
+        const isAddition = Math.random() > 0.5;
 
         if (isAddition) {
             const num1 = Math.floor(Math.random() * 10) + 1;
