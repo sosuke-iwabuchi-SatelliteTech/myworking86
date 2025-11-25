@@ -17,12 +17,8 @@ const CalculationPad: React.FC<CalculationPadProps> = ({ num1, num2 }) => {
     setActiveCell({ row, col });
   };
 
-  const handleNumpadClick = (num: string) => {
+  const advanceCursor = () => {
     if (activeCell) {
-      const newGrid = grid.map((r) => [...r]);
-      newGrid[activeCell.row][activeCell.col] = num;
-      setGrid(newGrid);
-
       const nextCol = activeCell.col - 1;
       if (nextCol >= 0) {
         setActiveCell({ row: activeCell.row, col: nextCol });
@@ -31,6 +27,15 @@ const CalculationPad: React.FC<CalculationPadProps> = ({ num1, num2 }) => {
       } else {
         setActiveCell(null);
       }
+    }
+  };
+
+  const handleNumpadClick = (num: string) => {
+    if (activeCell) {
+      const newGrid = grid.map((r) => [...r]);
+      newGrid[activeCell.row][activeCell.col] = num;
+      setGrid(newGrid);
+      advanceCursor();
     }
   };
 
@@ -63,22 +68,41 @@ const CalculationPad: React.FC<CalculationPadProps> = ({ num1, num2 }) => {
     }
   };
 
-  const num1Digits = num1.toString().padStart(2, ' ').split('');
-  const num2Digits = num2.toString().padStart(2, ' ').split('');
+  const handleNextClick = () => {
+    advanceCursor();
+  };
+
+  const num1Digits = num1.toString().padStart(4, " ").split("");
+  const num2Digits = num2.toString().padStart(4, " ").split("");
 
   return (
-    <div className="flex flex-col items-center p-4 bg-slate-100 rounded-lg">
-      <div className="w-[220px] tabular-nums">
-        <div className="text-2xl font-bold">
-          <div className="h-12 flex justify-end items-center">
-            <span className="w-12 text-center">{num1Digits[0]}</span>
-            <span className="w-12 text-center">{num1Digits[1]}</span>
+    <div className="w-full max-w-xs mr-auto p-4 bg-slate-100 rounded-lg">
+      <div className="tabular-nums">
+        <div className="grid grid-cols-4 gap-1 text-2xl font-bold">
+          <div></div> {/* Spacer */}
+          <div className="w-12 h-12 flex items-center justify-center">{num1Digits[2]}</div>
+          <div className="w-12 h-12 flex items-center justify-center">{num1Digits[3]}</div>
+        </div>
+        <div className="grid grid-cols-4 gap-1 text-2xl font-bold">
+          <div></div> {/* Spacer */}
+          <div className="w-12 h-12 flex items-center justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
           </div>
-          <div className="h-12 flex justify-end items-center">
-            <span className="w-12 text-center">x</span>
-            <span className="w-12 text-center">{num2Digits[0]}</span>
-            <span className="w-12 text-center">{num2Digits[1]}</span>
-          </div>
+          <div className="w-12 h-12 flex items-center justify-center">{num2Digits[2]}</div>
+          <div className="w-12 h-12 flex items-center justify-center">{num2Digits[3]}</div>
         </div>
         <hr className="border-black" />
         <div className="space-y-1 mt-1">
@@ -104,28 +128,28 @@ const CalculationPad: React.FC<CalculationPadProps> = ({ num1, num2 }) => {
           ))}
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-2 w-full max-w-[220px] mt-4">
-        {["7", "8", "9", "4", "5", "6", "1", "2", "3"].map((num) => (
-          <button
-            key={num}
-            onClick={() => handleNumpadClick(num)}
-            className="w-full h-12 text-2xl bg-white border rounded-lg hover:bg-gray-200"
-          >
-            {num}
-          </button>
-        ))}
-        <button
-          onClick={handleBackspaceClick}
-          className="w-full h-12 text-xl bg-yellow-500 text-white border rounded-lg hover:bg-yellow-600"
-        >
-          BS
-        </button>
-        <button
-          onClick={() => handleNumpadClick("0")}
-          className="w-full h-12 text-2xl bg-white border rounded-lg hover:bg-gray-200"
-        >
-          0
-        </button>
+      <div className="grid grid-cols-4 gap-2 w-full mt-4">
+        {/* Row 1 */}
+        <button onClick={() => handleNumpadClick('7')} className="w-full h-12 text-2xl bg-white border rounded-lg hover:bg-gray-200">7</button>
+        <button onClick={() => handleNumpadClick('8')} className="w-full h-12 text-2xl bg-white border rounded-lg hover:bg-gray-200">8</button>
+        <button onClick={() => handleNumpadClick('9')} className="w-full h-12 text-2xl bg-white border rounded-lg hover:bg-gray-200">9</button>
+        <button onClick={handleBackspaceClick} className="w-full h-12 text-xl bg-yellow-500 text-white border rounded-lg hover:bg-yellow-600">もどる</button>
+
+        {/* Row 2 */}
+        <button onClick={() => handleNumpadClick('4')} className="w-full h-12 text-2xl bg-white border rounded-lg hover:bg-gray-200">4</button>
+        <button onClick={() => handleNumpadClick('5')} className="w-full h-12 text-2xl bg-white border rounded-lg hover:bg-gray-200">5</button>
+        <button onClick={() => handleNumpadClick('6')} className="w-full h-12 text-2xl bg-white border rounded-lg hover:bg-gray-200">6</button>
+        <div/>
+
+        {/* Row 3 */}
+        <button onClick={() => handleNumpadClick('1')} className="w-full h-12 text-2xl bg-white border rounded-lg hover:bg-gray-200">1</button>
+        <button onClick={() => handleNumpadClick('2')} className="w-full h-12 text-2xl bg-white border rounded-lg hover:bg-gray-200">2</button>
+        <button onClick={() => handleNumpadClick('3')} className="w-full h-12 text-2xl bg-white border rounded-lg hover:bg-gray-200">3</button>
+        <div/>
+
+        {/* Row 4 */}
+        <button onClick={() => handleNumpadClick('0')} className="w-full h-12 text-2xl bg-white border rounded-lg hover:bg-gray-200 col-span-2">0</button>
+        <button onClick={handleNextClick} className="w-full h-12 text-xl bg-green-500 text-white border rounded-lg hover:bg-green-600 col-span-2">次へ</button>
       </div>
     </div>
   );

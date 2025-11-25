@@ -261,7 +261,7 @@ export default function QuizScreen({ level, onQuizComplete, onGoToTop, showTimer
                         <div className="flex-1">
                             <div className="mb-6 relative">
                                 {question.geometry && <GeometryDisplay geometry={question.geometry} />}
-                                <div className={`${question.showCalculationPad ? 'text-5xl' : 'text-6xl'} ${question.geometry ? 'text-xs text-slate-300' : 'text-slate-800'} font-black tracking-wider min-h-[80px] flex items-center justify-center`}>
+                                <div className={`text-6xl ${question.geometry ? 'text-xs text-slate-300' : 'text-slate-800'} font-black tracking-wider min-h-[80px] flex items-center justify-center`}>
                                     {question.text}
                                 </div>
 
@@ -282,7 +282,11 @@ export default function QuizScreen({ level, onQuizComplete, onGoToTop, showTimer
                     }
                     {question.showCalculationPad && multiplicationNumbers && (
                         <div className="flex-1">
-                            <CalculationPad num1={multiplicationNumbers.num1} num2={multiplicationNumbers.num2} />
+                            <CalculationPad
+                                key={currentQuestionIndex}
+                                num1={multiplicationNumbers.num1}
+                                num2={multiplicationNumbers.num2}
+                            />
                         </div>
                     )}
                 </div>
