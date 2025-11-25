@@ -1,8 +1,8 @@
-import { Question, GeometryData } from '../types';
+import { Question, GeometryData, AnswerMode } from '../types';
 import { QuestionGenerator } from './QuestionGenerator';
 
 export class Grade4GeometryGenerator implements QuestionGenerator {
-    generate(): Question {
+    generate(answerMode: AnswerMode): Question {
         let text = '';
         let correctAnswer = 0;
         let geometry: GeometryData | undefined;

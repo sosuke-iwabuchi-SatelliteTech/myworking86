@@ -1,8 +1,8 @@
-import { Question } from '../types';
+import { Question, AnswerMode } from '../types';
 import { QuestionGenerator } from './QuestionGenerator';
 
 export class Grade1CalcGenerator implements QuestionGenerator {
-    generate(): Question {
+    generate(answerMode: AnswerMode): Question {
         let text = '';
         let correctAnswer = 0;
         const isAddition = Math.random() > 0.5;

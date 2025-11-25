@@ -1,5 +1,5 @@
-import { Question } from '../types';
+import { Question, AnswerMode } from '../types';
 
 export interface QuestionGenerator {
-    generate(): Question;
+    generate(answerMode: AnswerMode): Question;
 }
