@@ -78,13 +78,13 @@ const CalculationPad: React.FC<CalculationPadProps> = ({ num1, num2 }) => {
   return (
     <div className="w-full max-w-xs mr-auto p-4 bg-slate-100 rounded-lg">
       <div className="tabular-nums">
-        <div className="grid grid-cols-4 gap-1 text-2xl font-bold">
-          <div></div> {/* Spacer */}
-          <div className="w-12 h-12 flex items-center justify-center">{num1Digits[2]}</div>
-          <div className="w-12 h-12 flex items-center justify-center">{num1Digits[3]}</div>
+        <div className="flex space-x-1 mb-1 justify-center">
+          <div className="w-12 h-12 text-2xl flex items-center justify-center"></div>
+          <div className="w-12 h-12 text-2xl flex items-center justify-center"></div>
+          <div className="w-12 h-12 text-2xl flex items-center justify-center">{num1Digits[2]}</div>
+          <div className="w-12 h-12 text-2xl flex items-center justify-center">{num1Digits[3]}</div>
         </div>
-        <div className="grid grid-cols-4 gap-1 text-2xl font-bold">
-          <div></div> {/* Spacer */}
+        <div className="flex space-x-1 justify-center">
           <div className="w-12 h-12 flex items-center justify-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -101,55 +101,59 @@ const CalculationPad: React.FC<CalculationPadProps> = ({ num1, num2 }) => {
               <line x1="6" y1="6" x2="18" y2="18"></line>
             </svg>
           </div>
-          <div className="w-12 h-12 flex items-center justify-center">{num2Digits[2]}</div>
-          <div className="w-12 h-12 flex items-center justify-center">{num2Digits[3]}</div>
+          <div className="w-12 h-12 text-2xl flex items-center justify-center"></div>
+          <div className="w-12 h-12 text-2xl flex items-center justify-center">{num2Digits[2]}</div>
+          <div className="w-12 h-12 text-2xl flex items-center justify-center">{num2Digits[3]}</div>
         </div>
-        <hr className="border-black" />
+        <div className="flex justify-center">
+          <hr className="border-black my-1 w-[13rem]" />
+        </div>
         <div className="space-y-1 mt-1">
           {grid.map((row, rowIndex) => (
             <React.Fragment key={rowIndex}>
-              <div className="flex space-x-1">
+              <div className="flex space-x-1 justify-center">
                 {row.map((cell, colIndex) => (
                   <div
                     key={colIndex}
                     onClick={() => handleCellClick(rowIndex, colIndex)}
-                    className={`w-12 h-12 text-2xl flex items-center justify-center border-2 rounded ${
-                      activeCell?.row === rowIndex && activeCell?.col === colIndex
-                        ? "border-blue-500 bg-blue-100"
-                        : "border-gray-300"
-                    } cursor-pointer`}
+                    className={`w-12 h-12 text-2xl flex items-center justify-center border-2 rounded ${activeCell?.row === rowIndex && activeCell?.col === colIndex
+                      ? "border-blue-500 bg-blue-100"
+                      : "border-gray-300"
+                      } cursor-pointer`}
                   >
                     {cell}
                   </div>
                 ))}
               </div>
-              {rowIndex === 1 && <hr className="border-black my-1" />}
+              {rowIndex === 1 && (
+                <div className="flex justify-center">
+                  <hr className="border-black my-1 w-[13rem]" />
+                </div>
+              )}
             </React.Fragment>
           ))}
         </div>
       </div>
-      <div className="grid grid-cols-4 gap-2 w-full mt-4">
+      <div className="grid grid-cols-3 gap-2 w-full mt-4">
         {/* Row 1 */}
         <button onClick={() => handleNumpadClick('7')} className="w-full h-12 text-2xl bg-white border rounded-lg hover:bg-gray-200">7</button>
         <button onClick={() => handleNumpadClick('8')} className="w-full h-12 text-2xl bg-white border rounded-lg hover:bg-gray-200">8</button>
         <button onClick={() => handleNumpadClick('9')} className="w-full h-12 text-2xl bg-white border rounded-lg hover:bg-gray-200">9</button>
-        <button onClick={handleBackspaceClick} className="w-full h-12 text-xl bg-yellow-500 text-white border rounded-lg hover:bg-yellow-600">もどる</button>
 
         {/* Row 2 */}
         <button onClick={() => handleNumpadClick('4')} className="w-full h-12 text-2xl bg-white border rounded-lg hover:bg-gray-200">4</button>
         <button onClick={() => handleNumpadClick('5')} className="w-full h-12 text-2xl bg-white border rounded-lg hover:bg-gray-200">5</button>
         <button onClick={() => handleNumpadClick('6')} className="w-full h-12 text-2xl bg-white border rounded-lg hover:bg-gray-200">6</button>
-        <div/>
 
         {/* Row 3 */}
         <button onClick={() => handleNumpadClick('1')} className="w-full h-12 text-2xl bg-white border rounded-lg hover:bg-gray-200">1</button>
         <button onClick={() => handleNumpadClick('2')} className="w-full h-12 text-2xl bg-white border rounded-lg hover:bg-gray-200">2</button>
         <button onClick={() => handleNumpadClick('3')} className="w-full h-12 text-2xl bg-white border rounded-lg hover:bg-gray-200">3</button>
-        <div/>
 
         {/* Row 4 */}
-        <button onClick={() => handleNumpadClick('0')} className="w-full h-12 text-2xl bg-white border rounded-lg hover:bg-gray-200 col-span-2">0</button>
-        <button onClick={handleNextClick} className="w-full h-12 text-xl bg-green-500 text-white border rounded-lg hover:bg-green-600 col-span-2">次へ</button>
+        <button onClick={handleBackspaceClick} className="w-full h-12 text-xl bg-yellow-500 text-white border rounded-lg hover:bg-yellow-600">もどる</button>
+        <button onClick={() => handleNumpadClick('0')} className="w-full h-12 text-2xl bg-white border rounded-lg hover:bg-gray-200">0</button>
+        <button onClick={handleNextClick} className="w-full h-12 text-xl bg-green-500 text-white border rounded-lg hover:bg-green-600">次へ</button>
       </div>
     </div>
   );
