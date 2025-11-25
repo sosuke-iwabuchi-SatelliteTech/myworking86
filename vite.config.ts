@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
@@ -8,5 +9,10 @@ export default defineConfig({
     build: {
         outDir: 'public',
         emptyOutDir: true, // Safe: static assets from 'static/' will be copied after clearing
+    },
+    test: {
+        globals: true,
+        environment: 'jsdom',
+        include: ['tests/**/*.{test,spec}.{js,ts,jsx,tsx}'],
     },
 })
