@@ -25,6 +25,9 @@ export interface Question {
   correctAnswer: number;
   options: number[];
   geometry?: GeometryData;
+  showCalculationPad?: boolean;
+  num1?: number;
+  num2?: number;
 }
 
 export interface GameState {

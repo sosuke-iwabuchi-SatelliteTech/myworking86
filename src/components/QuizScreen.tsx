@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { GameLevel, Question, GeometryData } from '../types';
 import { formatTime } from '../utils/format';
 import { QuestionFactory } from '../questions/QuestionFactory';
+import CalculationPad from './CalculationPad';
 
 interface QuizScreenProps {
     level: GameLevel;
@@ -146,6 +147,11 @@ export default function QuizScreen({ level, onQuizComplete, onGoToTop, showTimer
 
     const totalQuestions = 10;
 
+    const multiplicationNumbers =
+        question.showCalculationPad && question.num1 && question.num2
+            ? { num1: question.num1, num2: question.num2 }
+            : null;
+
     // Countdown effect
     useEffect(() => {
         if (countdown > 0) {
@@ -249,53 +255,63 @@ export default function QuizScreen({ level, onQuizComplete, onGoToTop, showTimer
                 </div>
             </div>
 
-            <div className="mb-6 relative">
-                {question.geometry && <GeometryDisplay geometry={question.geometry} />}
-                <div className={`${question.geometry ? 'text-xs text-slate-300' : 'text-6xl text-slate-800'} font-black tracking-wider`}>
-                    {question.text}
+            <div className="flex flex-col">
+                <div className="flex justify-center items-start gap-8">
+                    <div className="flex-1">
+                        <div className="mb-6 relative">
+                            {question.geometry && <GeometryDisplay geometry={question.geometry} />}
+                            <div className={`${question.showCalculationPad ? 'text-5xl' : 'text-6xl'} ${question.geometry ? 'text-xs text-slate-300' : 'text-slate-800'} font-black tracking-wider min-h-[80px] flex items-center justify-center`}>
+                                {question.text}
+                            </div>
+
+                            {/* Feedback Overlay */}
+                            <div
+                                className={`absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-300 ${feedback.show ? 'opacity-100' : 'opacity-0'
+                                    }`}
+                            >
+                                <span
+                                    className={`text-8xl filter drop-shadow-lg transform transition-transform duration-300 ${feedback.show ? 'scale-100' : 'scale-0'
+                                        } ${feedback.isCorrect ? 'text-brand-green' : 'text-brand-red'}`}
+                                >
+                                    {feedback.isCorrect ? '⭕' : '❌'}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    {question.showCalculationPad && multiplicationNumbers && (
+                        <div className="flex-1">
+                            <CalculationPad num1={multiplicationNumbers.num1} num2={multiplicationNumbers.num2} />
+                        </div>
+                    )}
                 </div>
+                <div className="grid grid-cols-2 gap-4 mt-4">
+                    {question.options.map((option) => {
+                        const isSelected = selectedAnswer === option;
+                        const isCorrect = option === question.correctAnswer;
+                        const showCorrect = selectedAnswer !== null && !feedback.isCorrect && isCorrect;
 
-                {/* Feedback Overlay */}
-                <div
-                    className={`absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-300 ${feedback.show ? 'opacity-100' : 'opacity-0'
-                        }`}
-                >
-                    <span
-                        className={`text-8xl filter drop-shadow-lg transform transition-transform duration-300 ${feedback.show ? 'scale-100' : 'scale-0'
-                            } ${feedback.isCorrect ? 'text-brand-green' : 'text-brand-red'}`}
-                    >
-                        {feedback.isCorrect ? '⭕' : '❌'}
-                    </span>
+                        let buttonClass = 'bg-slate-100 answer-btn-hover text-slate-700 border-slate-200';
+
+                        if (isSelected && feedback.isCorrect) {
+                            buttonClass = 'bg-brand-green text-white border-brand-green shadow-[0_4px_0_rgb(86,168,98)]';
+                        } else if (isSelected && !feedback.isCorrect) {
+                            buttonClass = 'bg-brand-red text-white border-brand-red shadow-[0_4px_0_rgb(255,73,73)]';
+                        } else if (showCorrect) {
+                            buttonClass = 'bg-green-50 text-slate-700 border-slate-200 ring-4 ring-brand-green';
+                        }
+
+                        return (
+                            <button
+                                key={option}
+                                onClick={() => handleAnswer(option)}
+                                disabled={isAnswering}
+                                className={`${buttonClass} font-bold text-3xl py-2 rounded-2xl shadow-sm border-2 transition-all active:scale-95`}
+                            >
+                                {option}
+                            </button>
+                        );
+                    })}
                 </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-                {question.options.map((option) => {
-                    const isSelected = selectedAnswer === option;
-                    const isCorrect = option === question.correctAnswer;
-                    const showCorrect = selectedAnswer !== null && !feedback.isCorrect && isCorrect;
-
-                    let buttonClass = 'bg-slate-100 answer-btn-hover text-slate-700 border-slate-200';
-
-                    if (isSelected && feedback.isCorrect) {
-                        buttonClass = 'bg-brand-green text-white border-brand-green shadow-[0_4px_0_rgb(86,168,98)]';
-                    } else if (isSelected && !feedback.isCorrect) {
-                        buttonClass = 'bg-brand-red text-white border-brand-red shadow-[0_4px_0_rgb(255,73,73)]';
-                    } else if (showCorrect) {
-                        buttonClass = 'bg-green-50 text-slate-700 border-slate-200 ring-4 ring-brand-green';
-                    }
-
-                    return (
-                        <button
-                            key={option}
-                            onClick={() => handleAnswer(option)}
-                            disabled={isAnswering}
-                            className={`${buttonClass} font-bold text-3xl py-2 rounded-2xl shadow-sm border-2 transition-all active:scale-95`}
-                        >
-                            {option}
-                        </button>
-                    );
-                })}
             </div>
 
             <button

@@ -27,6 +27,10 @@ export const GRADES = [
         id: "grade-4-geometry",
         name: "図形の面積",
       },
+      {
+        id: "grade-4-multiplication",
+        name: "2桁のかけ算",
+      },
     ],
   },
 ];
