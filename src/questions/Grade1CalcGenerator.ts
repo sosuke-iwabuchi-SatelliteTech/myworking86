@@ -11,12 +11,12 @@ export class Grade1CalcGenerator implements QuestionGenerator {
             const num1 = Math.floor(Math.random() * 10) + 1;
             const num2 = Math.floor(Math.random() * 10) + 1;
             correctAnswer = num1 + num2;
-            text = `${num1} + ${num2} = ?`;
+            text = `${num1} + ${num2} = `;
         } else {
             const num1 = Math.floor(Math.random() * 15) + 5;
             const num2 = Math.floor(Math.random() * num1);
             correctAnswer = num1 - num2;
-            text = `${num1} - ${num2} = ?`;
+            text = `${num1} - ${num2} = `;
         }
 
         // Generate options
