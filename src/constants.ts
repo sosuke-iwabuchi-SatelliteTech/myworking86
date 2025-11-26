@@ -1,8 +1,10 @@
+import { Grade } from "./types";
+
 /**
  * アプリケーションで利用可能な学年とレベルの定義。
  * 各学年には、その学年でプレイできるレベル（単元）のリストが含まれています。
  */
-export const GRADES = [
+export const GRADES: readonly Grade[] = [
   {
     grade: 1,
     name: "1ねんせい",
@@ -10,6 +12,7 @@ export const GRADES = [
       {
         id: "grade-1-calc",
         name: "たしざん・ひきざん",
+        numberOfQuestions: 10,
       },
     ],
   },
@@ -20,6 +23,7 @@ export const GRADES = [
       {
         id: "grade-2-kuku",
         name: "九九",
+        numberOfQuestions: 10,
       },
     ],
   },
@@ -30,11 +34,13 @@ export const GRADES = [
       {
         id: "grade-4-geometry",
         name: "図形の面積",
+        numberOfQuestions: 5,
       },
       {
         id: "grade-4-multiplication",
         name: "2桁のかけ算",
         calculationPadAvailable: true,
+        numberOfQuestions: 5,
       },
     ],
   },

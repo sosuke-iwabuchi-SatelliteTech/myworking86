@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { GameLevel, Question, GeometryData, AnswerMode } from '../types';
 import { formatTime } from '../utils/format';
+import { GRADES } from '../constants';
 import { QuestionFactory } from '../questions/QuestionFactory';
 import CalculationPad from './CalculationPad';
 import FeedbackOverlay from './FeedbackOverlay';
@@ -149,7 +150,8 @@ export default function QuizScreen({ level, answerMode, onQuizComplete, onGoToTo
     // Add state for correction mode
     const [isCorrectionMode, setIsCorrectionMode] = useState(false);
 
-    const totalQuestions = 10;
+    const levelInfo = GRADES.flatMap(g => g.levels).find(l => l.id === level);
+    const totalQuestions = levelInfo?.numberOfQuestions || 10;
 
     // Countdown effect
     useEffect(() => {
@@ -277,7 +279,7 @@ export default function QuizScreen({ level, answerMode, onQuizComplete, onGoToTo
 
             <div className="flex justify-between items-center mb-8 mt-2">
                 <div className="bg-slate-100 px-4 py-2 rounded-full font-bold text-slate-600">
-                    もんだい <span className="text-brand-blue text-xl">{currentQuestionIndex}</span>/10
+                    もんだい <span className="text-brand-blue text-xl">{currentQuestionIndex}</span>/{totalQuestions}
                 </div>
                 <div className="bg-yellow-50 px-4 py-2 rounded-full font-bold text-yellow-600 border-2 border-yellow-100">
                     スコア: <span>{score}</span>
