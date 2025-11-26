@@ -3,6 +3,7 @@ import { GameLevel, Question, GeometryData, AnswerMode } from '../types';
 import { formatTime } from '../utils/format';
 import { QuestionFactory } from '../questions/QuestionFactory';
 import CalculationPad from './CalculationPad';
+import FeedbackOverlay from './FeedbackOverlay';
 
 /**
  * QuizScreenコンポーネントのprops
@@ -249,7 +250,8 @@ export default function QuizScreen({ level, answerMode, onQuizComplete, onGoToTo
     }
 
     return (
-        <div className="bg-white rounded-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] p-8 pb-20 text-center border-4 border-white ring-4 ring-purple-100 relative overflow-hidden">
+        <div className={`bg-white rounded-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] p-8 pb-20 text-center border-4 border-white ring-4 ring-purple-100 relative overflow-hidden ${feedback.show ? 'pointer-events-none' : ''}`}>
+            <FeedbackOverlay show={feedback.show} isCorrect={feedback.isCorrect} />
             {/* Progress Bar */}
             <div className="absolute top-0 left-0 w-full h-3 bg-slate-100">
                 <div className="h-full bg-brand-green transition-all duration-500" style={{ width: `${progress}%` }} />
@@ -280,13 +282,6 @@ export default function QuizScreen({ level, answerMode, onQuizComplete, onGoToTo
                     <div className={`text-6xl ${question.geometry ? 'text-xs text-slate-300' : 'text-slate-800'} font-black tracking-wider min-h-[80px] flex items-center justify-center`}>
                         {question.text}
                     </div>
-                </div>
-
-                {/* Feedback Overlay */}
-                <div className={`absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-300 ${feedback.show ? 'opacity-100' : 'opacity-0'}`}>
-                    <span className={`text-8xl filter drop-shadow-lg transform transition-transform duration-300 ${feedback.show ? 'scale-100' : 'scale-0'} ${feedback.isCorrect ? 'text-brand-green' : 'text-brand-red'}`}>
-                        {feedback.isCorrect ? '⭕' : '❌'}
-                    </span>
                 </div>
             </div>
 
