@@ -204,11 +204,16 @@ export default function QuizScreen({ level, answerMode, onQuizComplete, onGoToTo
         } else {
             // Incorrect answer
             if (answerMode === 'calculationPad') {
-                setIsCorrectionMode(true);
                 if (timerIntervalRef.current) {
                     clearInterval(timerIntervalRef.current);
                     pauseTimeRef.current = Date.now();
                 }
+                // After 500ms, hide feedback, enter correction mode, and re-enable answers
+                setTimeout(() => {
+                    setFeedback({ show: false, isCorrect: false });
+                    setIsCorrectionMode(true);
+                    setIsAnswering(false);
+                }, 500);
             } else {
                 const nextQuestionDelay = 1500;
                 setTimeout(handleNextQuestion, nextQuestionDelay);
@@ -250,7 +255,7 @@ export default function QuizScreen({ level, answerMode, onQuizComplete, onGoToTo
     }
 
     return (
-        <div className={`bg-white rounded-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] p-8 pb-20 text-center border-4 border-white ring-4 ring-purple-100 relative overflow-hidden ${feedback.show ? 'pointer-events-none' : ''}`}>
+        <div className={`bg-white rounded-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] p-8 pb-20 text-center border-4 border-white ring-4 ring-purple-100 relative overflow-hidden ${isAnswering ? 'pointer-events-none' : ''}`}>
             <FeedbackOverlay show={feedback.show} isCorrect={feedback.isCorrect} />
             {/* Progress Bar */}
             <div className="absolute top-0 left-0 w-full h-3 bg-slate-100">
