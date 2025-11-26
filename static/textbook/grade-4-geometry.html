@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>さんすう教科書 - 4年生の図形</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"M PLUS Rounded 1c"', 'sans-serif'],
+                    },
+                    colors: {
+                        'brand-yellow': '#FFD93D',
+                        'brand-orange': '#FF8E3C',
+                        'brand-red': '#FF4949',
+                        'brand-blue': '#6AD2FF',
+                        'brand-green': '#6BCB77',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-blue-50 min-h-screen font-sans selection:bg-brand-yellow selection:text-brand-orange">
+    <div id="page-content" class="container mx-auto p-4 sm:p-8">
+        <header class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold text-slate-700">4年生の図形マスター</h1>
+            <a href="/" class="text-base sm:text-lg text-blue-500 hover:underline flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                </svg>
+                クイズにもどる
+            </a>
+        </header>
+        <main class="space-y-12">
+            <!-- 長方形・正方形セクション -->
+            <section id="rectangle">
+                <h2 class="text-2xl font-bold text-slate-600 border-l-4 border-brand-orange pl-3 mb-4">長方形と正方形</h2>
+                <div class="bg-white rounded-lg shadow p-6">
+                    <p class="mb-4">長方形は、4つの角がすべて直角（90度）の四角形です。向かい合う辺の長さは同じです。</p>
+                    <p class="mb-4">正方形は、4つの角がすべて直角で、4つの辺の長さがすべて同じ四角形です。つまり、正方形は長方形の特別な形です。</p>
+
+                    <h3 class="text-lg font-bold text-slate-500 mt-6 mb-2">面積の求め方</h3>
+                    <div class="bg-amber-100 border-l-4 border-amber-500 text-amber-800 p-4 rounded-md mb-4">
+                        <p class="font-bold">面積 = たて × よこ</p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row items-center gap-8 mt-6">
+                        <div class="flex-shrink-0">
+                            <svg width="200" height="150" viewBox="0 0 200 150" class="border rounded">
+                                <rect x="20" y="30" width="160" height="100" fill="#6AD2FF" stroke="#3B82F6" stroke-width="2"/>
+                                <text x="100" y="20" font-family="sans-serif" font-size="14" fill="#333" text-anchor="middle">よこ</text>
+                                <text x="10" y="85" font-family="sans-serif" font-size="14" fill="#333" text-anchor="middle" transform="rotate(-90, 10, 85)">たて</text>
+                            </svg>
+                        </div>
+                        <div class="flex-grow">
+                            <h4 class="font-bold mb-2">例題</h4>
+                            <p class="mb-2">たてが 5cm、よこが 8cm の長方形の面積は？</p>
+                            <p class="font-bold text-brand-green">こたえ: 5cm × 8cm = 40cm²</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- 三角形セクション -->
+            <section id="triangle">
+                <h2 class="text-2xl font-bold text-slate-600 border-l-4 border-brand-orange pl-3 mb-4">三角形</h2>
+                <div class="bg-white rounded-lg shadow p-6">
+                    <p class="mb-4">三角形は、3つの直線で囲まれた図形です。</p>
+
+                    <h3 class="text-lg font-bold text-slate-500 mt-6 mb-2">面積の求め方</h3>
+                    <div class="bg-amber-100 border-l-4 border-amber-500 text-amber-800 p-4 rounded-md mb-4">
+                        <p class="font-bold">面積 = ていへん × たかさ ÷ 2</p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row items-center gap-8 mt-6">
+                        <div class="flex-shrink-0">
+                            <svg width="200" height="150" viewBox="0 0 200 150" class="border rounded">
+                                <!-- 三角形 -->
+                                <polygon points="30,130 170,130 80,30" fill="#6BCB77" stroke="#16A34A" stroke-width="2"/>
+                                <!-- 高さの線 -->
+                                <line x1="80" y1="30" x2="80" y2="130" stroke="#333" stroke-width="1" stroke-dasharray="4"/>
+                                <text x="85" y="85" font-family="sans-serif" font-size="14" fill="#333">たかさ</text>
+                                <!-- 底辺の線 -->
+                                <text x="100" y="145" font-family="sans-serif" font-size="14" fill="#333" text-anchor="middle">ていへん</text>
+                            </svg>
+                        </div>
+                        <div class="flex-grow">
+                            <h4 class="font-bold mb-2">例題</h4>
+                            <p class="mb-2">ていへんが 10cm、たかさが 6cm の三角形の面積は？</p>
+                            <p class="font-bold text-brand-green">こたえ: 10cm × 6cm ÷ 2 = 30cm²</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- 台形セクション -->
+            <section id="trapezoid">
+                <h2 class="text-2xl font-bold text-slate-600 border-l-4 border-brand-orange pl-3 mb-4">台形</h2>
+                <div class="bg-white rounded-lg shadow p-6">
+                    <p class="mb-4">台形は、向かい合う辺のうち、少なくとも一組が平行な四角形です。</p>
+
+                    <h3 class="text-lg font-bold text-slate-500 mt-6 mb-2">面積の求め方</h3>
+                    <div class="bg-amber-100 border-l-4 border-amber-500 text-amber-800 p-4 rounded-md mb-4">
+                        <p class="font-bold">面積 = (じょうてい + かてい) × たかさ ÷ 2</p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row items-center gap-8 mt-6">
+                        <div class="flex-shrink-0">
+                            <svg width="200" height="150" viewBox="0 0 200 150" class="border rounded">
+                                <!-- 台形 -->
+                                <polygon points="60,30 140,30 180,120 20,120" fill="#FF8E3C" stroke="#D97706" stroke-width="2"/>
+                                <!-- 高さの線 -->
+                                <line x1="60" y1="30" x2="60" y2="120" stroke="#333" stroke-width="1" stroke-dasharray="4"/>
+                                <text x="65" y="80" font-family="sans-serif" font-size="14" fill="#333">たかさ</text>
+                                <!-- 上底・下底 -->
+                                <text x="100" y="25" font-family="sans-serif" font-size="14" fill="#333" text-anchor="middle">じょうてい</text>
+                                <text x="100" y="135" font-family="sans-serif" font-size="14" fill="#333" text-anchor="middle">かてい</text>
+                            </svg>
+                        </div>
+                        <div class="flex-grow">
+                            <h4 class="font-bold mb-2">例題</h4>
+                            <p class="mb-2">じょうていが 6cm、かていが 10cm、たかさが 5cm の台形の面積は？</p>
+                            <p class="font-bold text-brand-green">こたえ: (6cm + 10cm) × 5cm ÷ 2 = 40cm²</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+
+</html>
