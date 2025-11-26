@@ -191,6 +191,13 @@ export default function QuizScreen({ level, answerMode, onQuizComplete, onGoToTo
 
     const handleAnswer = (selected: number) => {
         if (isAnswering) return;
+
+        // 回答した瞬間にタイマーを停止
+        if (timerIntervalRef.current) {
+            clearInterval(timerIntervalRef.current);
+            pauseTimeRef.current = Date.now();
+        }
+
         setIsAnswering(true);
         setSelectedAnswer(selected);
 
@@ -204,10 +211,6 @@ export default function QuizScreen({ level, answerMode, onQuizComplete, onGoToTo
         } else {
             // Incorrect answer
             if (answerMode === 'calculationPad') {
-                if (timerIntervalRef.current) {
-                    clearInterval(timerIntervalRef.current);
-                    pauseTimeRef.current = Date.now();
-                }
                 // After 500ms, hide feedback, enter correction mode, and re-enable answers
                 setTimeout(() => {
                     setFeedback({ show: false, isCorrect: false });
