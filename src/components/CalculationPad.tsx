@@ -175,7 +175,10 @@ const CalculationPad: React.FC<CalculationPadProps> = ({
         {/* Row 4 */}
         <button onClick={handleBackspaceClick} className="w-full h-12 text-xl bg-yellow-500 text-white border rounded-lg hover:bg-yellow-600">もどる</button>
         <button onClick={() => handleNumpadClick('0')} className="w-full h-12 text-2xl bg-white border rounded-lg hover:bg-gray-200">0</button>
-        <button onClick={handleSubmit} className="w-full h-12 text-xl bg-blue-500 text-white border rounded-lg hover:bg-blue-600">こたえ</button>
+        <button onClick={handleNextClick} className="w-full h-12 text-xl bg-white border rounded-lg hover:bg-gray-200">次へ</button>
+
+        {/* Row 5 */}
+        <button onClick={handleSubmit} className="col-span-3 w-full h-12 text-xl bg-blue-500 text-white border rounded-lg hover:bg-blue-600">こたえ</button>
       </div>
     </div>
   );

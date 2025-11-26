@@ -4,7 +4,7 @@ import QuizScreen from "./components/QuizScreen";
 import ResultScreen from "./components/ResultScreen";
 import HistoryScreen from "./components/HistoryScreen";
 import SettingsScreen from "./components/SettingsScreen";
-import SelectAnswerModeScreen from "./components/SelectAnswerModeScreen";
+import AnswerModeModal from "./components/AnswerModeModal";
 import {
   GameLevel,
   Screen,
@@ -33,6 +33,7 @@ function App() {
   const [finalTime, setFinalTime] = useState(0);
   const [history, setHistory] = useState<HistoryRecord[]>([]);
   const [settings, setSettings] = useState<GameSettings>({ showTimer: true });
+  const [isAnswerModeModalOpen, setIsAnswerModeModalOpen] = useState(false);
 
   useEffect(() => {
     // Load history on mount to determine button state
@@ -50,7 +51,7 @@ function App() {
     );
 
     if (selectedLevelInfo?.calculationPadAvailable) {
-      setScreen("selectAnswerMode");
+      setIsAnswerModeModalOpen(true);
     } else {
       setAnswerMode("choice");
       setScreen("quiz");
@@ -59,7 +60,12 @@ function App() {
 
   const handleAnswerModeSelect = (mode: AnswerMode) => {
     setAnswerMode(mode);
+    setIsAnswerModeModalOpen(false);
     setScreen("quiz");
+  };
+
+  const handleAnswerModeModalClose = () => {
+    setIsAnswerModeModalOpen(false);
   };
 
   const handleQuizComplete = (score: number, time: number) => {
@@ -136,12 +142,6 @@ function App() {
             onSettingsChange={handleSettingsChange}
           />
         )}
-        {screen === "selectAnswerMode" && (
-          <SelectAnswerModeScreen
-            onSelect={handleAnswerModeSelect}
-            onBack={handleGoToTop}
-          />
-        )}
         {screen === "quiz" && (
           <QuizScreen
             key={`${level}-${answerMode}-${Date.now()}`}
@@ -161,6 +161,11 @@ function App() {
           />
         )}
       </div>
+      <AnswerModeModal
+        isOpen={isAnswerModeModalOpen}
+        onSelect={handleAnswerModeSelect}
+        onClose={handleAnswerModeModalClose}
+      />
     </div>
   );
 }
