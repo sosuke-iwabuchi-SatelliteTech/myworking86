@@ -3,6 +3,7 @@ import { GameLevel, Question, GeometryData, AnswerMode } from '../types';
 import { formatTime } from '../utils/format';
 import { QuestionFactory } from '../questions/QuestionFactory';
 import CalculationPad from './CalculationPad';
+import FeedbackOverlay from './FeedbackOverlay';
 
 /**
  * QuizScreenコンポーネントのprops
@@ -142,6 +143,11 @@ export default function QuizScreen({ level, answerMode, onQuizComplete, onGoToTo
     const [countdown, setCountdown] = useState(3);
     const startTimeRef = useRef<number>(Date.now());
     const timerIntervalRef = useRef<number | null>(null);
+    const pauseTimeRef = useRef<number | null>(null);
+    const quizEndedRef = useRef(false);
+
+    // Add state for correction mode
+    const [isCorrectionMode, setIsCorrectionMode] = useState(false);
 
     const totalQuestions = 10;
 
@@ -171,6 +177,18 @@ export default function QuizScreen({ level, answerMode, onQuizComplete, onGoToTo
         };
     }, [countdown]);
 
+    // Quiz completion effect
+    useEffect(() => {
+        if (currentQuestionIndex > totalQuestions && !quizEndedRef.current) {
+            quizEndedRef.current = true; // prevent multiple calls
+            if (timerIntervalRef.current) {
+                clearInterval(timerIntervalRef.current);
+            }
+            onQuizComplete(score, elapsedTime);
+        }
+    }, [currentQuestionIndex, onQuizComplete, score, elapsedTime]);
+
+
     const handleAnswer = (selected: number) => {
         if (isAnswering) return;
         setIsAnswering(true);
@@ -181,29 +199,44 @@ export default function QuizScreen({ level, answerMode, onQuizComplete, onGoToTo
 
         if (isCorrect) {
             setScore(prev => prev + 10);
-        }
-
-        const nextQuestionDelay = isCorrect ? 500 : 1500;
-
-        setTimeout(() => {
-            setFeedback({ show: false, isCorrect: false });
-            setSelectedAnswer(null);
-            setIsAnswering(false);
-
-            if (currentQuestionIndex >= totalQuestions) {
-                // Quiz complete
+            const nextQuestionDelay = 500;
+            setTimeout(handleNextQuestion, nextQuestionDelay);
+        } else {
+            // Incorrect answer
+            if (answerMode === 'calculationPad') {
+                setIsCorrectionMode(true);
                 if (timerIntervalRef.current) {
                     clearInterval(timerIntervalRef.current);
+                    pauseTimeRef.current = Date.now();
                 }
-                const finalTime = Date.now() - startTimeRef.current;
-                const finalScore = isCorrect ? score + 10 : score;
-                onQuizComplete(finalScore, finalTime);
             } else {
-                // Next question
-                setCurrentQuestionIndex(prev => prev + 1);
-                setQuestion(QuestionFactory.create(level).generate(answerMode));
+                const nextQuestionDelay = 1500;
+                setTimeout(handleNextQuestion, nextQuestionDelay);
             }
-        }, nextQuestionDelay);
+        }
+    };
+
+    const handleNextQuestion = () => {
+        // Restart timer if coming from correction mode
+        if (pauseTimeRef.current) {
+            const pausedDuration = Date.now() - pauseTimeRef.current;
+            startTimeRef.current += pausedDuration;
+            pauseTimeRef.current = null;
+
+            timerIntervalRef.current = window.setInterval(() => {
+                setElapsedTime(Date.now() - startTimeRef.current);
+            }, 10);
+        }
+
+        setFeedback({ show: false, isCorrect: false });
+        setSelectedAnswer(null);
+        setIsAnswering(false);
+        setIsCorrectionMode(false);
+
+        if (currentQuestionIndex < totalQuestions) {
+            setQuestion(QuestionFactory.create(level).generate(answerMode));
+        }
+        setCurrentQuestionIndex(prev => prev + 1);
     };
 
     const progress = ((currentQuestionIndex - 1) / totalQuestions) * 100;
@@ -217,7 +250,8 @@ export default function QuizScreen({ level, answerMode, onQuizComplete, onGoToTo
     }
 
     return (
-        <div className="bg-white rounded-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] p-8 pb-20 text-center border-4 border-white ring-4 ring-purple-100 relative overflow-hidden">
+        <div className={`bg-white rounded-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] p-8 pb-20 text-center border-4 border-white ring-4 ring-purple-100 relative overflow-hidden ${feedback.show ? 'pointer-events-none' : ''}`}>
+            <FeedbackOverlay show={feedback.show} isCorrect={feedback.isCorrect} />
             {/* Progress Bar */}
             <div className="absolute top-0 left-0 w-full h-3 bg-slate-100">
                 <div className="h-full bg-brand-green transition-all duration-500" style={{ width: `${progress}%` }} />
@@ -249,13 +283,6 @@ export default function QuizScreen({ level, answerMode, onQuizComplete, onGoToTo
                         {question.text}
                     </div>
                 </div>
-
-                {/* Feedback Overlay */}
-                <div className={`absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-300 ${feedback.show ? 'opacity-100' : 'opacity-0'}`}>
-                    <span className={`text-8xl filter drop-shadow-lg transform transition-transform duration-300 ${feedback.show ? 'scale-100' : 'scale-0'} ${feedback.isCorrect ? 'text-brand-green' : 'text-brand-red'}`}>
-                        {feedback.isCorrect ? '⭕' : '❌'}
-                    </span>
-                </div>
             </div>
 
             {answerMode === 'choice' && (
@@ -285,7 +312,15 @@ export default function QuizScreen({ level, answerMode, onQuizComplete, onGoToTo
 
             {answerMode === 'calculationPad' && question.num1 && question.num2 && (
                 <div className="mt-4">
-                    <CalculationPad key={currentQuestionIndex} num1={question.num1} num2={question.num2} onSubmit={handleAnswer} />
+                    <CalculationPad
+                        key={currentQuestionIndex}
+                        num1={question.num1}
+                        num2={question.num2}
+                        onSubmit={handleAnswer}
+                        onNextQuestion={handleNextQuestion}
+                        isCorrectionMode={isCorrectionMode}
+                        correctAnswer={question.correctAnswer}
+                    />
                 </div>
             )}
 

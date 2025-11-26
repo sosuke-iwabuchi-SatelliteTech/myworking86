@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 /**
  * 計算パッドコンポーネントのprops
@@ -13,12 +13,18 @@ interface CalculationPadProps {
    */
   num2: number;
   onSubmit: (answer: number) => void;
+  onNextQuestion: () => void;
+  isCorrectionMode: boolean;
+  correctAnswer: number;
 }
 
 const CalculationPad: React.FC<CalculationPadProps> = ({
   num1,
   num2,
   onSubmit,
+  onNextQuestion,
+  isCorrectionMode,
+  correctAnswer,
 }) => {
   const [grid, setGrid] = useState<string[][]>(
     Array(3)
@@ -26,6 +32,31 @@ const CalculationPad: React.FC<CalculationPadProps> = ({
       .map(() => Array(4).fill(""))
   );
   const [activeCell, setActiveCell] = useState<{ row: number; col: number } | null>({ row: 0, col: 3 });
+  const [incorrectIndexes, setIncorrectIndexes] = useState<number[]>([]);
+  const [isCorrectionComplete, setIsCorrectionComplete] = useState(false);
+
+  useEffect(() => {
+    const answerString = grid[2].join("");
+    const answerNum = parseInt(answerString, 10) || 0;
+
+    if (isCorrectionMode) {
+      const correctStr = String(correctAnswer).padStart(4, ' ');
+      const currentAnswerRow = grid[2];
+      const newIncorrectIndexes: number[] = [];
+      let isFullyCorrect = true;
+
+      for (let i = 0; i < 4; i++) {
+        const userDigit = currentAnswerRow[i] === '' ? ' ' : currentAnswerRow[i];
+        if (userDigit !== correctStr[i]) {
+          newIncorrectIndexes.push(8 + i); // Row 2 starts at index 8
+          isFullyCorrect = false;
+        }
+      }
+      setIncorrectIndexes(newIncorrectIndexes);
+      setIsCorrectionComplete(isFullyCorrect && answerNum === correctAnswer);
+    }
+  }, [grid, isCorrectionMode, correctAnswer]);
+
 
   const handleCellClick = (row: number, col: number) => {
     setActiveCell({ row, col });
@@ -136,10 +167,13 @@ const CalculationPad: React.FC<CalculationPadProps> = ({
                 {row.map((cell, colIndex) => (
                   <div
                     key={colIndex}
+                    data-testid={`cell-${rowIndex}-${colIndex}`}
                     onClick={() => handleCellClick(rowIndex, colIndex)}
                     className={`w-12 h-12 text-2xl flex items-center justify-center border-2 rounded ${
                       activeCell?.row === rowIndex && activeCell?.col === colIndex
                         ? "border-blue-500 bg-blue-100"
+                        : incorrectIndexes.includes(rowIndex * 4 + colIndex)
+                        ? "border-red-500 bg-red-100"
                         : "border-gray-300"
                     } cursor-pointer`}
                   >
@@ -178,8 +212,21 @@ const CalculationPad: React.FC<CalculationPadProps> = ({
         <button onClick={handleNextClick} className="w-full h-12 text-xl bg-white border rounded-lg hover:bg-gray-200">次へ</button>
 
         {/* Row 5 */}
-        <button onClick={handleSubmit} className="col-span-3 w-full h-12 text-xl bg-blue-500 text-white border rounded-lg hover:bg-blue-600">こたえ</button>
+        <button
+          data-testid="submit-button"
+          onClick={isCorrectionMode ? onNextQuestion : handleSubmit}
+          disabled={isCorrectionMode && !isCorrectionComplete}
+          className="col-span-3 w-full h-12 text-xl bg-blue-500 text-white border rounded-lg hover:bg-blue-600 disabled:bg-slate-400 disabled:cursor-not-allowed"
+        >
+          {isCorrectionMode ? "次の問題へ" : "こたえる"}
+        </button>
       </div>
+      {isCorrectionMode && (
+        <div className="mt-4 text-center">
+          <p className="text-sm text-slate-500">こたえ</p>
+          <p className="text-2xl font-bold text-green-600">{correctAnswer}</p>
+        </div>
+      )}
     </div>
   );
 };
