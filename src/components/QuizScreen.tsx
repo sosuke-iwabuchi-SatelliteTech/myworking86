@@ -142,6 +142,8 @@ export default function QuizScreen({ level, answerMode, onQuizComplete, onGoToTo
     const [countdown, setCountdown] = useState(3);
     const startTimeRef = useRef<number>(Date.now());
     const timerIntervalRef = useRef<number | null>(null);
+    const pauseTimeRef = useRef<number | null>(null);
+    const quizEndedRef = useRef(false);
 
     // Add state for correction mode
     const [isCorrectionMode, setIsCorrectionMode] = useState(false);
@@ -174,6 +176,18 @@ export default function QuizScreen({ level, answerMode, onQuizComplete, onGoToTo
         };
     }, [countdown]);
 
+    // Quiz completion effect
+    useEffect(() => {
+        if (currentQuestionIndex > totalQuestions && !quizEndedRef.current) {
+            quizEndedRef.current = true; // prevent multiple calls
+            if (timerIntervalRef.current) {
+                clearInterval(timerIntervalRef.current);
+            }
+            onQuizComplete(score, elapsedTime);
+        }
+    }, [currentQuestionIndex, onQuizComplete, score, elapsedTime]);
+
+
     const handleAnswer = (selected: number) => {
         if (isAnswering) return;
         setIsAnswering(true);
@@ -192,6 +206,7 @@ export default function QuizScreen({ level, answerMode, onQuizComplete, onGoToTo
                 setIsCorrectionMode(true);
                 if (timerIntervalRef.current) {
                     clearInterval(timerIntervalRef.current);
+                    pauseTimeRef.current = Date.now();
                 }
             } else {
                 const nextQuestionDelay = 1500;
@@ -201,21 +216,26 @@ export default function QuizScreen({ level, answerMode, onQuizComplete, onGoToTo
     };
 
     const handleNextQuestion = () => {
+        // Restart timer if coming from correction mode
+        if (pauseTimeRef.current) {
+            const pausedDuration = Date.now() - pauseTimeRef.current;
+            startTimeRef.current += pausedDuration;
+            pauseTimeRef.current = null;
+
+            timerIntervalRef.current = window.setInterval(() => {
+                setElapsedTime(Date.now() - startTimeRef.current);
+            }, 10);
+        }
+
         setFeedback({ show: false, isCorrect: false });
         setSelectedAnswer(null);
         setIsAnswering(false);
         setIsCorrectionMode(false);
 
-        if (currentQuestionIndex >= totalQuestions) {
-            if (timerIntervalRef.current) {
-                clearInterval(timerIntervalRef.current);
-            }
-            const finalTime = Date.now() - startTimeRef.current;
-            onQuizComplete(score, finalTime);
-        } else {
-            setCurrentQuestionIndex(prev => prev + 1);
+        if (currentQuestionIndex < totalQuestions) {
             setQuestion(QuestionFactory.create(level).generate(answerMode));
         }
+        setCurrentQuestionIndex(prev => prev + 1);
     };
 
     const progress = ((currentQuestionIndex - 1) / totalQuestions) * 100;
