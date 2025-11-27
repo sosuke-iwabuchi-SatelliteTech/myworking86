@@ -1,3 +1,4 @@
+import { MedalCriteria } from '../types';
 import { formatTime, getMedal } from '../utils/format';
 
 /**
@@ -20,6 +21,10 @@ interface ResultScreenProps {
    * 「さいしょにもどる」ボタンがクリックされたときに呼び出されるコールバック関数
    */
   onGoToTop: () => void;
+  /**
+   * メダル獲得条件（オプション）
+   */
+  medalCriteria?: MedalCriteria;
 }
 
 /**
@@ -27,7 +32,7 @@ interface ResultScreenProps {
  * スコア、経過時間、評価メッセージ、および獲得したメダルを表示します。
  * @param {ResultScreenProps} props - コンポーネントのprops
  */
-export default function ResultScreen({ score, finalTime, onRestart, onGoToTop }: ResultScreenProps) {
+export default function ResultScreen({ score, finalTime, onRestart, onGoToTop, medalCriteria }: ResultScreenProps) {
   let message = 'がんばったね！ つぎはもっといけるよ！ 💪';
   let messageClass = 'text-xl font-bold text-brand-blue';
 
@@ -39,7 +44,7 @@ export default function ResultScreen({ score, finalTime, onRestart, onGoToTop }:
     messageClass = 'text-xl font-bold text-brand-orange';
   }
 
-  const medal = getMedal(score, finalTime);
+  const medal = getMedal(score, finalTime, medalCriteria);
 
   return (
     <div className="bg-white rounded-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] p-8 text-center border-4 border-white ring-4 ring-brand-yellow relative">

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Question, GeometryData, AnswerMode } from '../types';
 import { formatTime } from '../utils/format';
-import { GRADES } from '../constants';
+import { GRADES, DEFAULT_MEDAL_CRITERIA } from '../constants';
 import { QuestionFactory } from '../questions/QuestionFactory';
 import CalculationPad from './CalculationPad';
 import FeedbackOverlay from './FeedbackOverlay';
@@ -258,11 +258,25 @@ export default function QuizScreen({ level, answerMode, onQuizComplete, onGoToTo
     };
 
     const progress = ((currentQuestionIndex - 1) / totalQuestions) * 100;
+    const medalCriteria = level.medalCriteria || DEFAULT_MEDAL_CRITERIA;
 
     if (countdown > 0) {
         return (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-blue-50">
-                <div className="text-9xl font-black text-brand-blue animate-pulse">{countdown}</div>
+            <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-blue-50">
+                <div className="text-9xl font-black text-brand-blue animate-pulse mb-8">{countdown}</div>
+                <div className="bg-white px-8 py-6 rounded-3xl shadow-lg border-4 border-slate-100 text-center">
+                    <p className="text-xl font-bold text-slate-500 mb-4">メダルかくとくじょうけん</p>
+                    <div className="flex flex-col gap-3">
+                        <div className="flex items-center gap-4 text-2xl font-bold text-brand-yellow">
+                            <span className="text-4xl">🥇</span>
+                            <span>{medalCriteria.goldThreshold / 1000}びょう 以内</span>
+                        </div>
+                        <div className="flex items-center gap-4 text-2xl font-bold text-slate-400">
+                            <span className="text-4xl">🥈</span>
+                            <span>{medalCriteria.silverThreshold / 1000}びょう 以内</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }

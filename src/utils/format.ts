@@ -1,3 +1,6 @@
+import { MedalCriteria } from '../types';
+import { DEFAULT_MEDAL_CRITERIA } from '../constants';
+
 /**
  * ミリ秒を MM:SS.ms 形式の文字列にフォーマットします。
  * @param ms フォーマットする時間（ミリ秒）
@@ -16,15 +19,16 @@ export function formatTime(ms: number): string {
 /**
  * スコアと時間に基づいて、獲得したメダル（絵文字）を返します。
  * スコアが100点でない場合、またはタイムが設定されていない場合はメダルを獲得できません。
- * - 20秒以内: 金メダル 🥇
- * - 25秒以内: 銀メダル 🥈
+ * - 金メダル条件（デフォルト: 20秒以内）
+ * - 銀メダル条件（デフォルト: 30秒以内）
  * @param score ユーザーのスコア
  * @param time 経過時間（ミリ秒）
+ * @param criteria メダル獲得条件（オプション）。指定がない場合はデフォルト値が使用されます。
  * @returns 条件を満たす場合はメダルの絵文字、それ以外はnull
  */
-export function getMedal(score: number, time?: number): string | null {
+export function getMedal(score: number, time?: number, criteria: MedalCriteria = DEFAULT_MEDAL_CRITERIA): string | null {
   if (!time || score !== 100) return null;
-  if (time <= 20000) return '🥇';
-  if (time <= 25000) return '🥈';
+  if (time <= criteria.goldThreshold) return '🥇';
+  if (time <= criteria.silverThreshold) return '🥈';
   return null;
 }

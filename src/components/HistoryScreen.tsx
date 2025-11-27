@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { HistoryRecord } from '../types';
+import { HistoryRecord, MedalCriteria } from '../types';
 import { formatTime, getMedal } from '../utils/format';
 import { GRADES } from '../constants';
 
@@ -52,6 +52,21 @@ const getLevelName = (levelId: string): string => {
 };
 
 /**
+ * レベルIDから対応するメダル獲得条件を取得します。
+ * @param levelId レベルID
+ * @returns メダル獲得条件。見つからない場合はundefined。
+ */
+const getMedalCriteria = (levelId: string): MedalCriteria | undefined => {
+  for (const grade of GRADES) {
+    const level = grade.levels.find((l) => l.id === levelId);
+    if (level) {
+      return level.medalCriteria;
+    }
+  }
+  return undefined;
+};
+
+/**
  * 過去のクイズの成績履歴を表示するコンポーネント。
  * 履歴のリスト表示と、全履歴を削除する機能を提供します。
  * @param {HistoryScreenProps} props - コンポーネントのprops
@@ -76,6 +91,7 @@ export default function HistoryScreen({ history, onBack, onClearHistory }: Histo
             {history.map((record, index) => {
               const levelName = getLevelName(record.level);
               const gradeName = record.grade ? GRADES.find((g) => g.grade === record.grade)?.name : null;
+              const medalCriteria = getMedalCriteria(record.level);
 
               return (
                 <div
@@ -94,7 +110,7 @@ export default function HistoryScreen({ history, onBack, onClearHistory }: Histo
                     </div>
                     {record.time && (
                       <div className="text-slate-500 font-mono text-xs mt-1 flex items-center gap-1">
-                        <span>{getMedal(record.score, record.time)}</span>
+                        <span>{getMedal(record.score, record.time, medalCriteria)}</span>
                         <span>{formatTime(record.time)}</span>
                       </div>
                     )}
