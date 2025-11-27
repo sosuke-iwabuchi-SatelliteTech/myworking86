@@ -35,6 +35,7 @@ export const GRADES: readonly Grade[] = [
         id: "grade-4-geometry",
         name: "図形の面積",
         numberOfQuestions: 5,
+        textbookUrl: "/textbook/grade-4-geometry.html",
       },
       {
         id: "grade-4-multiplication",

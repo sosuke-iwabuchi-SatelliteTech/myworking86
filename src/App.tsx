@@ -6,11 +6,11 @@ import HistoryScreen from "./components/HistoryScreen";
 import SettingsScreen from "./components/SettingsScreen";
 import AnswerModeModal from "./components/AnswerModeModal";
 import {
-  GameLevel,
   Screen,
   HistoryRecord,
   GameSettings,
   AnswerMode,
+  GameLevel,
 } from "./types";
 import {
   getHistory,
@@ -27,7 +27,7 @@ import { GRADES } from "./constants";
  */
 function App() {
   const [screen, setScreen] = useState<Screen>("welcome");
-  const [level, setLevel] = useState<GameLevel>("grade-1-calc");
+  const [level, setLevel] = useState<(typeof GRADES)[number]['levels'][number]>(GRADES[0].levels[0]);
   const [answerMode, setAnswerMode] = useState<AnswerMode>("choice");
   const [finalScore, setFinalScore] = useState(0);
   const [finalTime, setFinalTime] = useState(0);
@@ -41,16 +41,10 @@ function App() {
     setSettings(getSettings());
   }, []);
 
-  const handleStartGame = (selectedLevel: GameLevel) => {
+  const handleStartGame = (selectedLevel: (typeof GRADES)[number]['levels'][number]) => {
     setLevel(selectedLevel);
-    const selectedGrade = GRADES.find((g) =>
-      g.levels.some((l) => l.id === selectedLevel)
-    );
-    const selectedLevelInfo = selectedGrade?.levels.find(
-      (l) => l.id === selectedLevel
-    );
 
-    if (selectedLevelInfo?.calculationPadAvailable) {
+    if (selectedLevel.calculationPadAvailable) {
       setIsAnswerModeModalOpen(true);
     } else {
       setAnswerMode("choice");
@@ -73,7 +67,7 @@ function App() {
     setFinalTime(time);
 
     const gradeInfo = GRADES.find((g) =>
-      g.levels.some((l) => l.id === level)
+      g.levels.some((l) => l.id === level.id)
     );
     const grade = gradeInfo ? gradeInfo.grade : undefined;
 
@@ -81,7 +75,7 @@ function App() {
     saveRecord({
       timestamp: Date.now(),
       score,
-      level,
+      level: level.id,
       time,
       grade,
     });

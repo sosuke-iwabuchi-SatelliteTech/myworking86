@@ -111,11 +111,44 @@ export interface Question {
    * 図形問題の場合の図形データ
    */
   geometry?: GeometryData;
+  /**
+   * 計算パッドで使用する1番目の数値
+   */
   num1?: number;
   /**
    * 計算パッドで使用する2番目の数値
    */
   num2?: number;
+  /**
+   * 計算パッドを表示するかどうか
+   */
+  showCalculationPad?: boolean;
+}
+
+/**
+ * 1つのレベル（単元）を表すインターフェース。
+ */
+export interface Level {
+  /**
+   * レベルの一意なID
+   */
+  id: GameLevel;
+  /**
+   * レベルの表示名
+   */
+  name: string;
+  /**
+   * 計算パッドが利用可能かどうか
+   */
+  calculationPadAvailable?: boolean;
+  /**
+   * 教科書ページへのURL（オプション）
+   */
+  textbookUrl?: string;
+  /**
+   * このレベルの問題数
+   */
+  numberOfQuestions: number;
 }
 
 /**

@@ -1,16 +1,18 @@
 import { useState, useEffect, useRef } from 'react';
-import { GameLevel, Question, GeometryData, AnswerMode } from '../types';
+import { Question, GeometryData, AnswerMode } from '../types';
 import { formatTime } from '../utils/format';
 import { GRADES } from '../constants';
 import { QuestionFactory } from '../questions/QuestionFactory';
 import CalculationPad from './CalculationPad';
 import FeedbackOverlay from './FeedbackOverlay';
+import { GRADES } from '../constants';
+import { calculateScore } from '../utils/score';
 
 /**
  * QuizScreenコンポーネントのprops
  */
 interface QuizScreenProps {
-    level: GameLevel;
+    level: (typeof GRADES)[number]['levels'][number];
     answerMode: AnswerMode;
     onQuizComplete: (score: number, finalTime: number) => void;
     onGoToTop: () => void;
@@ -135,8 +137,8 @@ function GeometryDisplay({ geometry }: { geometry: GeometryData }) {
 
 export default function QuizScreen({ level, answerMode, onQuizComplete, onGoToTop, showTimer }: QuizScreenProps) {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(1);
-    const [score, setScore] = useState(0);
-    const [question, setQuestion] = useState<Question>(() => QuestionFactory.create(level).generate(answerMode));
+    const [correctAnswerCount, setCorrectAnswerCount] = useState(0);
+    const [question, setQuestion] = useState<Question>(() => QuestionFactory.create(level.id).generate(answerMode));
     const [isAnswering, setIsAnswering] = useState(false);
     const [feedback, setFeedback] = useState<{ show: boolean; isCorrect: boolean }>({ show: false, isCorrect: false });
     const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
@@ -150,8 +152,7 @@ export default function QuizScreen({ level, answerMode, onQuizComplete, onGoToTo
     // Add state for correction mode
     const [isCorrectionMode, setIsCorrectionMode] = useState(false);
 
-    const levelInfo = GRADES.flatMap(g => g.levels).find(l => l.id === level);
-    const totalQuestions = levelInfo?.numberOfQuestions || 10;
+    const totalQuestions = level.numberOfQuestions;
 
     // Countdown effect
     useEffect(() => {
@@ -186,9 +187,10 @@ export default function QuizScreen({ level, answerMode, onQuizComplete, onGoToTo
             if (timerIntervalRef.current) {
                 clearInterval(timerIntervalRef.current);
             }
-            onQuizComplete(score, elapsedTime);
+            const finalScore = calculateScore(correctAnswerCount, totalQuestions);
+            onQuizComplete(finalScore, elapsedTime);
         }
-    }, [currentQuestionIndex, onQuizComplete, score, elapsedTime]);
+    }, [currentQuestionIndex, onQuizComplete, correctAnswerCount, elapsedTime, totalQuestions]);
 
 
     const handleAnswer = (selected: number) => {
@@ -207,7 +209,7 @@ export default function QuizScreen({ level, answerMode, onQuizComplete, onGoToTo
         setFeedback({ show: true, isCorrect });
 
         if (isCorrect) {
-            setScore(prev => prev + 10);
+            setCorrectAnswerCount(prev => prev + 1);
             const nextQuestionDelay = 500;
             setTimeout(handleNextQuestion, nextQuestionDelay);
         } else {
@@ -244,7 +246,7 @@ export default function QuizScreen({ level, answerMode, onQuizComplete, onGoToTo
         setIsCorrectionMode(false);
 
         if (currentQuestionIndex < totalQuestions) {
-            setQuestion(QuestionFactory.create(level).generate(answerMode));
+            setQuestion(QuestionFactory.create(level.id).generate(answerMode));
         }
         setCurrentQuestionIndex(prev => prev + 1);
     };
@@ -282,7 +284,7 @@ export default function QuizScreen({ level, answerMode, onQuizComplete, onGoToTo
                     もんだい <span className="text-brand-blue text-xl">{currentQuestionIndex}</span>/{totalQuestions}
                 </div>
                 <div className="bg-yellow-50 px-4 py-2 rounded-full font-bold text-yellow-600 border-2 border-yellow-100">
-                    スコア: <span>{score}</span>
+                    スコア: <span>{calculateScore(correctAnswerCount, totalQuestions)}</span>
                 </div>
             </div>
 

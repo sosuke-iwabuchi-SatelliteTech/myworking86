@@ -40,8 +40,16 @@ def verify_full_quiz_flow():
 
         page.wait_for_timeout(5000)
 
-        for i in range(1, 11):
-            question_header = page.locator(f"text=もんだい {i}/10")
+        # Get total number of questions from the header "もんだい 1/10"
+        header_text = page.locator("text=/").inner_text() # e.g. "もんだい 1/10"
+        total_questions_match = re.search(r'/(\d+)', header_text)
+        if not total_questions_match:
+            raise ValueError("Could not determine total number of questions.")
+        total_questions = int(total_questions_match.group(1))
+        print(f"Total questions: {total_questions}")
+
+        for i in range(1, total_questions + 1):
+            question_header = page.locator(f"text=もんだい {i}/{total_questions}")
             expect(question_header).to_be_visible()
 
             question_text_element = page.locator(".text-6xl.font-black")
