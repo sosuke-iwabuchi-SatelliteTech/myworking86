@@ -5,18 +5,22 @@ import ResultScreen from "./components/ResultScreen";
 import HistoryScreen from "./components/HistoryScreen";
 import SettingsScreen from "./components/SettingsScreen";
 import AnswerModeModal from "./components/AnswerModeModal";
+import UserRegistrationScreen from "./components/UserRegistrationScreen";
 import {
   Screen,
   HistoryRecord,
   GameSettings,
   AnswerMode,
   GameLevel,
+  UserProfile,
 } from "./types";
 import {
   getHistory,
   saveRecord,
   clearHistory,
   getSettings,
+  getUserProfile,
+  saveUserProfile,
 } from "./utils/storage";
 import { GRADES } from "./constants";
 
@@ -33,12 +37,21 @@ function App() {
   const [finalTime, setFinalTime] = useState(0);
   const [history, setHistory] = useState<HistoryRecord[]>([]);
   const [settings, setSettings] = useState<GameSettings>({ showTimer: true });
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [isAnswerModeModalOpen, setIsAnswerModeModalOpen] = useState(false);
 
   useEffect(() => {
-    // Load history on mount to determine button state
+    // Load history and settings
     setHistory(getHistory());
     setSettings(getSettings());
+
+    // Check for user profile
+    const profile = getUserProfile();
+    if (profile) {
+      setUserProfile(profile);
+    } else {
+      setScreen("registration");
+    }
   }, []);
 
   const handleStartGame = (selectedLevel: (typeof GRADES)[number]['levels'][number]) => {
@@ -112,15 +125,27 @@ function App() {
     setSettings(newSettings);
   };
 
+  const handleRegistrationComplete = (profile: UserProfile) => {
+    saveUserProfile(profile);
+    setUserProfile(profile);
+    setScreen("welcome");
+  };
+
   return (
     <div className="flex flex-col items-center pt-1 min-h-screen bg-blue-50">
-      <div className="w-full max-w-md p-6">
+      <div className={`w-full p-6 ${screen === 'quiz' ? 'max-w-7xl' : 'max-w-md'}`}>
+        {screen === "registration" && (
+          <UserRegistrationScreen
+            onComplete={handleRegistrationComplete}
+          />
+        )}
         {screen === "welcome" && (
           <WelcomeScreen
             onStartGame={handleStartGame}
             onShowHistory={handleShowHistory}
             hasHistory={history.length > 0}
             onGoToSettings={handleGoToSettings}
+            userProfile={userProfile}
           />
         )}
         {screen === "history" && (
@@ -152,6 +177,7 @@ function App() {
             finalTime={finalTime}
             onRestart={handleRestart}
             onGoToTop={handleGoToTop}
+            medalCriteria={level.medalCriteria}
           />
         )}
       </div>

@@ -1,4 +1,13 @@
-import { Grade } from "./types";
+import { Grade, MedalCriteria } from "./types";
+
+/**
+ * デフォルトのメダル獲得条件
+ * 金: 20秒以内, 銀: 30秒以内
+ */
+export const DEFAULT_MEDAL_CRITERIA: MedalCriteria = {
+  goldThreshold: 20000,
+  silverThreshold: 30000,
+};
 
 /**
  * アプリケーションで利用可能な学年とレベルの定義。
@@ -13,6 +22,7 @@ export const GRADES: readonly Grade[] = [
         id: "grade-1-calc",
         name: "たしざん・ひきざん",
         numberOfQuestions: 10,
+        medalCriteria: DEFAULT_MEDAL_CRITERIA,
       },
     ],
   },
@@ -24,6 +34,7 @@ export const GRADES: readonly Grade[] = [
         id: "grade-2-kuku",
         name: "九九",
         numberOfQuestions: 10,
+        medalCriteria: DEFAULT_MEDAL_CRITERIA,
       },
     ],
   },
@@ -36,12 +47,14 @@ export const GRADES: readonly Grade[] = [
         name: "図形の面積",
         numberOfQuestions: 5,
         textbookUrl: "/textbook/grade-4-geometry.html",
+        medalCriteria: DEFAULT_MEDAL_CRITERIA,
       },
       {
         id: "grade-4-multiplication",
         name: "2桁のかけ算",
         calculationPadAvailable: true,
         numberOfQuestions: 5,
+        medalCriteria: DEFAULT_MEDAL_CRITERIA,
       },
     ],
   },
@@ -51,3 +64,8 @@ export const GRADES: readonly Grade[] = [
  * localStorageに設定を保存する際のキー
  */
 export const SETTINGS_STORAGE_KEY = "quiz_settings";
+
+/**
+ * localStorageにユーザープロフィールを保存する際のキー
+ */
+export const USER_PROFILE_STORAGE_KEY = "quiz_user_profile";

@@ -1,5 +1,5 @@
-import { HistoryRecord, GameSettings } from "../types";
-import { SETTINGS_STORAGE_KEY } from "../constants";
+import { HistoryRecord, GameSettings, UserProfile } from "../types";
+import { SETTINGS_STORAGE_KEY, USER_PROFILE_STORAGE_KEY } from "../constants";
 
 const STORAGE_KEY = "quiz_history";
 const MAX_HISTORY_ITEMS = 10;
@@ -83,5 +83,34 @@ export function saveSettings(settings: GameSettings): void {
     localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(settings));
   } catch (e) {
     console.error("Failed to save settings", e);
+  }
+}
+
+/**
+ * localStorageからユーザープロフィールを取得します。
+ * @returns ユーザープロフィール、または存在しない場合はnull
+ */
+export function getUserProfile(): UserProfile | null {
+  try {
+    const json = localStorage.getItem(USER_PROFILE_STORAGE_KEY);
+    if (!json) {
+      return null;
+    }
+    return JSON.parse(json) as UserProfile;
+  } catch (e) {
+    console.error("Failed to parse user profile", e);
+    return null;
+  }
+}
+
+/**
+ * ユーザープロフィールをlocalStorageに保存します。
+ * @param profile 保存するユーザープロフィール
+ */
+export function saveUserProfile(profile: UserProfile): void {
+  try {
+    localStorage.setItem(USER_PROFILE_STORAGE_KEY, JSON.stringify(profile));
+  } catch (e) {
+    console.error("Failed to save user profile", e);
   }
 }

@@ -12,11 +12,20 @@ export type GameLevel =
 /**
  * 1つの学習ユニット（レベル）を表すインターフェース。
  */
+export interface MedalCriteria {
+  goldThreshold: number; // in milliseconds
+  silverThreshold: number; // in milliseconds
+}
+
+/**
+ * 1つの学習ユニット（レベル）を表すインターフェース。
+ */
 export interface Level {
   id: GameLevel;
   name: string;
   calculationPadAvailable?: boolean;
   numberOfQuestions?: number;
+  medalCriteria?: MedalCriteria;
 }
 
 /**
@@ -35,7 +44,8 @@ export type Screen =
   | "result"
   | "history"
   | "settings"
-  | "selectAnswerMode";
+  | "selectAnswerMode"
+  | "registration";
 export type AnswerMode = "choice" | "calculationPad";
 
 /**
@@ -149,6 +159,10 @@ export interface Level {
    * このレベルの問題数
    */
   numberOfQuestions: number;
+  /**
+   * メダル獲得条件
+   */
+  medalCriteria?: MedalCriteria;
 }
 
 /**
@@ -173,4 +187,18 @@ export interface GameSettings {
    * クイズ中にタイマーを表示するかどうか
    */
   showTimer: boolean;
+}
+
+/**
+ * ユーザープロフィール情報を表すインターフェース
+ */
+export interface UserProfile {
+  /**
+   * ニックネーム（最大10文字）
+   */
+  nickname: string;
+  /**
+   * 学年（1-6）
+   */
+  grade: number;
 }
