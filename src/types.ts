@@ -87,11 +87,18 @@ export interface Question {
    * 図形問題の場合の図形データ
    */
   geometry?: GeometryData;
+  /**
+   * 計算パッドで使用する1番目の数値
+   */
   num1?: number;
   /**
    * 計算パッドで使用する2番目の数値
    */
   num2?: number;
+  /**
+   * 計算パッドを表示するかどうか
+   */
+  showCalculationPad?: boolean;
 }
 
 /**
@@ -114,6 +121,10 @@ export interface Level {
    * 教科書ページへのURL（オプション）
    */
   textbookUrl?: string;
+  /**
+   * このレベルの問題数
+   */
+  numberOfQuestions: number;
 }
 
 /**
