@@ -35,7 +35,8 @@ export type Screen =
   | "result"
   | "history"
   | "settings"
-  | "selectAnswerMode";
+  | "selectAnswerMode"
+  | "registration";
 export type AnswerMode = "choice" | "calculationPad";
 
 /**
@@ -173,4 +174,18 @@ export interface GameSettings {
    * クイズ中にタイマーを表示するかどうか
    */
   showTimer: boolean;
+}
+
+/**
+ * ユーザープロフィール情報を表すインターフェース
+ */
+export interface UserProfile {
+  /**
+   * ニックネーム（最大10文字）
+   */
+  nickname: string;
+  /**
+   * 学年（1-6）
+   */
+  grade: number;
 }

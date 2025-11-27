@@ -51,3 +51,8 @@ export const GRADES: readonly Grade[] = [
  * localStorageに設定を保存する際のキー
  */
 export const SETTINGS_STORAGE_KEY = "quiz_settings";
+
+/**
+ * localStorageにユーザープロフィールを保存する際のキー
+ */
+export const USER_PROFILE_STORAGE_KEY = "quiz_user_profile";

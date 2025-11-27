@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { GameLevel, Level } from "../types";
+import { GameLevel, Level, UserProfile } from "../types";
 import { GRADES } from "../constants";
 import QuestionIcon from "./icons/QuestionIcon";
 
@@ -24,6 +24,10 @@ interface WelcomeScreenProps {
    * 設定画面へ遷移するボタンがクリックされたときに呼び出されるコールバック関数
    */
   onGoToSettings: () => void;
+  /**
+   * ユーザープロフィール情報
+   */
+  userProfile: UserProfile | null;
 }
 
 /**
@@ -36,6 +40,7 @@ export default function WelcomeScreen({
   onShowHistory,
   hasHistory,
   onGoToSettings,
+  userProfile,
 }: WelcomeScreenProps) {
   const [selectedGrade, setSelectedGrade] = useState<number | null>(null);
 
@@ -125,6 +130,11 @@ export default function WelcomeScreen({
           <br />
           <span className="text-brand-blue">クイズ</span>
         </h1>
+        {userProfile && (
+          <div className="mb-2 text-xl font-black text-slate-700 bg-blue-50 py-2 px-4 rounded-xl inline-block">
+            {userProfile.nickname}さん <span className="text-slate-500 text-lg font-bold">({userProfile.grade}ねんせい)</span>
+          </div>
+        )}
         <p className="text-slate-500 font-bold text-lg">
           {selectedGrade === null
             ? "がくねんをえらんでね！"
