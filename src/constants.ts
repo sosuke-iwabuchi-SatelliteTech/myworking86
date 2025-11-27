@@ -1,8 +1,10 @@
+import { Grade } from "./types";
+
 /**
  * アプリケーションで利用可能な学年とレベルの定義。
  * 各学年には、その学年でプレイできるレベル（単元）のリストが含まれています。
  */
-export const GRADES = [
+export const GRADES: readonly Grade[] = [
   {
     grade: 1,
     name: "1ねんせい",

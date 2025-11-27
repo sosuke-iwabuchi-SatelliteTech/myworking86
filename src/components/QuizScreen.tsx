@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Question, GeometryData, AnswerMode } from '../types';
 import { formatTime } from '../utils/format';
+import { GRADES } from '../constants';
 import { QuestionFactory } from '../questions/QuestionFactory';
 import CalculationPad from './CalculationPad';
 import FeedbackOverlay from './FeedbackOverlay';

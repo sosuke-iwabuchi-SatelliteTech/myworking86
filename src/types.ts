@@ -1,10 +1,34 @@
-import { GRADES } from "./constants";
-
 /**
  * 利用可能なゲームレベルIDを表す型。
- * `constants.ts`の`GRADES`定義から動的に生成されます。
+ * NOTE: 循環依存を避けるため、`constants.ts`から動的に生成する代わりに手動で定義しています。
+ * 新しいレベルを追加する際は、この型定義も更新する必要があります。
  */
-export type GameLevel = (typeof GRADES)[number]["levels"][number]["id"];
+export type GameLevel =
+  | "grade-1-calc"
+  | "grade-2-kuku"
+  | "grade-4-geometry"
+  | "grade-4-multiplication";
+
+/**
+ * 1つの学習ユニット（レベル）を表すインターフェース。
+ */
+export interface Level {
+  id: GameLevel;
+  name: string;
+  calculationPadAvailable?: boolean;
+  numberOfQuestions?: number;
+}
+
+/**
+ * 1つの学年を表すインターフェース。
+ * これには、その学年で利用可能なレベルのリストが含まれます。
+ */
+export interface Grade {
+  grade: number;
+  name: string;
+  levels: readonly Level[];
+}
+
 export type Screen =
   | "welcome"
   | "quiz"
