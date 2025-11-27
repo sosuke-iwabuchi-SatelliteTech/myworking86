@@ -152,6 +152,7 @@ function App() {
             finalTime={finalTime}
             onRestart={handleRestart}
             onGoToTop={handleGoToTop}
+            medalCriteria={level.medalCriteria}
           />
         )}
       </div>
