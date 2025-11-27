@@ -95,6 +95,28 @@ export interface Question {
 }
 
 /**
+ * 1つのレベル（単元）を表すインターフェース。
+ */
+export interface Level {
+  /**
+   * レベルの一意なID
+   */
+  id: GameLevel;
+  /**
+   * レベルの表示名
+   */
+  name: string;
+  /**
+   * 計算パッドが利用可能かどうか
+   */
+  calculationPadAvailable?: boolean;
+  /**
+   * 教科書ページへのURL（オプション）
+   */
+  textbookUrl?: string;
+}
+
+/**
  * ゲームの現在の状態を表すインターフェース。
  * @deprecated このインターフェースは現在使用されていません。Appコンポーネントのstateが代わりに使用されています。
  */
