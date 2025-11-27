@@ -22,6 +22,7 @@ import {
   getUserProfile,
   saveUserProfile,
 } from "./utils/storage";
+import { setUserProperties, trackQuizComplete } from "./utils/analytics";
 import { GRADES } from "./constants";
 
 /**
@@ -49,6 +50,7 @@ function App() {
     const profile = getUserProfile();
     if (profile) {
       setUserProfile(profile);
+      setUserProperties(profile.nickname, profile.grade);
     } else {
       setScreen("registration");
     }
@@ -96,6 +98,9 @@ function App() {
     // Update local history state so the welcome screen button updates immediately if we go back
     setHistory(getHistory());
 
+    // Send analytics
+    trackQuizComplete(level.id, score, time);
+
     setScreen("result");
   };
 
@@ -128,6 +133,7 @@ function App() {
   const handleRegistrationComplete = (profile: UserProfile) => {
     saveUserProfile(profile);
     setUserProfile(profile);
+    setUserProperties(profile.nickname, profile.grade);
     setScreen("welcome");
   };
 

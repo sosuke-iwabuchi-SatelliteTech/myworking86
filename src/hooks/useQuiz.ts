@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Question, AnswerMode, Level } from '../types';
 import { calculateScore } from '../utils/score';
 import { QuestionFactory } from '../questions/QuestionFactory';
+import { trackQuizStart } from '../utils/analytics';
 
 interface UseQuizProps {
     level: Level;
@@ -43,6 +44,9 @@ export const useQuiz = ({ level, answerMode, onQuizComplete, onBeforeNextQuestio
     useEffect(() => {
         if (countdown > 0) return;
 
+        // Track quiz start
+        trackQuizStart(level.id);
+
         startTimeRef.current = Date.now();
         timerIntervalRef.current = window.setInterval(() => {
             setElapsedTime(Date.now() - startTimeRef.current);
@@ -53,7 +57,7 @@ export const useQuiz = ({ level, answerMode, onQuizComplete, onBeforeNextQuestio
                 clearInterval(timerIntervalRef.current);
             }
         };
-    }, [countdown]);
+    }, [countdown, level.id]);
 
     // Quiz completion effect
     useEffect(() => {
