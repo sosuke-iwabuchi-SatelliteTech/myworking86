@@ -27,13 +27,13 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
 
     const resizeCanvas = () => {
       const { width, height } = container.getBoundingClientRect();
-      // Only resize if dimensions actually changed to avoid clearing on mobile scroll (though hidden on mobile)
-      if (canvas.width !== width || canvas.height !== height) {
-        // Save current content if needed? No, usually resize clears canvas which is acceptable or we'd need to redraw.
-        // For simple scratchpad, clearing on resize is often acceptable, but let's try to preserve if easy.
-        // Actually, simplest is just set size.
-        canvas.width = width;
-        canvas.height = height;
+      // Use floor to avoid subpixel infinite growth issues
+      const newWidth = Math.floor(width);
+      const newHeight = Math.floor(height);
+
+      if (canvas.width !== newWidth || canvas.height !== newHeight) {
+        canvas.width = newWidth;
+        canvas.height = newHeight;
 
         // Re-apply context settings after resize
         ctx.lineCap = 'round';
@@ -46,8 +46,16 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    // Also use ResizeObserver for container size changes
-    const resizeObserver = new ResizeObserver(() => resizeCanvas());
+    // ResizeObserver is causing the infinite loop.
+    // Since we are using absolute positioning for the canvas, relying on window resize
+    // and initial render should be sufficient for most cases, or we can use a debounced observer if strictly needed.
+    // However, given the bug report, the safest immediate fix is to rely on window resize or
+    // ensure the canvas itself doesn't affect container size.
+    // By making the canvas absolute, it won't push the container.
+
+    const resizeObserver = new ResizeObserver(() => {
+       window.requestAnimationFrame(resizeCanvas);
+    });
     resizeObserver.observe(container);
 
     return () => {
@@ -107,13 +115,13 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
   };
 
   return (
-    <div ref={containerRef} className="relative w-full h-full bg-slate-50 border-2 border-dashed border-slate-300 rounded-2xl overflow-hidden">
-      <div className="absolute top-2 left-4 text-slate-400 font-bold select-none pointer-events-none">
+    <div ref={containerRef} className="relative w-full h-full bg-slate-50 border-2 border-dashed border-slate-300 rounded-2xl overflow-hidden isolate">
+      <div className="absolute top-2 left-4 text-slate-400 font-bold select-none pointer-events-none z-10">
         けいさん用紙
       </div>
       <canvas
         ref={canvasRef}
-        className="touch-none cursor-crosshair"
+        className="absolute inset-0 touch-none cursor-crosshair z-0"
         onMouseDown={startDrawing}
         onMouseMove={draw}
         onMouseUp={stopDrawing}
@@ -124,7 +132,7 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
       />
       <button
         onClick={clearCanvas}
-        className="absolute top-2 right-2 bg-white/80 hover:bg-white text-slate-500 hover:text-red-500 p-2 rounded-full shadow-sm border border-slate-200 transition-colors"
+        className="absolute top-2 right-2 bg-white/80 hover:bg-white text-slate-500 hover:text-red-500 p-2 rounded-full shadow-sm border border-slate-200 transition-colors z-10"
         aria-label="すべて消す"
       >
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-5 h-5">
