@@ -64,13 +64,15 @@ export function clearHistory(): void {
 export function getSettings(): GameSettings {
   try {
     const json = localStorage.getItem(SETTINGS_STORAGE_KEY);
+    const defaults: GameSettings = { showTimer: true, penSize: 2 };
     if (!json) {
-      return { showTimer: true };
+      return defaults;
     }
-    return JSON.parse(json);
+    const stored = JSON.parse(json);
+    return { ...defaults, ...stored };
   } catch (e) {
     console.error("Failed to parse settings", e);
-    return { showTimer: true };
+    return { showTimer: true, penSize: 2 };
   }
 }
 

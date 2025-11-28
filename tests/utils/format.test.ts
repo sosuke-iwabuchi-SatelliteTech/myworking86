@@ -1,5 +1,17 @@
 import { describe, it, expect } from 'vitest';
-import { getMedal } from '../../src/utils/format';
+import { getMedal, formatTime } from '../../src/utils/format';
+
+describe('formatTime', () => {
+  it('should format milliseconds to MM:SS.ms', () => {
+    expect(formatTime(0)).toBe('00:00.00');
+    expect(formatTime(1000)).toBe('00:01.00');
+    expect(formatTime(1500)).toBe('00:01.50');
+    expect(formatTime(60000)).toBe('01:00.00');
+    expect(formatTime(65432)).toBe('01:05.43');
+    // Check floor behavior for milliseconds (1239ms -> .23)
+    expect(formatTime(1239)).toBe('00:01.23');
+  });
+});
 
 describe('getMedal', () => {
   it('should return a gold medal for a perfect score within 20 seconds', () => {

@@ -76,11 +76,11 @@ describe('storage', () => {
 
   describe('Settings', () => {
     it('should get default settings', () => {
-      expect(getSettings()).toEqual({ showTimer: true });
+      expect(getSettings()).toEqual({ showTimer: true, penSize: 2 });
     });
 
     it('should save and get settings', () => {
-      const newSettings = { showTimer: false };
+      const newSettings = { showTimer: false, penSize: 2 };
       saveSettings(newSettings);
       expect(getSettings()).toEqual(newSettings);
     });
