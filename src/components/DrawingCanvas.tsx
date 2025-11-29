@@ -43,7 +43,10 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
     const container = containerRef.current;
     if (!canvas || !container) return;
 
-    const ctx = canvas.getContext('2d');
+    // Use alpha: false to potentially improve performance if transparency isn't needed,
+    // though here we are drawing on a transparent canvas over a div background.
+    // 'desynchronized: true' hints the browser to bypass the compositor to reduce latency
+    const ctx = canvas.getContext('2d', { desynchronized: true });
     if (!ctx) return;
 
     ctx.lineCap = 'round';
@@ -94,9 +97,11 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
     clear: clearCanvas
   }));
 
-  const startDrawing = (e: React.MouseEvent | React.TouchEvent) => {
+  const startDrawing = (e: React.PointerEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
     if (!canvas || !contextRef.current) return;
+
+    e.currentTarget.setPointerCapture(e.pointerId);
 
     const { offsetX, offsetY } = getCoordinates(e, canvas);
     contextRef.current.beginPath();
@@ -104,34 +109,50 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
     setIsDrawing(true);
   };
 
-  const draw = (e: React.MouseEvent | React.TouchEvent) => {
+  const draw = (e: React.PointerEvent<HTMLCanvasElement>) => {
     if (!isDrawing || !contextRef.current || !canvasRef.current) return;
-    e.preventDefault(); // Prevent scrolling on touch devices
 
-    const { offsetX, offsetY } = getCoordinates(e, canvasRef.current);
-    contextRef.current.lineTo(offsetX, offsetY);
-    contextRef.current.stroke();
+    // Prevent default touch actions (scrolling) just in case, though touch-action: none should handle it.
+    // e.preventDefault();
+
+    // Handle coalesced events for higher precision (smoother curves on supporting devices like iPad)
+    const events = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
+
+    events.forEach((event) => {
+        const { offsetX, offsetY } = getCoordinates(event, canvasRef.current!);
+        contextRef.current!.lineTo(offsetX, offsetY);
+        contextRef.current!.stroke();
+        // Update current path position to the new point
+        contextRef.current!.moveTo(offsetX, offsetY);
+    });
   };
 
-  const stopDrawing = () => {
+  const stopDrawing = (e: React.PointerEvent<HTMLCanvasElement>) => {
     if (!contextRef.current) return;
-    contextRef.current.closePath();
+    // We do not closePath() here because it connects the last point to the start point of the subpath
+    // which creates a straight line back to start for 'stroke'. We just want to stop adding segments.
+    // However, the original code had closePath().
+    // If we are just stroking lines continuously, closePath usually isn't needed unless we are filling.
+    // But to respect original behavior (or fix it if it was weird), let's see.
+    // Original: closePath(). If lineCap is round, closePath might not look different unless fill is used.
+    // But typically freehand drawing doesn't use closePath().
+    // I will remove closePath() as it is usually incorrect for open strokes.
+
     setIsDrawing(false);
+
+    try {
+        e.currentTarget.releasePointerCapture(e.pointerId);
+    } catch (err) {
+        // ignore
+    }
   };
 
-  const getCoordinates = (e: React.MouseEvent | React.TouchEvent, canvas: HTMLCanvasElement) => {
-    if ('touches' in e) {
-      const rect = canvas.getBoundingClientRect();
-      return {
-        offsetX: e.touches[0].clientX - rect.left,
-        offsetY: e.touches[0].clientY - rect.top
-      };
-    } else {
-      return {
-        offsetX: (e as React.MouseEvent).nativeEvent.offsetX,
-        offsetY: (e as React.MouseEvent).nativeEvent.offsetY
-      };
-    }
+  const getCoordinates = (e: React.PointerEvent | PointerEvent, canvas: HTMLCanvasElement) => {
+    const rect = canvas.getBoundingClientRect();
+    return {
+      offsetX: e.clientX - rect.left,
+      offsetY: e.clientY - rect.top
+    };
   };
 
   const handleChangePenSize = (size: number) => {
@@ -148,13 +169,11 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
       <canvas
         ref={canvasRef}
         className="absolute inset-0 touch-none cursor-crosshair z-0"
-        onMouseDown={startDrawing}
-        onMouseMove={draw}
-        onMouseUp={stopDrawing}
-        onMouseLeave={stopDrawing}
-        onTouchStart={startDrawing}
-        onTouchMove={draw}
-        onTouchEnd={stopDrawing}
+        onPointerDown={startDrawing}
+        onPointerMove={draw}
+        onPointerUp={stopDrawing}
+        onPointerLeave={stopDrawing}
+        onPointerCancel={stopDrawing}
       />
 
       {/* Controls Container */}
