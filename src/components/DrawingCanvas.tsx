@@ -17,7 +17,7 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
   const isDrawingRef = useRef(false);
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
   const [penSize, setPenSize] = useState<number>(2);
-  const lastPos = useRef<{x: number, y: number} | null>(null);
+  const lastPos = useRef<{ x: number, y: number } | null>(null);
 
   // Keep a ref to access current penSize inside the resize listener closure
   const penSizeRef = useRef(penSize);
@@ -78,7 +78,7 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
     window.addEventListener('resize', resizeCanvas);
 
     const resizeObserver = new ResizeObserver(() => {
-       window.requestAnimationFrame(resizeCanvas);
+      window.requestAnimationFrame(resizeCanvas);
     });
     resizeObserver.observe(container);
 
@@ -123,18 +123,18 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
     const rect = canvasRef.current.getBoundingClientRect();
 
     events.forEach((event) => {
-        // Calculate coordinates manually using cached rect
-        const offsetX = event.clientX - rect.left;
-        const offsetY = event.clientY - rect.top;
+      // Calculate coordinates manually using cached rect
+      const offsetX = event.clientX - rect.left;
+      const offsetY = event.clientY - rect.top;
 
-        if (lastPos.current) {
-            contextRef.current!.beginPath();
-            contextRef.current!.moveTo(lastPos.current.x, lastPos.current.y);
-            contextRef.current!.lineTo(offsetX, offsetY);
-            contextRef.current!.stroke();
-        }
+      if (lastPos.current) {
+        contextRef.current!.beginPath();
+        contextRef.current!.moveTo(lastPos.current.x, lastPos.current.y);
+        contextRef.current!.lineTo(offsetX, offsetY);
+        contextRef.current!.stroke();
+      }
 
-        lastPos.current = { x: offsetX, y: offsetY };
+      lastPos.current = { x: offsetX, y: offsetY };
     });
   };
 
@@ -152,18 +152,10 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
     isDrawingRef.current = false;
 
     try {
-        e.currentTarget.releasePointerCapture(e.pointerId);
+      e.currentTarget.releasePointerCapture(e.pointerId);
     } catch (err) {
-        // ignore
+      // ignore
     }
-  };
-
-  const getCoordinates = (e: React.PointerEvent | PointerEvent, canvas: HTMLCanvasElement) => {
-    const rect = canvas.getBoundingClientRect();
-    return {
-      offsetX: e.clientX - rect.left,
-      offsetY: e.clientY - rect.top
-    };
   };
 
   const getCoordinates = (e: React.PointerEvent | PointerEvent, canvas: HTMLCanvasElement) => {
@@ -204,11 +196,10 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
             <button
               key={item.size}
               onClick={() => handleChangePenSize(item.size)}
-              className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
-                penSize === item.size
+              className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${penSize === item.size
                   ? 'bg-slate-800 text-white'
                   : 'text-slate-400 hover:bg-slate-100 hover:text-slate-600'
-              }`}
+                }`}
               aria-label={`ペンサイズ: ${item.label}`}
               title={`${item.label} (${item.size}px)`}
             >
