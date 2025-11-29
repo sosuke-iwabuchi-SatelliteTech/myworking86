@@ -53,7 +53,7 @@ export const GRADES: readonly Grade[] = [
         id: "grade-4-multiplication",
         name: "2桁のかけ算",
         calculationPadAvailable: true,
-        numberOfQuestions: 3,
+        numberOfQuestions: 5,
         medalCriteria: DEFAULT_MEDAL_CRITERIA,
       },
     ],

@@ -28,10 +28,6 @@ interface WelcomeScreenProps {
    * ユーザープロフィール情報
    */
   userProfile: UserProfile | null;
-  /**
-   * ユーザー切り替えボタンがクリックされたときに呼び出されるコールバック関数
-   */
-  onSwitchUser: () => void;
 }
 
 /**
@@ -45,7 +41,6 @@ export default function WelcomeScreen({
   hasHistory,
   onGoToSettings,
   userProfile,
-  onSwitchUser,
 }: WelcomeScreenProps) {
   const [selectedGrade, setSelectedGrade] = useState<number | null>(null);
 
@@ -136,22 +131,8 @@ export default function WelcomeScreen({
           <span className="text-brand-blue">クイズ</span>
         </h1>
         {userProfile && (
-          <div className="mb-2 flex items-center justify-center gap-2">
-             <div className="text-xl font-black text-slate-700 bg-blue-50 py-2 px-4 rounded-xl inline-flex items-center">
-              <span>{userProfile.nickname}さん <span className="text-slate-500 text-lg font-bold">({userProfile.grade}ねんせい)</span></span>
-            </div>
-            <button
-              onClick={onSwitchUser}
-              className="p-2 text-brand-blue hover:text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-xl transition-all"
-              aria-label="ユーザーを切り替える"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                <circle cx="9" cy="7" r="4"></circle>
-                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
-                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-              </svg>
-            </button>
+          <div className="mb-2 text-xl font-black text-slate-700 bg-blue-50 py-2 px-4 rounded-xl inline-block">
+            {userProfile.nickname}さん <span className="text-slate-500 text-lg font-bold">({userProfile.grade}ねんせい)</span>
           </div>
         )}
         <p className="text-slate-500 font-bold text-lg">

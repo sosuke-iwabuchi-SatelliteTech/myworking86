@@ -38,72 +38,20 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
     }
   }, [penSize]);
 
-  // Initialize canvas context and sizing
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const container = containerRef.current;
-    if (!canvas || !container) return;
+  // Event handlers (moved out of render for native binding)
+  // We use references to ensure the latest state/refs are accessed inside listeners
+  const startDrawing = (e: PointerEvent) => {
+    // Crucial: prevent default to stop scrolling/gestures immediately
+    if (e.cancelable) e.preventDefault();
 
-    // Use alpha: false to potentially improve performance if transparency isn't needed,
-    // though here we are drawing on a transparent canvas over a div background.
-    // 'desynchronized: true' hints the browser to bypass the compositor to reduce latency
-    const ctx = canvas.getContext('2d', { desynchronized: true });
-    if (!ctx) return;
-
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    ctx.strokeStyle = '#000000';
-    ctx.lineWidth = penSizeRef.current;
-    contextRef.current = ctx;
-
-    const resizeCanvas = () => {
-      const { width, height } = container.getBoundingClientRect();
-      // Use floor to avoid subpixel infinite growth issues
-      const newWidth = Math.floor(width);
-      const newHeight = Math.floor(height);
-
-      if (canvas.width !== newWidth || canvas.height !== newHeight) {
-        canvas.width = newWidth;
-        canvas.height = newHeight;
-
-        // Re-apply context settings after resize because resizing clears the context state
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
-        ctx.strokeStyle = '#000000';
-        ctx.lineWidth = penSizeRef.current; // Use the latest penSize from ref
-      }
-    };
-
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-
-    const resizeObserver = new ResizeObserver(() => {
-       window.requestAnimationFrame(resizeCanvas);
-    });
-    resizeObserver.observe(container);
-
-    return () => {
-      window.removeEventListener('resize', resizeCanvas);
-      resizeObserver.disconnect();
-    };
-  }, []); // Run once on mount
-
-  const clearCanvas = () => {
-    const canvas = canvasRef.current;
-    if (!canvas || !contextRef.current) return;
-    contextRef.current.clearRect(0, 0, canvas.width, canvas.height);
-  };
-
-  useImperativeHandle(ref, () => ({
-    clear: clearCanvas
-  }));
-
-  const startDrawing = (e: React.PointerEvent<HTMLCanvasElement>) => {
-    e.preventDefault();
     const canvas = canvasRef.current;
     if (!canvas || !contextRef.current) return;
 
-    e.currentTarget.setPointerCapture(e.pointerId);
+    try {
+      canvas.setPointerCapture(e.pointerId);
+    } catch (err) {
+      // Ignore errors if capture fails
+    }
 
     const { offsetX, offsetY } = getCoordinates(e, canvas);
     contextRef.current.beginPath();
@@ -112,18 +60,17 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
     isDrawingRef.current = true;
   };
 
-  const draw = (e: React.PointerEvent<HTMLCanvasElement>) => {
+  const draw = (e: PointerEvent) => {
+    // Prevent default handling (scrolling/zoom)
+    if (e.cancelable) e.preventDefault();
+
     if (!isDrawingRef.current || !contextRef.current || !canvasRef.current) return;
 
-    // Access coalesced events from nativeEvent if available for higher precision
-    const nativeEvent = e.nativeEvent as PointerEvent;
-    const events = nativeEvent.getCoalescedEvents ? nativeEvent.getCoalescedEvents() : [e];
-
-    // Cache rect to avoid layout thrashing inside the loop
+    // Access coalesced events for higher precision (120Hz+ on iPad)
+    const events = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
     const rect = canvasRef.current.getBoundingClientRect();
 
     events.forEach((event) => {
-        // Calculate coordinates manually using cached rect
         const offsetX = event.clientX - rect.left;
         const offsetY = event.clientY - rect.top;
 
@@ -138,27 +85,101 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
     });
   };
 
-  const stopDrawing = (e: React.PointerEvent<HTMLCanvasElement>) => {
-    if (!contextRef.current) return;
-    // We do not closePath() here because it connects the last point to the start point of the subpath
-    // which creates a straight line back to start for 'stroke'. We just want to stop adding segments.
-    // However, the original code had closePath().
-    // If we are just stroking lines continuously, closePath usually isn't needed unless we are filling.
-    // But to respect original behavior (or fix it if it was weird), let's see.
-    // Original: closePath(). If lineCap is round, closePath might not look different unless fill is used.
-    // But typically freehand drawing doesn't use closePath().
-    // I will remove closePath() as it is usually incorrect for open strokes.
+  const stopDrawing = (e: PointerEvent) => {
+    if (e.cancelable) e.preventDefault();
 
     isDrawingRef.current = false;
+    lastPos.current = null; // Reset last position
 
-    try {
-        e.currentTarget.releasePointerCapture(e.pointerId);
-    } catch (err) {
-        // ignore
+    if (canvasRef.current) {
+        try {
+            canvasRef.current.releasePointerCapture(e.pointerId);
+        } catch (err) {
+            // ignore
+        }
     }
   };
 
-  const getCoordinates = (e: React.PointerEvent | PointerEvent, canvas: HTMLCanvasElement) => {
+  const preventDefaultHandler = (e: Event) => {
+      e.preventDefault();
+  };
+
+  // Initialize canvas context, sizing, and Native Event Listeners
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const container = containerRef.current;
+    if (!canvas || !container) return;
+
+    // 'desynchronized: true' hints the browser to bypass the compositor to reduce latency
+    const ctx = canvas.getContext('2d', { desynchronized: true, alpha: true });
+    if (!ctx) return;
+
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = penSizeRef.current;
+    contextRef.current = ctx;
+
+    const resizeCanvas = () => {
+      const { width, height } = container.getBoundingClientRect();
+      const newWidth = Math.floor(width);
+      const newHeight = Math.floor(height);
+
+      if (canvas.width !== newWidth || canvas.height !== newHeight) {
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+        // Re-apply context settings after resize
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = penSizeRef.current;
+      }
+    };
+
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const resizeObserver = new ResizeObserver(() => {
+       window.requestAnimationFrame(resizeCanvas);
+    });
+    resizeObserver.observe(container);
+
+    // --- Native Event Binding ---
+    // We bind directly to the DOM element to use { passive: false }
+    // This allows us to call preventDefault() synchronously and reliably.
+    const opts = { passive: false };
+
+    canvas.addEventListener('pointerdown', startDrawing, opts);
+    canvas.addEventListener('pointermove', draw, opts);
+    canvas.addEventListener('pointerup', stopDrawing, opts);
+    canvas.addEventListener('pointerleave', stopDrawing, opts);
+    canvas.addEventListener('pointercancel', stopDrawing, opts);
+    canvas.addEventListener('contextmenu', preventDefaultHandler, opts);
+
+    return () => {
+      window.removeEventListener('resize', resizeCanvas);
+      resizeObserver.disconnect();
+
+      canvas.removeEventListener('pointerdown', startDrawing);
+      canvas.removeEventListener('pointermove', draw);
+      canvas.removeEventListener('pointerup', stopDrawing);
+      canvas.removeEventListener('pointerleave', stopDrawing);
+      canvas.removeEventListener('pointercancel', stopDrawing);
+      canvas.removeEventListener('contextmenu', preventDefaultHandler);
+    };
+  }, []); // Run once on mount
+
+  const clearCanvas = () => {
+    const canvas = canvasRef.current;
+    if (!canvas || !contextRef.current) return;
+    contextRef.current.clearRect(0, 0, canvas.width, canvas.height);
+  };
+
+  useImperativeHandle(ref, () => ({
+    clear: clearCanvas
+  }));
+
+  const getCoordinates = (e: PointerEvent, canvas: HTMLCanvasElement) => {
     const rect = canvas.getBoundingClientRect();
     return {
       offsetX: e.clientX - rect.left,
@@ -179,13 +200,8 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
       </div>
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 touch-none cursor-crosshair z-0"
-        onPointerDown={startDrawing}
-        onPointerMove={draw}
-        onPointerUp={stopDrawing}
-        onPointerLeave={stopDrawing}
-        onPointerCancel={stopDrawing}
-        onContextMenu={(e) => e.preventDefault()}
+        className="absolute inset-0 cursor-crosshair z-0"
+        style={{ touchAction: 'none' }}
       />
 
       {/* Controls Container */}
