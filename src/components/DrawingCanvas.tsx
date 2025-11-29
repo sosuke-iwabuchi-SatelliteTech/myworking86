@@ -17,6 +17,7 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
   const [isDrawing, setIsDrawing] = useState(false);
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
   const [penSize, setPenSize] = useState<number>(2);
+  const lastPos = useRef<{x: number, y: number} | null>(null);
 
   // Keep a ref to access current penSize inside the resize listener closure
   const penSizeRef = useRef(penSize);
@@ -98,6 +99,7 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
   }));
 
   const startDrawing = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    e.preventDefault();
     const canvas = canvasRef.current;
     if (!canvas || !contextRef.current) return;
 
@@ -106,24 +108,33 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
     const { offsetX, offsetY } = getCoordinates(e, canvas);
     contextRef.current.beginPath();
     contextRef.current.moveTo(offsetX, offsetY);
+    lastPos.current = { x: offsetX, y: offsetY };
     setIsDrawing(true);
   };
 
   const draw = (e: React.PointerEvent<HTMLCanvasElement>) => {
     if (!isDrawing || !contextRef.current || !canvasRef.current) return;
 
-    // Prevent default touch actions (scrolling) just in case, though touch-action: none should handle it.
-    // e.preventDefault();
+    // Access coalesced events from nativeEvent if available for higher precision
+    const nativeEvent = e.nativeEvent as PointerEvent;
+    const events = nativeEvent.getCoalescedEvents ? nativeEvent.getCoalescedEvents() : [e];
 
-    // Handle coalesced events for higher precision (smoother curves on supporting devices like iPad)
-    const events = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
+    // Cache rect to avoid layout thrashing inside the loop
+    const rect = canvasRef.current.getBoundingClientRect();
 
     events.forEach((event) => {
-        const { offsetX, offsetY } = getCoordinates(event, canvasRef.current!);
-        contextRef.current!.lineTo(offsetX, offsetY);
-        contextRef.current!.stroke();
-        // Update current path position to the new point
-        contextRef.current!.moveTo(offsetX, offsetY);
+        // Calculate coordinates manually using cached rect
+        const offsetX = event.clientX - rect.left;
+        const offsetY = event.clientY - rect.top;
+
+        if (lastPos.current) {
+            contextRef.current!.beginPath();
+            contextRef.current!.moveTo(lastPos.current.x, lastPos.current.y);
+            contextRef.current!.lineTo(offsetX, offsetY);
+            contextRef.current!.stroke();
+        }
+
+        lastPos.current = { x: offsetX, y: offsetY };
     });
   };
 
@@ -162,7 +173,7 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
   };
 
   return (
-    <div ref={containerRef} className="relative w-full h-full bg-slate-50 border-2 border-dashed border-slate-300 rounded-2xl overflow-hidden isolate">
+    <div ref={containerRef} className="relative w-full h-full bg-slate-50 border-2 border-dashed border-slate-300 rounded-2xl overflow-hidden isolate select-none">
       <div className="absolute top-2 left-4 text-slate-400 font-bold select-none pointer-events-none z-10">
         けいさん用紙
       </div>
@@ -174,6 +185,7 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
         onPointerUp={stopDrawing}
         onPointerLeave={stopDrawing}
         onPointerCancel={stopDrawing}
+        onContextMenu={(e) => e.preventDefault()}
       />
 
       {/* Controls Container */}
