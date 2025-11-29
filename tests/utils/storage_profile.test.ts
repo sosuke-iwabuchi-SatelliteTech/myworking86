@@ -1,6 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { getUserProfile, saveUserProfile } from "../../src/utils/storage";
-import { USER_PROFILE_STORAGE_KEY } from "../../src/constants";
+import { getUserProfile, saveUserProfile, getCurrentUser } from "../../src/utils/storage";
 import { UserProfile } from "../../src/types";
 
 describe("Storage Utils - User Profile", () => {
@@ -23,13 +22,17 @@ describe("Storage Utils - User Profile", () => {
     saveUserProfile(testProfile);
     const retrieved = getUserProfile();
 
-    expect(retrieved).toEqual(testProfile);
+    expect(retrieved).not.toBeNull();
+    expect(retrieved?.nickname).toBe(testProfile.nickname);
+    expect(retrieved?.grade).toBe(testProfile.grade);
+    expect(retrieved?.id).toBeDefined(); // Now it has an ID
   });
 
-  it("should return null if json parsing fails", () => {
-    localStorage.setItem(USER_PROFILE_STORAGE_KEY, "invalid-json");
+  it("should return null if json parsing fails (simulated by corrupted users list)", () => {
+    // Note: getUserProfile now delegates to getCurrentUser, which reads from USERS_STORAGE_KEY.
+    // If USERS_STORAGE_KEY is corrupted, it should fail gracefully.
+    localStorage.setItem("quiz_users", "invalid-json");
 
-    // Mock console.error to avoid noise in test output
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     const profile = getUserProfile();

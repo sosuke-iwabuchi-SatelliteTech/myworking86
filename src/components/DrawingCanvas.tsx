@@ -17,6 +17,7 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
   const [isDrawing, setIsDrawing] = useState(false);
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
   const [penSize, setPenSize] = useState<number>(2);
+  const lastPos = useRef<{x: number, y: number} | null>(null);
 
   // Keep a ref to access current penSize inside the resize listener closure
   const penSizeRef = useRef(penSize);
@@ -43,7 +44,10 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
     const container = containerRef.current;
     if (!canvas || !container) return;
 
-    const ctx = canvas.getContext('2d');
+    // Use alpha: false to potentially improve performance if transparency isn't needed,
+    // though here we are drawing on a transparent canvas over a div background.
+    // 'desynchronized: true' hints the browser to bypass the compositor to reduce latency
+    const ctx = canvas.getContext('2d', { desynchronized: true });
     if (!ctx) return;
 
     ctx.lineCap = 'round';
@@ -94,44 +98,72 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
     clear: clearCanvas
   }));
 
-  const startDrawing = (e: React.MouseEvent | React.TouchEvent) => {
+  const startDrawing = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    e.preventDefault();
     const canvas = canvasRef.current;
     if (!canvas || !contextRef.current) return;
+
+    e.currentTarget.setPointerCapture(e.pointerId);
 
     const { offsetX, offsetY } = getCoordinates(e, canvas);
     contextRef.current.beginPath();
     contextRef.current.moveTo(offsetX, offsetY);
+    lastPos.current = { x: offsetX, y: offsetY };
     setIsDrawing(true);
   };
 
-  const draw = (e: React.MouseEvent | React.TouchEvent) => {
+  const draw = (e: React.PointerEvent<HTMLCanvasElement>) => {
     if (!isDrawing || !contextRef.current || !canvasRef.current) return;
-    e.preventDefault(); // Prevent scrolling on touch devices
 
-    const { offsetX, offsetY } = getCoordinates(e, canvasRef.current);
-    contextRef.current.lineTo(offsetX, offsetY);
-    contextRef.current.stroke();
+    // Access coalesced events from nativeEvent if available for higher precision
+    const nativeEvent = e.nativeEvent as PointerEvent;
+    const events = nativeEvent.getCoalescedEvents ? nativeEvent.getCoalescedEvents() : [e];
+
+    // Cache rect to avoid layout thrashing inside the loop
+    const rect = canvasRef.current.getBoundingClientRect();
+
+    events.forEach((event) => {
+        // Calculate coordinates manually using cached rect
+        const offsetX = event.clientX - rect.left;
+        const offsetY = event.clientY - rect.top;
+
+        if (lastPos.current) {
+            contextRef.current!.beginPath();
+            contextRef.current!.moveTo(lastPos.current.x, lastPos.current.y);
+            contextRef.current!.lineTo(offsetX, offsetY);
+            contextRef.current!.stroke();
+        }
+
+        lastPos.current = { x: offsetX, y: offsetY };
+    });
   };
 
-  const stopDrawing = () => {
+  const stopDrawing = (e: React.PointerEvent<HTMLCanvasElement>) => {
     if (!contextRef.current) return;
-    contextRef.current.closePath();
+    // We do not closePath() here because it connects the last point to the start point of the subpath
+    // which creates a straight line back to start for 'stroke'. We just want to stop adding segments.
+    // However, the original code had closePath().
+    // If we are just stroking lines continuously, closePath usually isn't needed unless we are filling.
+    // But to respect original behavior (or fix it if it was weird), let's see.
+    // Original: closePath(). If lineCap is round, closePath might not look different unless fill is used.
+    // But typically freehand drawing doesn't use closePath().
+    // I will remove closePath() as it is usually incorrect for open strokes.
+
     setIsDrawing(false);
+
+    try {
+        e.currentTarget.releasePointerCapture(e.pointerId);
+    } catch (err) {
+        // ignore
+    }
   };
 
-  const getCoordinates = (e: React.MouseEvent | React.TouchEvent, canvas: HTMLCanvasElement) => {
-    if ('touches' in e) {
-      const rect = canvas.getBoundingClientRect();
-      return {
-        offsetX: e.touches[0].clientX - rect.left,
-        offsetY: e.touches[0].clientY - rect.top
-      };
-    } else {
-      return {
-        offsetX: (e as React.MouseEvent).nativeEvent.offsetX,
-        offsetY: (e as React.MouseEvent).nativeEvent.offsetY
-      };
-    }
+  const getCoordinates = (e: React.PointerEvent | PointerEvent, canvas: HTMLCanvasElement) => {
+    const rect = canvas.getBoundingClientRect();
+    return {
+      offsetX: e.clientX - rect.left,
+      offsetY: e.clientY - rect.top
+    };
   };
 
   const handleChangePenSize = (size: number) => {
@@ -141,20 +173,19 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
   };
 
   return (
-    <div ref={containerRef} className="relative w-full h-full bg-slate-50 border-2 border-dashed border-slate-300 rounded-2xl overflow-hidden isolate">
+    <div ref={containerRef} className="relative w-full h-full bg-slate-50 border-2 border-dashed border-slate-300 rounded-2xl overflow-hidden isolate select-none">
       <div className="absolute top-2 left-4 text-slate-400 font-bold select-none pointer-events-none z-10">
         けいさん用紙
       </div>
       <canvas
         ref={canvasRef}
         className="absolute inset-0 touch-none cursor-crosshair z-0"
-        onMouseDown={startDrawing}
-        onMouseMove={draw}
-        onMouseUp={stopDrawing}
-        onMouseLeave={stopDrawing}
-        onTouchStart={startDrawing}
-        onTouchMove={draw}
-        onTouchEnd={stopDrawing}
+        onPointerDown={startDrawing}
+        onPointerMove={draw}
+        onPointerUp={stopDrawing}
+        onPointerLeave={stopDrawing}
+        onPointerCancel={stopDrawing}
+        onContextMenu={(e) => e.preventDefault()}
       />
 
       {/* Controls Container */}

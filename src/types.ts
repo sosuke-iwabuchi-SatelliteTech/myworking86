@@ -18,13 +18,32 @@ export interface MedalCriteria {
 }
 
 /**
- * 1つの学習ユニット（レベル）を表すインターフェース。
+ * 1つのレベル（単元）を表すインターフェース。
  */
 export interface Level {
+  /**
+   * レベルの一意なID
+   */
   id: GameLevel;
+  /**
+   * レベルの表示名
+   */
   name: string;
+  /**
+   * 計算パッドが利用可能かどうか
+   */
   calculationPadAvailable?: boolean;
+  /**
+   * 教科書ページへのURL（オプション）
+   */
+  textbookUrl?: string;
+  /**
+   * このレベルの問題数
+   */
   numberOfQuestions?: number;
+  /**
+   * メダル獲得条件
+   */
   medalCriteria?: MedalCriteria;
 }
 
@@ -136,36 +155,6 @@ export interface Question {
 }
 
 /**
- * 1つのレベル（単元）を表すインターフェース。
- */
-export interface Level {
-  /**
-   * レベルの一意なID
-   */
-  id: GameLevel;
-  /**
-   * レベルの表示名
-   */
-  name: string;
-  /**
-   * 計算パッドが利用可能かどうか
-   */
-  calculationPadAvailable?: boolean;
-  /**
-   * 教科書ページへのURL（オプション）
-   */
-  textbookUrl?: string;
-  /**
-   * このレベルの問題数
-   */
-  numberOfQuestions: number;
-  /**
-   * メダル獲得条件
-   */
-  medalCriteria?: MedalCriteria;
-}
-
-/**
  * ゲームの現在の状態を表すインターフェース。
  * @deprecated このインターフェースは現在使用されていません。Appコンポーネントのstateが代わりに使用されています。
  */
@@ -205,4 +194,14 @@ export interface UserProfile {
    * 学年（1-6）
    */
   grade: number;
+}
+
+/**
+ * ID付きのユーザー情報を表すインターフェース
+ */
+export interface User extends UserProfile {
+  /**
+   * ユーザーの一意なID (UUID)
+   */
+  id: string;
 }
