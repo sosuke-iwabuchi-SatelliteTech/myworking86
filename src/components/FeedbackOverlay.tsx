@@ -14,7 +14,13 @@ export default function FeedbackOverlay({ show, isCorrect }: FeedbackOverlayProp
 
   return ReactDOM.createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
-      {isCorrect ? <CorrectIcon /> : <IncorrectIcon />}
+      <div className="w-[85vmin] h-[85vmin] max-w-[600px] max-h-[600px] animate-feedback-pop">
+        {isCorrect ? (
+            <CorrectIcon className="w-full h-full" />
+        ) : (
+            <IncorrectIcon className="w-full h-full" />
+        )}
+      </div>
     </div>,
     document.body
   );
