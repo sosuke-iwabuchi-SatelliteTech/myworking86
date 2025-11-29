@@ -17,9 +17,13 @@ global.ResizeObserver = class ResizeObserver {
 
 describe('DrawingCanvas', () => {
   it('renders correctly', () => {
-    render(<DrawingCanvas />);
+    const { container } = render(<DrawingCanvas />);
     expect(screen.getByText('けいさん用紙')).toBeDefined();
     expect(screen.getByRole('button', { name: 'すべて消す' })).toBeDefined();
+
+    // Check for select-none class on the container (first child of the rendered output)
+    const containerDiv = container.firstChild as HTMLElement;
+    expect(containerDiv.className).toContain('select-none');
   });
 
   it('initializes canvas context on mount', () => {
