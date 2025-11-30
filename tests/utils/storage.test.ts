@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { getHistory, saveRecord, clearHistory, getSettings, saveSettings, saveUser } from '../../src/utils/storage';
+import { getHistory, saveRecord, clearHistory, getSettings, saveSettings } from '../../src/utils/storage';
 import { HistoryRecord } from '../../src/types';
 
 // Mock localStorage
@@ -26,25 +26,17 @@ Object.defineProperty(window, 'localStorage', {
 const mockRecord: HistoryRecord = {
   timestamp: 1,
   score: 100,
-  level: "grade-1-calc",
+  level: { id: 'test', name: 'Test' },
   time: 10000,
 };
-
-// Use crypto.randomUUID or a simple mock if not available (Vitest environment usually has it or we can mock it)
-if (!globalThis.crypto) {
-    // @ts-ignore
-    globalThis.crypto = { randomUUID: () => 'test-uuid-' + Math.random() };
-}
 
 describe('storage', () => {
   beforeEach(() => {
     localStorageMock.clear();
-    // Create a dummy user for history tests
-    saveUser({ nickname: "Test", grade: 1 });
   });
 
   describe('History', () => {
-    it('should get empty history initially', () => {
+    it('should get empty history', () => {
       expect(getHistory()).toEqual([]);
     });
 
