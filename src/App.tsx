@@ -23,6 +23,7 @@ import {
   saveUserProfile,
   getUsers,
   setCurrentUser,
+  deleteUserProfile,
 } from "./utils/storage";
 import { setUserProperties, trackQuizComplete } from "./utils/analytics";
 import { GRADES } from "./constants";
@@ -34,6 +35,7 @@ import { GRADES } from "./constants";
  */
 function App() {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(() => getUserProfile());
+  const [users, setUsers] = useState<UserProfile[]>(() => getUsers());
   const [screen, setScreen] = useState<Screen>(() => {
     return getUserProfile() ? "welcome" : "registration";
   });
@@ -134,11 +136,13 @@ function App() {
   const handleRegistrationComplete = (profile: UserProfile) => {
     saveUserProfile(profile);
     setUserProfile(profile);
+    setUsers(getUsers());
     setUserProperties(profile.nickname, String(profile.grade));
     setScreen("welcome");
   };
 
   const handleOpenUserSwitch = () => {
+    setUsers(getUsers()); // Refresh user list just in case
     setIsUserSwitchModalOpen(true);
   };
 
@@ -161,6 +165,11 @@ function App() {
   const handleCreateNewUser = () => {
     setIsUserSwitchModalOpen(false);
     setScreen("registration");
+  };
+
+  const handleDeleteUser = (userId: string) => {
+    deleteUserProfile(userId);
+    setUsers(getUsers());
   };
 
   return (
@@ -222,10 +231,11 @@ function App() {
       <UserSwitchModal
         isOpen={isUserSwitchModalOpen}
         onClose={handleCloseUserSwitch}
-        users={getUsers()}
+        users={users}
         currentUser={userProfile}
         onSwitchUser={handleSwitchUser}
         onCreateNewUser={handleCreateNewUser}
+        onDeleteUser={handleDeleteUser}
       />
     </div>
   );

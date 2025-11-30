@@ -205,3 +205,19 @@ export function getUserProfile(): UserProfile | null {
     const user = users.find(u => u.id === currentId);
     return user || null;
 }
+
+/**
+ * 指定されたユーザーとその履歴を削除します。
+ */
+export function deleteUserProfile(userId: string): void {
+  const users = getUsers();
+  const newUsers = users.filter(u => u.id !== userId);
+  saveUsers(newUsers);
+
+  // Remove history
+  try {
+    localStorage.removeItem(`quiz_history_${userId}`);
+  } catch (e) {
+    console.error("Failed to delete history for user", userId, e);
+  }
+}
