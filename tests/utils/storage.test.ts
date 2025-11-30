@@ -26,7 +26,7 @@ Object.defineProperty(window, 'localStorage', {
 const mockRecord: HistoryRecord = {
   timestamp: 1,
   score: 100,
-  level: { id: 'test', name: 'Test' },
+  level: 'grade-1-calc',
   time: 10000,
 };
 

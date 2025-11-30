@@ -17,16 +17,7 @@ export interface MedalCriteria {
   silverThreshold: number; // in milliseconds
 }
 
-/**
- * 1つの学習ユニット（レベル）を表すインターフェース。
- */
-export interface Level {
-  id: GameLevel;
-  name: string;
-  calculationPadAvailable?: boolean;
-  numberOfQuestions?: number;
-  medalCriteria?: MedalCriteria;
-}
+
 
 /**
  * 1つの学年を表すインターフェース。

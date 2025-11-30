@@ -20,7 +20,6 @@ describe('useQuiz Hook', () => {
     id: 'grade-1-calc',
     name: 'Test Level',
     numberOfQuestions: 2,
-    answerMode: 'choice',
   };
 
   const mockQuestion = {
@@ -48,9 +47,9 @@ describe('useQuiz Hook', () => {
 
   // Helper to advance countdown
   const advanceCountdown = () => {
-      act(() => { vi.advanceTimersByTime(1000); });
-      act(() => { vi.advanceTimersByTime(1000); });
-      act(() => { vi.advanceTimersByTime(1000); });
+    act(() => { vi.advanceTimersByTime(1000); });
+    act(() => { vi.advanceTimersByTime(1000); });
+    act(() => { vi.advanceTimersByTime(1000); });
   };
 
   it('should initialize with countdown and correct default state', () => {
@@ -178,7 +177,7 @@ describe('useQuiz Hook', () => {
 
     // Simulate user correcting logic
     act(() => {
-        result.current.handleNextQuestion();
+      result.current.handleNextQuestion();
     });
     expect(result.current.isCorrectionMode).toBe(false);
     expect(result.current.currentQuestionIndex).toBe(2);
