@@ -5,7 +5,8 @@ import { QuestionGenerator } from './QuestionGenerator';
  * 1年生レベルの計算問題（簡単な足し算と引き算）を生成するクラス。
  */
 export class Grade1CalcGenerator implements QuestionGenerator {
-    generate(answerMode: AnswerMode): Question {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    generate(_answerMode: AnswerMode): Question {
         let text = '';
         let correctAnswer = 0;
         const isAddition = Math.random() > 0.5;

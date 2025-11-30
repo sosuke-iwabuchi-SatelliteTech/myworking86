@@ -15,17 +15,20 @@ describe('QuestionDisplay', () => {
     };
 
     it('renders question text', () => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         render(<QuestionDisplay question={mockQuestion as any} isAnswering={false} />);
         expect(screen.getByText('Test Question')).toBeDefined();
     });
 
     it('renders geometry when present', () => {
         const geoQuestion = { ...mockQuestion, geometry: { type: 'rectangle', width: 10, height: 10 } };
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         render(<QuestionDisplay question={geoQuestion as any} isAnswering={false} />);
         expect(screen.getByTestId('geometry-display')).toBeDefined();
     });
 
     it('applies opacity when answering', () => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const { container } = render(<QuestionDisplay question={mockQuestion as any} isAnswering={true} />);
         const div = container.querySelector('.opacity-20');
         expect(div).toBeDefined();

@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState, useImperativeHandle, forwardRef } from 'react';
-import { getSettings, saveSettings } from '../utils/storage';
+import { getSettings, saveSettings } from '../../utils/storage';
 
 export interface DrawingCanvasHandle {
   clear: () => void;
@@ -38,6 +38,14 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
     }
   }, [penSize]);
 
+  const getCoordinates = (e: PointerEvent, canvas: HTMLCanvasElement) => {
+    const rect = canvas.getBoundingClientRect();
+    return {
+      offsetX: e.clientX - rect.left,
+      offsetY: e.clientY - rect.top
+    };
+  };
+
   // Event handlers (moved out of render for native binding)
   // We use references to ensure the latest state/refs are accessed inside listeners
   const startDrawing = (e: PointerEvent) => {
@@ -49,7 +57,7 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
 
     try {
       canvas.setPointerCapture(e.pointerId);
-    } catch (err) {
+    } catch {
       // Ignore errors if capture fails
     }
 
@@ -94,7 +102,7 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
     if (canvasRef.current) {
         try {
             canvasRef.current.releasePointerCapture(e.pointerId);
-        } catch (err) {
+        } catch {
             // ignore
         }
     }
@@ -167,6 +175,7 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
       canvas.removeEventListener('pointercancel', stopDrawing);
       canvas.removeEventListener('contextmenu', preventDefaultHandler);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Run once on mount
 
   const clearCanvas = () => {
@@ -178,14 +187,6 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
   useImperativeHandle(ref, () => ({
     clear: clearCanvas
   }));
-
-  const getCoordinates = (e: PointerEvent, canvas: HTMLCanvasElement) => {
-    const rect = canvas.getBoundingClientRect();
-    return {
-      offsetX: e.clientX - rect.left,
-      offsetY: e.clientY - rect.top
-    };
-  };
 
   const handleChangePenSize = (size: number) => {
     setPenSize(size);

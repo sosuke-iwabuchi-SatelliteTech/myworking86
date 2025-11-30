@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { getHistory, saveRecord, clearHistory, getSettings, saveSettings } from '../../src/utils/storage';
 import { HistoryRecord } from '../../src/types';
 

@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import DrawingCanvas from '../../src/components/DrawingCanvas';
+import DrawingCanvas from '../../src/components/quiz/DrawingCanvas';
 
 // Mock getSettings and saveSettings
 vi.mock('../../src/utils/storage', () => ({

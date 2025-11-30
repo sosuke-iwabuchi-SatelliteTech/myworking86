@@ -27,6 +27,7 @@ describe('QuestionFactory', () => {
   });
 
   it('should throw an error for an unknown level', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect(() => QuestionFactory.create('unknown-level' as any)).toThrow(
       'Generator not found for level: unknown-level'
     );

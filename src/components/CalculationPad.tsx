@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 /**
  * 計算パッドコンポーネントのprops
@@ -32,30 +32,27 @@ const CalculationPad: React.FC<CalculationPadProps> = ({
       .map(() => Array(4).fill(""))
   );
   const [activeCell, setActiveCell] = useState<{ row: number; col: number } | null>({ row: 0, col: 3 });
-  const [incorrectIndexes, setIncorrectIndexes] = useState<number[]>([]);
-  const [isCorrectionComplete, setIsCorrectionComplete] = useState(false);
+  // Calculate correction state directly during render
+  const answerString = grid[2].join("");
+  const answerNum = parseInt(answerString, 10) || 0;
 
-  useEffect(() => {
-    const answerString = grid[2].join("");
-    const answerNum = parseInt(answerString, 10) || 0;
+  const incorrectIndexes: number[] = [];
+  let isCorrectionComplete = false;
 
-    if (isCorrectionMode) {
-      const correctStr = String(correctAnswer).padStart(4, ' ');
-      const currentAnswerRow = grid[2];
-      const newIncorrectIndexes: number[] = [];
-      let isFullyCorrect = true;
+  if (isCorrectionMode) {
+    const correctStr = String(correctAnswer).padStart(4, ' ');
+    const currentAnswerRow = grid[2];
+    let isFullyCorrect = true;
 
-      for (let i = 0; i < 4; i++) {
-        const userDigit = currentAnswerRow[i] === '' ? ' ' : currentAnswerRow[i];
-        if (userDigit !== correctStr[i]) {
-          newIncorrectIndexes.push(8 + i); // Row 2 starts at index 8
-          isFullyCorrect = false;
-        }
+    for (let i = 0; i < 4; i++) {
+      const userDigit = currentAnswerRow[i] === '' ? ' ' : currentAnswerRow[i];
+      if (userDigit !== correctStr[i]) {
+        incorrectIndexes.push(8 + i); // Row 2 starts at index 8
+        isFullyCorrect = false;
       }
-      setIncorrectIndexes(newIncorrectIndexes);
-      setIsCorrectionComplete(isFullyCorrect && answerNum === correctAnswer);
     }
-  }, [grid, isCorrectionMode, correctAnswer]);
+    isCorrectionComplete = isFullyCorrect && answerNum === correctAnswer;
+  }
 
 
   const handleCellClick = (row: number, col: number) => {

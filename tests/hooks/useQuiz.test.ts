@@ -35,6 +35,7 @@ describe('useQuiz Hook', () => {
 
   beforeEach(() => {
     vi.useFakeTimers();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (QuestionFactory.create as any).mockReturnValue(mockGenerator);
     mockOnQuizComplete.mockClear();
     mockOnBeforeNextQuestion.mockClear();
