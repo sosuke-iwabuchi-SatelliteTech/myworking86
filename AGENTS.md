@@ -31,7 +31,8 @@ This document outlines the rules and guidelines for AI agents working on this re
 ## 4. Project Structure
 
 *   `src/`: Source code.
-*   `tests/`: Unit tests (Vitest) and E2E tests (Playwright).
+*   `tests/`: Unit tests (Vitest).
+*   `verification/`: E2E verification scripts (Playwright).
 *   `doc/`: Documentation (`design/*.md`).
 *   `static/`: Static assets (textbooks, etc.).
 
