@@ -7,7 +7,7 @@ This document outlines the rules and guidelines for AI agents working on this re
 *   **Update Documentation**: For every feature change, addition, or architectural modification, you **MUST** update `doc/design.md`. This file acts as the source of truth for the project's design and logic.
 *   **Write Tests**: You **MUST** write or update tests for your changes.
     *   Use **Vitest** for unit testing logic (in `tests/`).
-    *   Use **Playwright (Python)** for end-to-end verification (refer to `verification/verify_quiz.py`).
+    *   Use **Playwright** (TypeScript) for end-to-end verification (in `tests/e2e/`).
 
 ## 2. Tech Stack & Conventions
 
@@ -24,17 +24,14 @@ This document outlines the rules and guidelines for AI agents working on this re
 2.  **Implement**: Write clean, functional code.
 3.  **Test**:
     *   Run unit tests: `npm test`
-    *   Run E2E verification:
-        1.  Start server: `npm run dev &`
-        2.  Run script: `python verification/verify_quiz.py`
+    *   Run E2E verification: `npm run test:e2e`
 4.  **Document**: Update `doc/design.md` with new features or logic changes.
 5.  **Submit**: Ensure all tests pass before submitting.
 
 ## 4. Project Structure
 
 *   `src/`: Source code.
-*   `tests/`: Unit tests (Vitest).
-*   `verification/`: E2E verification scripts (Playwright).
+*   `tests/`: Unit tests (Vitest) and E2E tests (Playwright).
 *   `doc/`: Documentation (`design.md`).
 *   `static/`: Static assets (textbooks, etc.).
 
