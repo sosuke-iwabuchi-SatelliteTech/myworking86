@@ -24,6 +24,12 @@ export const GRADES: readonly Grade[] = [
         numberOfQuestions: 10,
         medalCriteria: DEFAULT_MEDAL_CRITERIA,
       },
+      {
+        id: "grade-1-word-problems",
+        name: "ぶんしょうだい",
+        numberOfQuestions: 5,
+        medalCriteria: DEFAULT_MEDAL_CRITERIA,
+      },
     ],
   },
   {

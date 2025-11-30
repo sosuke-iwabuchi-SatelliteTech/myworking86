@@ -25,8 +25,9 @@ This document outlines the rules and guidelines for AI agents working on this re
 3.  **Test**:
     *   Run unit tests: `npm test`
     *   Run E2E verification: `npm run test:e2e`
-4.  **Document**: Update the relevant files in `doc/design/` with new features or logic changes.
-5.  **Submit**: Ensure all tests pass before submitting.
+4.  **Lint**: Run `npm run lint` and resolve any errors.
+5.  **Document**: Update the relevant files in `doc/design/` with new features or logic changes.
+6.  **Submit**: Ensure all tests pass before submitting.
 
 ## 4. Project Structure
 

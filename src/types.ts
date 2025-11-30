@@ -5,6 +5,7 @@
  */
 export type GameLevel =
   | "grade-1-calc"
+  | "grade-1-word-problems"
   | "grade-2-kuku"
   | "grade-4-geometry"
   | "grade-4-multiplication";

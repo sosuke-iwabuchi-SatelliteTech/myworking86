@@ -4,6 +4,7 @@ import { Grade1CalcGenerator } from './Grade1CalcGenerator';
 import { Grade2KukuGenerator } from './Grade2KukuGenerator';
 import { Grade4GeometryGenerator } from './Grade4GeometryGenerator';
 import { Grade4MultiplicationGenerator } from './Grade4MultiplicationGenerator';
+import { Grade1WordProblemGenerator } from './Grade1WordProblemGenerator';
 
 /**
  * 問題生成器（QuestionGenerator）のインスタンスを作成するためのファクトリークラス。
@@ -20,6 +21,8 @@ export class QuestionFactory {
     switch (level) {
       case 'grade-1-calc':
         return new Grade1CalcGenerator();
+      case 'grade-1-word-problems':
+        return new Grade1WordProblemGenerator();
       case 'grade-2-kuku':
         return new Grade2KukuGenerator();
       case 'grade-4-geometry':
