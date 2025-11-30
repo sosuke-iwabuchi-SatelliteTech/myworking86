@@ -27,7 +27,7 @@ export const GRADES: readonly Grade[] = [
       {
         id: "grade-1-word-problems",
         name: "ぶんしょうだい",
-        numberOfQuestions: 10,
+        numberOfQuestions: 5,
         medalCriteria: DEFAULT_MEDAL_CRITERIA,
       },
     ],
