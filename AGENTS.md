@@ -4,7 +4,7 @@ This document outlines the rules and guidelines for AI agents working on this re
 
 ## 1. Core Directives (Mandatory)
 
-*   **Update Documentation**: For every feature change, addition, or architectural modification, you **MUST** update `doc/design.md`. This file acts as the source of truth for the project's design and logic.
+*   **Update Documentation**: For every feature change, addition, or architectural modification, you **MUST** update the relevant files in `doc/design/`. This directory acts as the source of truth for the project's design and logic.
 *   **Write Tests**: You **MUST** write or update tests for your changes.
     *   Use **Vitest** for unit testing logic (in `tests/`).
     *   Use **Playwright** (TypeScript) for end-to-end verification (in `tests/e2e/`).
@@ -25,14 +25,14 @@ This document outlines the rules and guidelines for AI agents working on this re
 3.  **Test**:
     *   Run unit tests: `npm test`
     *   Run E2E verification: `npm run test:e2e`
-4.  **Document**: Update `doc/design.md` with new features or logic changes.
+4.  **Document**: Update the relevant files in `doc/design/` with new features or logic changes.
 5.  **Submit**: Ensure all tests pass before submitting.
 
 ## 4. Project Structure
 
 *   `src/`: Source code.
 *   `tests/`: Unit tests (Vitest) and E2E tests (Playwright).
-*   `doc/`: Documentation (`design.md`).
+*   `doc/`: Documentation (`design/*.md`).
 *   `static/`: Static assets (textbooks, etc.).
 
 ## 5. Specific Implementation Details
