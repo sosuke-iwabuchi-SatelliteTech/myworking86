@@ -22,4 +22,7 @@ jobs:
         run: npm install
 
       - name: Run tests
+        env:
+          VITE_GA_MEASUREMENT_ID: ${{ secrets.VITE_GA_MEASUREMENT_ID }}
+          VITE_GA_ALLOWED_DOMAINS: ${{ secrets.VITE_GA_ALLOWED_DOMAINS }}
         run: npm test
