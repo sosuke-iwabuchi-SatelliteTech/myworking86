@@ -1,7 +1,22 @@
 import { HistoryRecord, GameSettings, UserProfile } from "../types";
-import { SETTINGS_STORAGE_KEY, USER_PROFILE_STORAGE_KEY } from "../constants";
+import {
+  SETTINGS_STORAGE_KEY,
+  USER_PROFILE_STORAGE_KEY,
+  USER_LIST_STORAGE_KEY,
+  CURRENT_USER_ID_STORAGE_KEY,
+} from "../constants";
 
-const STORAGE_KEY = "quiz_history";
+// The history storage key depends on the current user.
+// We need a helper to get the key for the current user.
+const getHistoryKey = () => {
+  const currentUser = getCurrentUserId();
+  if (currentUser) {
+    return `quiz_history_${currentUser}`;
+  }
+  // Fallback for legacy or unknown user (should eventually be migrated)
+  return "quiz_history";
+};
+
 const MAX_HISTORY_ITEMS = 10;
 
 /**
@@ -11,7 +26,8 @@ const MAX_HISTORY_ITEMS = 10;
  */
 export function getHistory(): HistoryRecord[] {
   try {
-    const json = localStorage.getItem(STORAGE_KEY);
+    const key = getHistoryKey();
+    const json = localStorage.getItem(key);
     if (!json) {
       return [];
     }
@@ -39,7 +55,8 @@ export function saveRecord(record: HistoryRecord): void {
   const newHistory = history.slice(0, MAX_HISTORY_ITEMS);
 
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(newHistory));
+    const key = getHistoryKey();
+    localStorage.setItem(key, JSON.stringify(newHistory));
   } catch (e) {
     console.error("Failed to save history", e);
   }
@@ -50,7 +67,8 @@ export function saveRecord(record: HistoryRecord): void {
  */
 export function clearHistory(): void {
   try {
-    localStorage.removeItem(STORAGE_KEY);
+    const key = getHistoryKey();
+    localStorage.removeItem(key);
   } catch (e) {
     console.error("Failed to clear history", e);
   }
@@ -89,30 +107,101 @@ export function saveSettings(settings: GameSettings): void {
 }
 
 /**
- * localStorageからユーザープロフィールを取得します。
- * @returns ユーザープロフィール、または存在しない場合はnull
+ * すべてのユーザーリストを取得します。
  */
-export function getUserProfile(): UserProfile | null {
+export function getUsers(): UserProfile[] {
   try {
-    const json = localStorage.getItem(USER_PROFILE_STORAGE_KEY);
+    const json = localStorage.getItem(USER_LIST_STORAGE_KEY);
     if (!json) {
-      return null;
+      // Migrate legacy single user if exists
+      const legacyJson = localStorage.getItem(USER_PROFILE_STORAGE_KEY);
+      if (legacyJson) {
+        const legacyUser = JSON.parse(legacyJson);
+        // If legacy user doesn't have an ID, give it one.
+        // Although the type definition now requires ID, the legacy data won't have it.
+        if (!legacyUser.id) {
+          legacyUser.id = crypto.randomUUID();
+        }
+        const users = [legacyUser as UserProfile];
+        saveUsers(users);
+        setCurrentUser(legacyUser.id);
+        // Also need to migrate history?
+        // For simplicity, we might leave old history behind or move it.
+        // Let's copy old history to new user key.
+        const oldHistory = localStorage.getItem("quiz_history");
+        if (oldHistory) {
+            localStorage.setItem(`quiz_history_${legacyUser.id}`, oldHistory);
+        }
+
+        return users;
+      }
+      return [];
     }
-    return JSON.parse(json) as UserProfile;
+    return JSON.parse(json) as UserProfile[];
   } catch (e) {
-    console.error("Failed to parse user profile", e);
-    return null;
+    console.error("Failed to parse users", e);
+    return [];
   }
 }
 
 /**
- * ユーザープロフィールをlocalStorageに保存します。
- * @param profile 保存するユーザープロフィール
+ * ユーザーリストを保存します。
+ */
+function saveUsers(users: UserProfile[]): void {
+  try {
+    localStorage.setItem(USER_LIST_STORAGE_KEY, JSON.stringify(users));
+  } catch (e) {
+    console.error("Failed to save users", e);
+  }
+}
+
+/**
+ * 現在のユーザーIDを取得します。
+ */
+export function getCurrentUserId(): string | null {
+  return localStorage.getItem(CURRENT_USER_ID_STORAGE_KEY);
+}
+
+/**
+ * 現在のユーザーIDを設定します。
+ */
+export function setCurrentUser(userId: string): void {
+  localStorage.setItem(CURRENT_USER_ID_STORAGE_KEY, userId);
+}
+
+/**
+ * 新しいユーザーを追加または更新します。
  */
 export function saveUserProfile(profile: UserProfile): void {
-  try {
-    localStorage.setItem(USER_PROFILE_STORAGE_KEY, JSON.stringify(profile));
-  } catch (e) {
-    console.error("Failed to save user profile", e);
+  const users = getUsers();
+  const index = users.findIndex(u => u.id === profile.id);
+
+  if (index >= 0) {
+    users[index] = profile;
+  } else {
+    users.push(profile);
   }
+
+  saveUsers(users);
+  setCurrentUser(profile.id);
+}
+
+/**
+ * 現在アクティブなユーザープロフィールを取得します。
+ */
+export function getUserProfile(): UserProfile | null {
+    const users = getUsers();
+    const currentId = getCurrentUserId();
+
+    if (!currentId) {
+        if (users.length > 0) {
+            // If we have users but no current ID, default to the first one
+            setCurrentUser(users[0].id);
+            return users[0];
+        }
+        return null;
+    }
+
+    const user = users.find(u => u.id === currentId);
+    return user || null;
 }

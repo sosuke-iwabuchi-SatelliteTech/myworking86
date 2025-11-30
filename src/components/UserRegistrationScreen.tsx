@@ -13,6 +13,7 @@ export default function UserRegistrationScreen({ onComplete }: UserRegistrationS
     e.preventDefault();
     if (nickname.length > 0 && nickname.length <= 10 && grade !== "") {
       onComplete({
+        id: crypto.randomUUID(),
         nickname,
         grade: Number(grade),
       });

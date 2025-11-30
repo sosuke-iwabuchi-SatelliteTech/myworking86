@@ -6,6 +6,7 @@ import HistoryScreen from "./components/HistoryScreen";
 import SettingsScreen from "./components/SettingsScreen";
 import AnswerModeModal from "./components/AnswerModeModal";
 import UserRegistrationScreen from "./components/UserRegistrationScreen";
+import UserSwitchModal from "./components/UserSwitchModal";
 import {
   Screen,
   HistoryRecord,
@@ -21,6 +22,8 @@ import {
   getSettings,
   getUserProfile,
   saveUserProfile,
+  getUsers,
+  setCurrentUser,
 } from "./utils/storage";
 import { setUserProperties, trackQuizComplete } from "./utils/analytics";
 import { GRADES } from "./constants";
@@ -40,6 +43,7 @@ function App() {
   const [settings, setSettings] = useState<GameSettings>({ showTimer: true });
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [isAnswerModeModalOpen, setIsAnswerModeModalOpen] = useState(false);
+  const [isUserSwitchModalOpen, setIsUserSwitchModalOpen] = useState(false);
 
   useEffect(() => {
     // Load history and settings
@@ -109,6 +113,7 @@ function App() {
   };
 
   const handleGoToTop = () => {
+    setHistory(getHistory()); // Refresh history when returning to top
     setScreen("welcome");
   };
 
@@ -137,6 +142,31 @@ function App() {
     setScreen("welcome");
   };
 
+  const handleOpenUserSwitch = () => {
+    setIsUserSwitchModalOpen(true);
+  };
+
+  const handleCloseUserSwitch = () => {
+    setIsUserSwitchModalOpen(false);
+  };
+
+  const handleSwitchUser = (userId: string) => {
+    setCurrentUser(userId);
+    const profile = getUserProfile();
+    if (profile) {
+      setUserProfile(profile);
+      setUserProperties(profile.nickname, profile.grade);
+      setHistory(getHistory()); // Load history for new user
+      setScreen("welcome"); // Reset to welcome screen
+    }
+    setIsUserSwitchModalOpen(false);
+  };
+
+  const handleCreateNewUser = () => {
+    setIsUserSwitchModalOpen(false);
+    setScreen("registration");
+  };
+
   return (
     <div className="flex flex-col items-center pt-1 min-h-screen bg-blue-50">
       <div className={`w-full p-6 ${screen === 'quiz' ? 'max-w-7xl' : 'max-w-md'}`}>
@@ -152,6 +182,7 @@ function App() {
             hasHistory={history.length > 0}
             onGoToSettings={handleGoToSettings}
             userProfile={userProfile}
+            onOpenUserSwitch={handleOpenUserSwitch}
           />
         )}
         {screen === "history" && (
@@ -191,6 +222,14 @@ function App() {
         isOpen={isAnswerModeModalOpen}
         onSelect={handleAnswerModeSelect}
         onClose={handleAnswerModeModalClose}
+      />
+      <UserSwitchModal
+        isOpen={isUserSwitchModalOpen}
+        onClose={handleCloseUserSwitch}
+        users={getUsers()}
+        currentUser={userProfile}
+        onSwitchUser={handleSwitchUser}
+        onCreateNewUser={handleCreateNewUser}
       />
     </div>
   );

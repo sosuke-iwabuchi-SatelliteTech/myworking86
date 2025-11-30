@@ -96,6 +96,7 @@ export default function HistoryScreen({ history, onBack, onClearHistory }: Histo
               return (
                 <div
                   key={index}
+                  data-testid="history-item"
                   className="bg-white p-3 rounded-xl border border-slate-200 flex items-center justify-between shadow-sm"
                 >
                   <div className="text-left">

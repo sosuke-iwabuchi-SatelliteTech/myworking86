@@ -198,6 +198,10 @@ export interface GameSettings {
  */
 export interface UserProfile {
   /**
+   * ユーザーの一意なID
+   */
+  id: string;
+  /**
    * ニックネーム（最大10文字）
    */
   nickname: string;
