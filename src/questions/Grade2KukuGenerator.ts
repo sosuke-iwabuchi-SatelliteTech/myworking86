@@ -5,7 +5,8 @@ import { QuestionGenerator } from './QuestionGenerator';
  * 2年生レベルの九九問題を生成するクラス。
  */
 export class Grade2KukuGenerator implements QuestionGenerator {
-    generate(answerMode: AnswerMode): Question {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    generate(_answerMode: AnswerMode): Question {
         const num1 = Math.floor(Math.random() * 9) + 1;
         const num2 = Math.floor(Math.random() * 9) + 1;
         const correctAnswer = num1 * num2;

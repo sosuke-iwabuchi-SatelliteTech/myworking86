@@ -20,7 +20,7 @@ export const useQuiz = ({ level, answerMode, onQuizComplete, onBeforeNextQuestio
     const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
     const [elapsedTime, setElapsedTime] = useState(0);
     const [countdown, setCountdown] = useState(3);
-    const startTimeRef = useRef<number>(Date.now());
+    const startTimeRef = useRef<number | null>(null);
     const timerIntervalRef = useRef<number | null>(null);
     const pauseTimeRef = useRef<number | null>(null);
     const quizEndedRef = useRef(false);
@@ -49,7 +49,9 @@ export const useQuiz = ({ level, answerMode, onQuizComplete, onBeforeNextQuestio
 
         startTimeRef.current = Date.now();
         timerIntervalRef.current = window.setInterval(() => {
-            setElapsedTime(Date.now() - startTimeRef.current);
+            if (startTimeRef.current !== null) {
+                setElapsedTime(Date.now() - startTimeRef.current);
+            }
         }, 10);
 
         return () => {
@@ -79,13 +81,15 @@ export const useQuiz = ({ level, answerMode, onQuizComplete, onBeforeNextQuestio
         }
 
         // Restart timer if coming from correction mode
-        if (pauseTimeRef.current) {
+        if (pauseTimeRef.current && startTimeRef.current !== null) {
             const pausedDuration = Date.now() - pauseTimeRef.current;
             startTimeRef.current += pausedDuration;
             pauseTimeRef.current = null;
 
             timerIntervalRef.current = window.setInterval(() => {
-                setElapsedTime(Date.now() - startTimeRef.current);
+                if (startTimeRef.current !== null) {
+                    setElapsedTime(Date.now() - startTimeRef.current);
+                }
             }, 10);
         }
 

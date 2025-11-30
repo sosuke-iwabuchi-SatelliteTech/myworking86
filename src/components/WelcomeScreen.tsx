@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { GameLevel, Level, UserProfile } from "../types";
+import { Level, UserProfile } from "../types";
 import { GRADES } from "../constants";
 import QuestionIcon from "./icons/QuestionIcon";
 

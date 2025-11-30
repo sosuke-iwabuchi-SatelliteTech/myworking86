@@ -6,7 +6,8 @@ import { QuestionGenerator } from './QuestionGenerator';
  * 長方形、三角形、台形の面積を求める問題をランダムに生成します。
  */
 export class Grade4GeometryGenerator implements QuestionGenerator {
-    generate(answerMode: AnswerMode): Question {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    generate(_answerMode: AnswerMode): Question {
         let text = '';
         let correctAnswer = 0;
         let geometry: GeometryData | undefined;
@@ -23,7 +24,7 @@ export class Grade4GeometryGenerator implements QuestionGenerator {
     } else if (shapeType < 0.66) {
       // Triangle
       let w = Math.floor(Math.random() * 8) + 2;
-      let h = Math.floor(Math.random() * 8) + 2;
+      const h = Math.floor(Math.random() * 8) + 2;
       if ((w * h) % 2 !== 0) {
         w += 1;
       }
@@ -32,8 +33,8 @@ export class Grade4GeometryGenerator implements QuestionGenerator {
       geometry = { shape: 'triangle', dimensions: { width: w, height: h } };
     } else {
       // Trapezoid
-      let upper = Math.floor(Math.random() * 6) + 2;
-      let lower = upper + Math.floor(Math.random() * 5) + 2;
+      const upper = Math.floor(Math.random() * 6) + 2;
+      const lower = upper + Math.floor(Math.random() * 5) + 2;
       let h = Math.floor(Math.random() * 6) + 2;
 
       // Ensure area is integer: (upper + lower) * h must be even

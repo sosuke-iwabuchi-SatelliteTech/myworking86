@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
 import { Grade4GeometryGenerator } from '../../src/questions/Grade4GeometryGenerator';
-import { Question } from '../../src/types';
 
 describe('Grade4GeometryGenerator', () => {
   const generator = new Grade4GeometryGenerator();
@@ -8,7 +7,8 @@ describe('Grade4GeometryGenerator', () => {
 
   it('should generate a valid question object with geometry data', () => {
     for (let i = 0; i < TEST_ITERATIONS; i++) {
-      const question = generator.generate();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const question = generator.generate('choice' as any);
       expect(question).toHaveProperty('text');
       expect(question).toHaveProperty('correctAnswer');
       expect(question).toHaveProperty('options');
@@ -19,7 +19,8 @@ describe('Grade4GeometryGenerator', () => {
 
   it('should have 4 unique options including the correct answer', () => {
     for (let i = 0; i < TEST_ITERATIONS; i++) {
-      const question = generator.generate();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const question = generator.generate('choice' as any);
       expect(question.options).toHaveLength(4);
       expect(new Set(question.options).size).toBe(4);
       expect(question.options).toContain(question.correctAnswer);
@@ -28,14 +29,16 @@ describe('Grade4GeometryGenerator', () => {
 
   it('should always have an integer as the correct answer', () => {
     for (let i = 0; i < TEST_ITERATIONS; i++) {
-      const question = generator.generate();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const question = generator.generate('choice' as any);
       expect(Number.isInteger(question.correctAnswer)).toBe(true);
     }
   });
 
   it('should generate a mathematically correct problem for the given shape', () => {
     for (let i = 0; i < TEST_ITERATIONS; i++) {
-      const question = generator.generate();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const question = generator.generate('choice' as any);
       const { shape, dimensions } = question.geometry!;
       let expectedAnswer;
 

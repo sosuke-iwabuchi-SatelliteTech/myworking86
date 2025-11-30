@@ -1,6 +1,6 @@
 import { GameSettings } from '../types';
 import { getSettings, saveSettings } from '../utils/storage';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 /**
  * SettingsScreenコンポーネントのprops
@@ -23,12 +23,8 @@ interface SettingsScreenProps {
  * @param {SettingsScreenProps} props - コンポーネントのprops
  */
 export default function SettingsScreen({ onBack, onSettingsChange }: SettingsScreenProps) {
-  const [settings, setSettings] = useState<GameSettings>({ showTimer: true });
-
-  useEffect(() => {
-    // Load initial state
-    setSettings(getSettings());
-  }, []);
+  // Load initial state synchronously
+  const [settings, setSettings] = useState<GameSettings>(() => getSettings());
 
   const handleToggleTimer = () => {
     const newSettings = { ...settings, showTimer: !settings.showTimer };

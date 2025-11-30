@@ -63,21 +63,25 @@ export class Grade4MultiplicationGenerator implements QuestionGenerator {
     let error;
 
     switch (errorType) {
-      case 'small':
+      case 'small': {
         error = Math.floor(Math.random() * 5) + 1;
         return correctAnswer + (Math.random() < 0.5 ? error : -error);
-      case 'medium':
+      }
+      case 'medium': {
         error = Math.floor(Math.random() * 20) + 5;
         return correctAnswer + (Math.random() < 0.5 ? error : -error);
-      case 'large':
+      }
+      case 'large': {
         error = Math.floor(Math.random() * 100) + 20;
         return correctAnswer + (Math.random() < 0.5 ? error : -error);
-      case 'digit':
+      }
+      case 'digit': {
         const s = correctAnswer.toString();
         const i = Math.floor(Math.random() * s.length);
         let d = parseInt(s[i], 10);
         d = (d + Math.floor(Math.random() * 9) + 1) % 10;
         return parseInt(s.substring(0, i) + d + s.substring(i + 1), 10);
+      }
       default:
         return correctAnswer + 1;
     }

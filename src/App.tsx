@@ -12,7 +12,6 @@ import {
   HistoryRecord,
   GameSettings,
   AnswerMode,
-  GameLevel,
   UserProfile,
 } from "./types";
 import {
@@ -34,31 +33,26 @@ import { GRADES } from "./constants";
  * また、ゲームの状態（レベル、スコアなど）や履歴データも管理します。
  */
 function App() {
-  const [screen, setScreen] = useState<Screen>("welcome");
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(() => getUserProfile());
+  const [screen, setScreen] = useState<Screen>(() => {
+    return getUserProfile() ? "welcome" : "registration";
+  });
   const [level, setLevel] = useState<(typeof GRADES)[number]['levels'][number]>(GRADES[0].levels[0]);
   const [answerMode, setAnswerMode] = useState<AnswerMode>("choice");
   const [finalScore, setFinalScore] = useState(0);
   const [finalTime, setFinalTime] = useState(0);
-  const [history, setHistory] = useState<HistoryRecord[]>([]);
-  const [settings, setSettings] = useState<GameSettings>({ showTimer: true });
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [history, setHistory] = useState<HistoryRecord[]>(() => getHistory());
+  const [settings, setSettings] = useState<GameSettings>(() => getSettings());
   const [isAnswerModeModalOpen, setIsAnswerModeModalOpen] = useState(false);
   const [isUserSwitchModalOpen, setIsUserSwitchModalOpen] = useState(false);
+  const [quizKey, setQuizKey] = useState(0);
 
   useEffect(() => {
-    // Load history and settings
-    setHistory(getHistory());
-    setSettings(getSettings());
-
-    // Check for user profile
-    const profile = getUserProfile();
-    if (profile) {
-      setUserProfile(profile);
-      setUserProperties(profile.nickname, profile.grade);
-    } else {
-      setScreen("registration");
+    // Track user properties if profile is loaded on mount
+    if (userProfile) {
+      setUserProperties(userProfile.nickname, userProfile.grade);
     }
-  }, []);
+  }, [userProfile]);
 
   const handleStartGame = (selectedLevel: (typeof GRADES)[number]['levels'][number]) => {
     setLevel(selectedLevel);
@@ -74,6 +68,7 @@ function App() {
   const handleAnswerModeSelect = (mode: AnswerMode) => {
     setAnswerMode(mode);
     setIsAnswerModeModalOpen(false);
+    setQuizKey(prev => prev + 1);
     setScreen("quiz");
   };
 
@@ -109,6 +104,7 @@ function App() {
   };
 
   const handleRestart = () => {
+    setQuizKey(prev => prev + 1);
     setScreen("quiz");
   };
 
@@ -200,7 +196,7 @@ function App() {
         )}
         {screen === "quiz" && (
           <QuizScreen
-            key={`${level}-${answerMode}-${Date.now()}`}
+            key={`${level.id}-${answerMode}-${quizKey}`}
             level={level}
             answerMode={answerMode}
             onQuizComplete={handleQuizComplete}

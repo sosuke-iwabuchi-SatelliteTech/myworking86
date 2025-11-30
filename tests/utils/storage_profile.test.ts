@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { getUserProfile, saveUserProfile, getUsers, setCurrentUser } from "../../src/utils/storage";
-import { USER_LIST_STORAGE_KEY, USER_PROFILE_STORAGE_KEY } from "../../src/constants";
+import { USER_LIST_STORAGE_KEY } from "../../src/constants";
 import { UserProfile } from "../../src/types";
 
 describe("Storage Utils - User Profile", () => {
