@@ -33,4 +33,4 @@ jobs:
           port: 22
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           source: "public"
-          target: "/var/www/app"
+          target: "/var/www/calc-app"
