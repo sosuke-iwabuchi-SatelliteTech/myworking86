@@ -61,6 +61,16 @@ npm run dev
 └── index.html          # エントリーポイントのHTML
 ```
 
+## 🧹 コード品質ツール
+
+このプロジェクトには、コードの品質を維持するために ESLint と Prettier が導入されています。
+
+- **Lintチェック**: `npm run lint`
+- **Lint修正**: `npm run lint:fix`
+- **フォーマット**: `npm run format`
+
+コミット時に、Husky と lint-staged によって変更ファイルに対して自動的にチェックと修正が行われます。
+
 ## 📄 ライセンス
 
 このプロジェクトは [MITライセンス](LICENSE) の下で公開されています。
