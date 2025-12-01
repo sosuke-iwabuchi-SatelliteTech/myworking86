@@ -202,3 +202,32 @@ export interface UserProfile {
    */
   grade: number;
 }
+
+/**
+ * 特定のレベルの統計情報（最高スコア、最速タイム、プレイ回数）を表すインターフェース。
+ */
+export interface LevelStats {
+  /**
+   * レベルID
+   */
+  levelId: string;
+  /**
+   * 最高スコア
+   */
+  bestScore: number;
+  /**
+   * 最高スコア（100点）獲得時の最速タイム（ミリ秒）。
+   * まだ100点を獲得していない場合はnullまたはundefined。
+   */
+  fastestPerfectTime?: number;
+  /**
+   * プレイ回数（クリア回数）
+   */
+  playCount: number;
+}
+
+/**
+ * ユーザーごとの全レベルの統計情報を保持するマップ。
+ * キーはレベルID。
+ */
+export type UserLevelStats = Record<string, LevelStats>;

@@ -1,10 +1,12 @@
-import { HistoryRecord, GameSettings, UserProfile } from "../types";
+import { HistoryRecord, GameSettings, UserProfile, LevelStats, UserLevelStats } from "../types";
 import {
   SETTINGS_STORAGE_KEY,
   USER_PROFILE_STORAGE_KEY,
   USER_LIST_STORAGE_KEY,
   CURRENT_USER_ID_STORAGE_KEY,
 } from "../constants";
+
+export const QUIZ_STATS_PREFIX = "quiz_stats_";
 
 // The history storage key depends on the current user.
 // We need a helper to get the key for the current user.
@@ -15,6 +17,15 @@ const getHistoryKey = () => {
   }
   // Fallback for legacy or unknown user (should eventually be migrated)
   return "quiz_history";
+};
+
+// Helper to get stats key for current user
+const getStatsKey = () => {
+  const currentUser = getCurrentUserId();
+  if (currentUser) {
+    return `${QUIZ_STATS_PREFIX}${currentUser}`;
+  }
+  return `${QUIZ_STATS_PREFIX}legacy`;
 };
 
 const MAX_HISTORY_ITEMS = 10;
@@ -71,6 +82,71 @@ export function clearHistory(): void {
     localStorage.removeItem(key);
   } catch (e) {
     console.error("Failed to clear history", e);
+  }
+}
+
+/**
+ * ユーザーの全レベルの統計情報を取得します。
+ */
+export function getUserLevelStats(): UserLevelStats {
+  try {
+    const key = getStatsKey();
+    const json = localStorage.getItem(key);
+    if (!json) {
+      return {};
+    }
+    return JSON.parse(json) as UserLevelStats;
+  } catch (e) {
+    console.error("Failed to parse level stats", e);
+    return {};
+  }
+}
+
+/**
+ * 特定のレベルの統計情報を取得します。
+ */
+export function getLevelStats(levelId: string): LevelStats | null {
+  const stats = getUserLevelStats();
+  return stats[levelId] || null;
+}
+
+/**
+ * レベルの統計情報を更新します。
+ */
+export function updateLevelStats(levelId: string, score: number, time: number): void {
+  const statsMap = getUserLevelStats();
+  const currentStats = statsMap[levelId] || {
+    levelId,
+    bestScore: 0,
+    playCount: 0,
+  };
+
+  // Update play count
+  currentStats.playCount += 1;
+
+  // Update best score
+  if (score > currentStats.bestScore) {
+    currentStats.bestScore = score;
+  }
+
+  // Update fastest perfect time if score is 100
+  if (score === 100) {
+    if (
+      currentStats.fastestPerfectTime === undefined ||
+      currentStats.fastestPerfectTime === null ||
+      time < currentStats.fastestPerfectTime
+    ) {
+      currentStats.fastestPerfectTime = time;
+    }
+  }
+
+  statsMap[levelId] = currentStats;
+
+  try {
+    const key = getStatsKey();
+    localStorage.setItem(key, JSON.stringify(statsMap));
+  } catch (e) {
+    console.error("Failed to save level stats", e);
   }
 }
 
@@ -204,4 +280,20 @@ export function getUserProfile(): UserProfile | null {
 
     const user = users.find(u => u.id === currentId);
     return user || null;
+}
+
+/**
+ * 指定されたユーザーとその履歴を削除します。
+ */
+export function deleteUserProfile(userId: string): void {
+  const users = getUsers();
+  const newUsers = users.filter(u => u.id !== userId);
+  saveUsers(newUsers);
+
+  // Remove history
+  try {
+    localStorage.removeItem(`quiz_history_${userId}`);
+  } catch (e) {
+    console.error("Failed to delete history for user", userId, e);
+  }
 }

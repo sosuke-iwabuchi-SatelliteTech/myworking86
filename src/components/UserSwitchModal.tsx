@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { UserProfile } from "../types";
 
 interface UserSwitchModalProps {
@@ -8,6 +8,7 @@ interface UserSwitchModalProps {
   currentUser: UserProfile | null;
   onSwitchUser: (userId: string) => void;
   onCreateNewUser: () => void;
+  onDeleteUser: (userId: string) => void;
 }
 
 export default function UserSwitchModal({
@@ -17,11 +18,72 @@ export default function UserSwitchModal({
   currentUser,
   onSwitchUser,
   onCreateNewUser,
+  onDeleteUser,
 }: UserSwitchModalProps) {
+  const [userToDelete, setUserToDelete] = useState<UserProfile | null>(null);
+  const [showDeleteSuccess, setShowDeleteSuccess] = useState(false);
+
   if (!isOpen) return null;
+
+  const handleDeleteClick = (e: React.MouseEvent, user: UserProfile) => {
+    e.stopPropagation();
+    setUserToDelete(user);
+  };
+
+  const confirmDelete = () => {
+    if (userToDelete) {
+      onDeleteUser(userToDelete.id);
+      setUserToDelete(null);
+      setShowDeleteSuccess(true);
+      setTimeout(() => {
+        setShowDeleteSuccess(false);
+      }, 2000);
+    }
+  };
+
+  const cancelDelete = () => {
+    setUserToDelete(null);
+  };
 
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+      {/* Delete Confirmation Overlay */}
+      {userToDelete && (
+        <div className="absolute inset-0 z-[60] flex items-center justify-center p-4 bg-black/20 backdrop-blur-sm">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-sm p-6 animate-pop-in border-4 border-red-100">
+            <h3 className="text-xl font-black text-center text-red-500 mb-4">
+              かくにん
+            </h3>
+            <p className="text-center font-bold text-slate-700 mb-6 whitespace-pre-line">
+              本当にこのユーザーを削除しますか？
+              {"\n"}
+              削除すると履歴も消えます
+            </p>
+            <div className="flex gap-4">
+              <button
+                onClick={cancelDelete}
+                className="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-3 rounded-xl transition-colors"
+              >
+                やめる
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold py-3 rounded-xl shadow-[0_4px_0_rgb(185,28,28)] active:shadow-none active:translate-y-[4px] transition-all"
+              >
+                削除する
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Success Feedback */}
+      {showDeleteSuccess && (
+        <div className="absolute top-10 left-1/2 -translate-x-1/2 z-[70] bg-green-500 text-white font-bold px-6 py-3 rounded-full shadow-lg animate-bounce">
+          削除しました
+        </div>
+      )}
+
       <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md p-6 relative animate-bounce-in">
         <button
           onClick={onClose}
@@ -53,7 +115,7 @@ export default function UserSwitchModal({
             <button
               key={user.id}
               onClick={() => onSwitchUser(user.id)}
-              className={`w-full flex items-center justify-between p-4 rounded-2xl transition-all border-2 ${
+              className={`w-full flex items-center justify-between p-4 rounded-2xl transition-all border-2 group relative ${
                 currentUser?.id === user.id
                   ? "bg-blue-50 border-brand-blue ring-2 ring-blue-200"
                   : "bg-white border-slate-200 hover:border-brand-blue hover:bg-blue-50"
@@ -67,11 +129,38 @@ export default function UserSwitchModal({
                   {user.grade}ねんせい
                 </span>
               </div>
-              {currentUser?.id === user.id && (
-                <span className="text-brand-blue font-bold text-lg">
-                  プレイ中
-                </span>
-              )}
+
+              <div className="flex items-center gap-2">
+                {currentUser?.id === user.id ? (
+                  <span className="text-brand-blue font-bold text-lg">
+                    プレイ中
+                  </span>
+                ) : (
+                  <div
+                    role="button"
+                    tabIndex={0}
+                    onClick={(e) => handleDeleteClick(e, user)}
+                    className="p-2 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors"
+                    title="ユーザーを削除"
+                    data-testid={`delete-user-${user.id}`}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
+                    </svg>
+                  </div>
+                )}
+              </div>
             </button>
           ))}
         </div>

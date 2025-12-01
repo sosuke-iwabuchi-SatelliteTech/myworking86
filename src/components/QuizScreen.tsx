@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useMemo } from 'react';
 import { AnswerMode } from '../types';
 import { GRADES, DEFAULT_MEDAL_CRITERIA } from '../constants';
 import CalculationPad from './CalculationPad';
@@ -7,6 +7,7 @@ import { useQuiz } from '../hooks/useQuiz';
 import QuizHeader from './quiz/QuizHeader';
 import QuestionDisplay from './quiz/QuestionDisplay';
 import AnswerChoices from './quiz/AnswerChoices';
+import { getLevelStats } from '../utils/storage';
 
 /**
  * QuizScreenコンポーネントのprops
@@ -49,11 +50,27 @@ export default function QuizScreen({ level, answerMode, onQuizComplete, onGoToTo
     const progress = ((currentQuestionIndex - 1) / totalQuestions) * 100;
     const medalCriteria = level.medalCriteria || DEFAULT_MEDAL_CRITERIA;
 
+    const stats = useMemo(() => getLevelStats(level.id), [level.id]);
+
     if (countdown > 0) {
         return (
             <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-blue-50">
                 <div className="text-9xl font-black text-brand-blue animate-pulse mb-8">{countdown}</div>
                 <div className="bg-white px-8 py-6 rounded-3xl shadow-lg border-4 border-slate-100 text-center">
+                    {stats && (
+                        <div className="mb-6 pb-6 border-b-2 border-slate-100">
+                            <div className="flex flex-col gap-2">
+                                <div className="text-2xl font-bold text-slate-700">
+                                    最高スコア: <span className="text-3xl text-brand-blue">{stats.bestScore}</span>点
+                                </div>
+                                {stats.bestScore === 100 && stats.fastestPerfectTime && (
+                                    <div className="text-xl font-bold text-slate-500">
+                                        最速タイム: <span className="text-2xl text-brand-blue">{stats.fastestPerfectTime / 1000}</span>秒
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
                     <p className="text-xl font-bold text-slate-500 mb-4">メダルかくとくじょうけん</p>
                     <div className="flex flex-col gap-3">
                         <div className="flex items-center gap-4 text-2xl font-bold text-brand-yellow">
