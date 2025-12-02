@@ -34,14 +34,14 @@ export const GACHA_ITEMS: GachaItem[] = [
   { id: 'uc-6', name: 'カメ', rarity: 'UC', description: 'ゆっくり歩く', imageUrl: '🐢' },
 
   // C (Common) - 50%
-  { id: 'c-1', name: 'ネズミ', rarity: 'C', description: 'すばしっこい', imageUrl: '🐀' },
-  { id: 'c-2', name: 'ニワトリ', rarity: 'C', description: '朝を告げる', imageUrl: '🐓' },
-  { id: 'c-3', name: 'カエル', rarity: 'C', description: '雨が好き', imageUrl: '🐸' },
-  { id: 'c-4', name: 'ヒツジ', rarity: 'C', description: 'もこもこの毛', imageUrl: '🐑' },
-  { id: 'c-5', name: 'ブタ', rarity: 'C', description: 'きれい好き', imageUrl: '🐖' },
-  { id: 'c-6', name: 'アヒル', rarity: 'C', description: '水浴びが好き', imageUrl: '🦆' },
-  { id: 'c-7', name: 'サル', rarity: 'C', description: '木登りが得意', imageUrl: '🐒' },
-  { id: 'c-8', name: 'ウマ', rarity: 'C', description: '走るのが速い', imageUrl: '🐎' },
+  { id: 'c-1', name: 'ネズミ', rarity: 'C', description: 'すばしっこい', imageUrl: '/gacha/c-1-mouse.svg' },
+  { id: 'c-2', name: 'ニワトリ', rarity: 'C', description: '朝を告げる', imageUrl: '/gacha/c-2-chicken.svg' },
+  { id: 'c-3', name: 'カエル', rarity: 'C', description: '雨が好き', imageUrl: '/gacha/c-3-frog.svg' },
+  { id: 'c-4', name: 'ヒツジ', rarity: 'C', description: 'もこもこの毛', imageUrl: '/gacha/c-4-sheep.svg' },
+  { id: 'c-5', name: 'ブタ', rarity: 'C', description: 'きれい好き', imageUrl: '/gacha/c-5-pig.svg' },
+  { id: 'c-6', name: 'アヒル', rarity: 'C', description: '水浴びが好き', imageUrl: '/gacha/c-6-duck.svg' },
+  { id: 'c-7', name: 'サル', rarity: 'C', description: '木登りが得意', imageUrl: '/gacha/c-7-monkey.svg' },
+  { id: 'c-8', name: 'ウマ', rarity: 'C', description: '走るのが速い', imageUrl: '/gacha/c-8-horse.svg' },
 ];
 
 const RARITY_WEIGHTS: Record<GachaRarity, number> = {

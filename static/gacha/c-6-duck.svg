@@ -1,0 +1,14 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Head -->
+  <circle cx="50" cy="50" r="40" fill="white" />
+  <!-- Beak -->
+  <path d="M 30 55 Q 50 75 70 55 Q 70 65 50 70 Q 30 65 30 55" fill="#fbbf24" stroke="#d97706" stroke-width="1" />
+  <!-- Eyes -->
+  <ellipse cx="38" cy="40" rx="4" ry="8" fill="#1f2937" />
+  <ellipse cx="62" cy="40" rx="4" ry="8" fill="#1f2937" />
+  <!-- Cheeks -->
+  <circle cx="20" cy="55" r="5" fill="#fca5a5" opacity="0.5" />
+  <circle cx="80" cy="55" r="5" fill="#fca5a5" opacity="0.5" />
+  <!-- Tuft -->
+  <path d="M 45 15 Q 50 5 55 15" stroke="white" stroke-width="4" fill="none" stroke-linecap="round" />
+</svg>
