@@ -25,6 +25,10 @@ export default defineConfig({
         __BUILD_VERSION__: JSON.stringify(getBuildVersion()),
     },
     publicDir: 'static', // Static assets that will be copied to outDir
+    server: {
+        host: true,
+        port: 5173,
+    },
     build: {
         outDir: 'public',
         emptyOutDir: true, // Safe: static assets from 'static/' will be copied after clearing
