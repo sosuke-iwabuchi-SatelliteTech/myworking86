@@ -25,6 +25,10 @@ interface WelcomeScreenProps {
    */
   onGoToSettings: () => void;
   /**
+   * ガチャ画面へ遷移するボタンがクリックされたときに呼び出されるコールバック関数
+   */
+  onGoToGacha: () => void;
+  /**
    * ユーザープロフィール情報
    */
   userProfile: UserProfile | null;
@@ -44,6 +48,7 @@ export default function WelcomeScreen({
   onShowHistory,
   hasHistory,
   onGoToSettings,
+  onGoToGacha,
   userProfile,
   onOpenUserSwitch,
 }: WelcomeScreenProps) {
@@ -69,6 +74,12 @@ export default function WelcomeScreen({
           }`}
       >
         履歴を見る
+      </button>
+      <button
+        onClick={onGoToGacha}
+        className="w-full bg-purple-100 hover:bg-purple-200 text-purple-600 font-black text-xl py-4 rounded-2xl shadow-[0_6px_0_rgb(216,180,254)] active:shadow-[0_0px_0_rgb(216,180,254)] active:translate-y-[6px] transition-all"
+      >
+        🎁 ガチャへ
       </button>
     </div>
   );
