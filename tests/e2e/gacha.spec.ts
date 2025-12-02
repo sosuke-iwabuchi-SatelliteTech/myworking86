@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test';
-import { USER_PROFILE_STORAGE_KEY } from '../../src/constants';
 
 test.describe('Gacha Screen', () => {
   test.beforeEach(async ({ page }) => {
