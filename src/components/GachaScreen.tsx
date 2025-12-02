@@ -124,8 +124,16 @@ const GachaScreen: React.FC<GachaScreenProps> = ({ onBack }) => {
               <div className={`text-4xl mb-2 font-black italic ${getRarityText(result.rarity)}`}>
                 {result.rarity}
               </div>
-              <div className="text-9xl mb-4 drop-shadow-md transform transition-transform hover:scale-110 duration-300">
-                {result.imageUrl}
+              <div className="text-9xl mb-4 drop-shadow-md transform transition-transform hover:scale-110 duration-300 flex justify-center items-center">
+                {result.imageUrl && result.imageUrl.startsWith('/') ? (
+                  <img
+                    src={result.imageUrl}
+                    alt={result.name}
+                    className="w-32 h-32 object-contain filter drop-shadow-lg"
+                  />
+                ) : (
+                  result.imageUrl
+                )}
               </div>
               <div className="text-2xl font-bold text-slate-800 bg-white/80 px-4 py-1 rounded-full mb-2 inline-block shadow-sm">
                 {result.name}

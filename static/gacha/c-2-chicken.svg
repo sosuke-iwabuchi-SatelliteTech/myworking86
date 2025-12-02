@@ -1,0 +1,14 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Comb -->
+  <path d="M 40 15 Q 50 5 60 15 Q 70 5 80 20 L 50 30 Z" fill="#ef4444" />
+  <!-- Body/Head -->
+  <circle cx="50" cy="55" r="40" fill="#fef08a" />
+  <!-- Eyes -->
+  <circle cx="35" cy="45" r="5" fill="#1f2937" />
+  <circle cx="65" cy="45" r="5" fill="#1f2937" />
+  <!-- Beak -->
+  <path d="M 40 60 L 60 60 L 50 75 Z" fill="#f97316" />
+  <!-- Wattles -->
+  <circle cx="45" cy="75" r="5" fill="#ef4444" />
+  <circle cx="55" cy="75" r="5" fill="#ef4444" />
+</svg>
