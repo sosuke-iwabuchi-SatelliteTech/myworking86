@@ -54,9 +54,9 @@ describe('GachaScreen', () => {
         vi.advanceTimersByTime(3100);
     });
 
-    // Fast forward open (0.5s)
+    // Fast forward open (0.8s)
     await act(async () => {
-        vi.advanceTimersByTime(600);
+        vi.advanceTimersByTime(900);
     });
 
     // Should show result
@@ -88,7 +88,7 @@ describe('GachaScreen', () => {
         vi.advanceTimersByTime(3100); // Shake -> Open
     });
     await act(async () => {
-        vi.advanceTimersByTime(600); // Open -> Result
+        vi.advanceTimersByTime(900); // Open -> Result
     });
 
     // Verify we are at result screen
