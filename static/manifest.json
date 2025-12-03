@@ -1,0 +1,15 @@
+{
+  "name": "さんすうクイズ",
+  "short_name": "さんすう",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#eff6ff",
+  "theme_color": "#FFD93D",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ]
+}

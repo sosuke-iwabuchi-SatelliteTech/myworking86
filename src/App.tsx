@@ -4,6 +4,7 @@ import QuizScreen from "./components/QuizScreen";
 import ResultScreen from "./components/ResultScreen";
 import HistoryScreen from "./components/HistoryScreen";
 import SettingsScreen from "./components/SettingsScreen";
+import GachaScreen from "./components/GachaScreen";
 import AnswerModeModal from "./components/AnswerModeModal";
 import UserRegistrationScreen from "./components/UserRegistrationScreen";
 import UserSwitchModal from "./components/UserSwitchModal";
@@ -133,6 +134,10 @@ function App() {
     setScreen("settings");
   };
 
+  const handleGoToGacha = () => {
+    setScreen("gacha");
+  };
+
   const handleSettingsChange = (newSettings: GameSettings) => {
     setSettings(newSettings);
   };
@@ -190,6 +195,7 @@ function App() {
             onShowHistory={handleShowHistory}
             hasHistory={history.length > 0}
             onGoToSettings={handleGoToSettings}
+            onGoToGacha={handleGoToGacha}
             userProfile={userProfile}
             onOpenUserSwitch={handleOpenUserSwitch}
           />
@@ -205,6 +211,11 @@ function App() {
           <SettingsScreen
             onBack={handleGoToTop}
             onSettingsChange={handleSettingsChange}
+          />
+        )}
+        {screen === "gacha" && (
+          <GachaScreen
+            onBack={handleGoToTop}
           />
         )}
         {screen === "quiz" && (

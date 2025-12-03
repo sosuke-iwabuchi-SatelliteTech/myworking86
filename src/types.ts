@@ -37,7 +37,8 @@ export type Screen =
   | "history"
   | "settings"
   | "selectAnswerMode"
-  | "registration";
+  | "registration"
+  | "gacha";
 export type AnswerMode = "choice" | "calculationPad";
 
 /**

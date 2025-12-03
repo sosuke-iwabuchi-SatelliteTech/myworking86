@@ -82,9 +82,124 @@ body {
   animation: medalPulse 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
+/* Gacha Animations */
+@keyframes shake {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(-5px, 5px) rotate(-5deg); }
+  50% { transform: translate(5px, -5px) rotate(5deg); }
+  75% { transform: translate(-5px, 5px) rotate(-5deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+.animate-shake {
+  animation: shake 0.5s ease-in-out infinite;
+}
+
+@keyframes flash {
+  0% { opacity: 0; transform: scale(0.5); }
+  50% { opacity: 1; transform: scale(1.5); }
+  100% { opacity: 0; transform: scale(2); }
+}
+
+.animate-flash {
+  animation: flash 0.5s ease-out forwards;
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 8s linear infinite;
+}
+
+@keyframes pop-out {
+  0% { transform: scale(0); opacity: 0; }
+  60% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.animate-pop-out {
+  animation: pop-out 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
 /* Touch device optimization: Only apply hover effect on devices that support hover */
 @media (hover: hover) {
   .answer-btn-hover:hover {
     background-color: #dbeafe; /* tailwind blue-100 */
   }
+}
+
+/* Enhanced Gacha Animations */
+@keyframes drop-bounce {
+  0% { transform: translateY(-500px); animation-timing-function: ease-in; opacity: 0; }
+  38% { transform: translateY(0); animation-timing-function: ease-out; opacity: 1; }
+  55% { transform: translateY(-65px); animation-timing-function: ease-in; }
+  72% { transform: translateY(0); animation-timing-function: ease-out; }
+  81% { transform: translateY(-28px); animation-timing-function: ease-in; }
+  90% { transform: translateY(0); animation-timing-function: ease-out; }
+  95% { transform: translateY(-8px); animation-timing-function: ease-in; }
+  100% { transform: translateY(0); animation-timing-function: ease-out; }
+}
+
+.animate-drop-bounce {
+  animation: drop-bounce 1s both;
+}
+
+@keyframes sway {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-15deg); }
+  75% { transform: rotate(15deg); }
+}
+
+.animate-sway {
+  animation: sway 1s ease-in-out infinite;
+}
+
+@keyframes capsule-open-top {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(-120%) rotate(-15deg); }
+}
+
+.animate-capsule-open-top {
+  animation: capsule-open-top 0.5s ease-out forwards;
+}
+
+@keyframes ray-burst {
+  0% { transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(3) rotate(45deg); opacity: 0; }
+}
+
+.animate-ray-burst {
+  animation: ray-burst 1s ease-out forwards;
+}
+
+@keyframes spin-fast {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin-fast {
+  animation: spin-fast 1s linear infinite;
+}
+
+@keyframes sparkle {
+  0% { transform: scale(0) rotate(0deg); opacity: 0; }
+  50% { transform: scale(1.5) rotate(180deg); opacity: 1; }
+  100% { transform: scale(0) rotate(360deg); opacity: 0; }
+}
+
+.animate-sparkle {
+  animation: sparkle 0.8s ease-out forwards;
+}
+
+@keyframes zoom-in-out {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.5); }
+}
+
+.animate-zoom-pulse {
+  animation: zoom-in-out 3s ease-in-out infinite;
 }

@@ -20,7 +20,18 @@ ReactとTypeScriptで構築されており、Viteを開発サーバーおよび�
 
 ## 🚀 セットアップと実行方法
 
-### 必要なもの
+### DevContainer を使用する場合（推奨）
+
+VS Code と Docker がインストールされている環境であれば、DevContainer を使用してすぐに開発を始めることができます。
+
+1.  VS Code でこのリポジトリを開きます。
+2.  「Reopen in Container」という通知が表示されたらクリックします（またはコマンドパレットから `Dev Containers: Reopen in Container` を実行）。
+3.  コンテナのビルドと依存関係のインストールが自動的に行われます。
+4.  完了後、ターミナルで `npm run dev` を実行して開発サーバーを起動します。
+
+### 手動でセットアップする場合
+
+#### 必要なもの
 
 - Node.js (v18以降を推奨)
 - npm (Node.jsに同梱)

@@ -1,0 +1,24 @@
+{
+  "name": "Node.js & Playwright",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm",
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {}
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {},
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss"
+      ]
+    }
+  },
+  "postCreateCommand": "npm install && npx playwright install --with-deps",
+  "containerEnv": {
+    "TZ": "Asia/Tokyo"
+  },
+  "forwardPorts": [
+    5173
+  ]
+}
