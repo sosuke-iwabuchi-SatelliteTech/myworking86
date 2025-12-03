@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState, useImperativeHandle, forwardRef } from 'react';
+import { getStroke, StrokeOptions } from 'perfect-freehand';
 import { getSettings, saveSettings } from '../../utils/storage';
 
 export interface DrawingCanvasHandle {
@@ -11,16 +12,36 @@ const PEN_SIZES = [
   { size: 10, label: '太' }
 ];
 
-const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const isDrawingRef = useRef(false);
-  const contextRef = useRef<CanvasRenderingContext2D | null>(null);
-  const [penSize, setPenSize] = useState<number>(2);
-  const lastPos = useRef<{x: number, y: number} | null>(null);
+function getSvgPathFromStroke(stroke: number[][]) {
+  if (!stroke.length) return "";
+  const d = stroke.reduce(
+    (acc, [x0, y0], i, arr) => {
+      const [x1, y1] = arr[(i + 1) % arr.length];
+      acc.push(x0, y0, (x0 + x1) / 2, (y0 + y1) / 2);
+      return acc;
+    },
+    ["M", ...stroke[0], "Q"] as (string | number)[]
+  );
+  d.push("Z");
+  return d.join(" ");
+}
 
-  // Keep a ref to access current penSize inside the resize listener closure
+const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Ref for the bottom (persistent) canvas
+  const mainCanvasRef = useRef<HTMLCanvasElement>(null);
+  const mainContextRef = useRef<CanvasRenderingContext2D | null>(null);
+
+  // Ref for the top (active stroke) canvas
+  const overlayCanvasRef = useRef<HTMLCanvasElement>(null);
+  const overlayContextRef = useRef<CanvasRenderingContext2D | null>(null);
+
+  const [penSize, setPenSize] = useState<number>(2);
   const penSizeRef = useRef(penSize);
+
+  // State to hold the current stroke points
+  const pointsRef = useRef<number[][]>([]);
 
   // Load settings on mount
   useEffect(() => {
@@ -30,117 +51,189 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
     }
   }, []);
 
-  // Update context lineWidth and ref when penSize changes
+  // Sync penSizeRef
   useEffect(() => {
     penSizeRef.current = penSize;
-    if (contextRef.current) {
-      contextRef.current.lineWidth = penSize;
-    }
   }, [penSize]);
+
+  // --- Drawing Logic ---
 
   const getCoordinates = (e: PointerEvent, canvas: HTMLCanvasElement) => {
     const rect = canvas.getBoundingClientRect();
     return {
-      offsetX: e.clientX - rect.left,
-      offsetY: e.clientY - rect.top
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+      pressure: e.pressure
     };
   };
 
-  // Event handlers (moved out of render for native binding)
-  // We use references to ensure the latest state/refs are accessed inside listeners
+  const renderStrokeToContext = (
+    ctx: CanvasRenderingContext2D,
+    points: number[][],
+    options: StrokeOptions
+  ) => {
+    const stroke = getStroke(points, options);
+    const pathData = getSvgPathFromStroke(stroke);
+    const path = new Path2D(pathData);
+    ctx.fill(path);
+  };
+
   const startDrawing = (e: PointerEvent) => {
-    // Crucial: prevent default to stop scrolling/gestures immediately
     if (e.cancelable) e.preventDefault();
 
-    const canvas = canvasRef.current;
-    if (!canvas || !contextRef.current) return;
+    const overlayCanvas = overlayCanvasRef.current;
+    const overlayCtx = overlayContextRef.current;
+    if (!overlayCanvas || !overlayCtx) return;
 
     try {
-      canvas.setPointerCapture(e.pointerId);
+      overlayCanvas.setPointerCapture(e.pointerId);
     } catch {
-      // Ignore errors if capture fails
+      // ignore
     }
 
-    const { offsetX, offsetY } = getCoordinates(e, canvas);
-    contextRef.current.beginPath();
-    contextRef.current.moveTo(offsetX, offsetY);
-    lastPos.current = { x: offsetX, y: offsetY };
-    isDrawingRef.current = true;
+    const { x, y, pressure } = getCoordinates(e, overlayCanvas);
+    pointsRef.current = [[x, y, pressure]];
+
+    // Render initial point (for dots/taps)
+    overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+
+    const options = {
+      size: penSizeRef.current * 2,
+      thinning: 0.5,
+      smoothing: 0.5,
+      streamline: 0.5,
+      simulatePressure: e.pointerType !== 'pen',
+      last: false,
+    };
+
+    renderStrokeToContext(overlayCtx, pointsRef.current, options);
   };
 
   const draw = (e: PointerEvent) => {
-    // Prevent default handling (scrolling/zoom)
     if (e.cancelable) e.preventDefault();
 
-    if (!isDrawingRef.current || !contextRef.current || !canvasRef.current) return;
+    // Only draw if we have started a stroke
+    if (pointsRef.current.length === 0) return;
 
-    // Access coalesced events for higher precision (120Hz+ on iPad)
+    const overlayCanvas = overlayCanvasRef.current;
+    const overlayCtx = overlayContextRef.current;
+    if (!overlayCanvas || !overlayCtx) return;
+
     const events = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
-    const rect = canvasRef.current.getBoundingClientRect();
 
-    events.forEach((event) => {
-        const offsetX = event.clientX - rect.left;
-        const offsetY = event.clientY - rect.top;
-
-        if (lastPos.current) {
-            contextRef.current!.beginPath();
-            contextRef.current!.moveTo(lastPos.current.x, lastPos.current.y);
-            contextRef.current!.lineTo(offsetX, offsetY);
-            contextRef.current!.stroke();
-        }
-
-        lastPos.current = { x: offsetX, y: offsetY };
+    // Add new points
+    events.forEach(event => {
+        const { x, y, pressure } = getCoordinates(event, overlayCanvas);
+        pointsRef.current.push([x, y, pressure]);
     });
+
+    // Clear overlay and draw current stroke
+    overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+
+    // perfect-freehand options
+    const options = {
+      size: penSizeRef.current * 2,
+      thinning: 0.5,
+      smoothing: 0.5,
+      streamline: 0.5,
+      simulatePressure: e.pointerType !== 'pen',
+      last: false, // stroke is ongoing
+    };
+
+    renderStrokeToContext(overlayCtx, pointsRef.current, options);
   };
 
   const stopDrawing = (e: PointerEvent) => {
     if (e.cancelable) e.preventDefault();
 
-    isDrawingRef.current = false;
-    lastPos.current = null; // Reset last position
+    if (pointsRef.current.length === 0) return;
 
-    if (canvasRef.current) {
+    const overlayCanvas = overlayCanvasRef.current;
+    const overlayCtx = overlayContextRef.current;
+    const mainCanvas = mainCanvasRef.current;
+    const mainCtx = mainContextRef.current;
+
+    if (overlayCanvas && overlayCtx && mainCtx && mainCanvas) {
         try {
-            canvasRef.current.releasePointerCapture(e.pointerId);
+            overlayCanvas.releasePointerCapture(e.pointerId);
         } catch {
             // ignore
         }
+
+        // Render final tapered stroke on Overlay Canvas before committing
+        overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+
+        const options = {
+          size: penSizeRef.current * 2,
+          thinning: 0.5,
+          smoothing: 0.5,
+          streamline: 0.5,
+          simulatePressure: e.pointerType !== 'pen',
+          last: true, // This enables tapering at the end
+        };
+
+        renderStrokeToContext(overlayCtx, pointsRef.current, options);
+
+        // Commit final state from overlay to main canvas
+        mainCtx.drawImage(overlayCanvas, 0, 0);
+
+        // Clear the overlay for next stroke
+        overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
     }
+
+    // Reset points
+    pointsRef.current = [];
   };
 
   const preventDefaultHandler = (e: Event) => {
       e.preventDefault();
   };
 
-  // Initialize canvas context, sizing, and Native Event Listeners
+  // --- Initialization & Resizing ---
+
   useEffect(() => {
-    const canvas = canvasRef.current;
+    const mainCanvas = mainCanvasRef.current;
+    const overlayCanvas = overlayCanvasRef.current;
     const container = containerRef.current;
-    if (!canvas || !container) return;
 
-    // 'desynchronized: true' hints the browser to bypass the compositor to reduce latency
-    const ctx = canvas.getContext('2d', { desynchronized: true, alpha: true });
-    if (!ctx) return;
+    if (!mainCanvas || !overlayCanvas || !container) return;
 
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    ctx.strokeStyle = '#000000';
-    ctx.lineWidth = penSizeRef.current;
-    contextRef.current = ctx;
+    // Initialize Contexts
+    const mainCtx = mainCanvas.getContext('2d', { alpha: true });
+    const overlayCtx = overlayCanvas.getContext('2d', { desynchronized: true, alpha: true });
+
+    if (!mainCtx || !overlayCtx) return;
+
+    mainContextRef.current = mainCtx;
+    overlayContextRef.current = overlayCtx;
+
+    mainCtx.fillStyle = '#000000';
+    overlayCtx.fillStyle = '#000000';
 
     const resizeCanvas = () => {
       const { width, height } = container.getBoundingClientRect();
       const newWidth = Math.floor(width);
       const newHeight = Math.floor(height);
 
-      if (canvas.width !== newWidth || canvas.height !== newHeight) {
-        canvas.width = newWidth;
-        canvas.height = newHeight;
-        // Re-apply context settings after resize
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
-        ctx.strokeStyle = '#000000';
-        ctx.lineWidth = penSizeRef.current;
+      // Resize Main Canvas
+      if (mainCanvas.width !== newWidth || mainCanvas.height !== newHeight) {
+        // Save content
+        const savedData = mainCtx.getImageData(0, 0, mainCanvas.width, mainCanvas.height);
+
+        mainCanvas.width = newWidth;
+        mainCanvas.height = newHeight;
+
+        // Restore content (naive approach: put at top-left)
+        // A better approach would be to scale, but for a scratchpad this is acceptable.
+        mainCtx.putImageData(savedData, 0, 0);
+        mainCtx.fillStyle = '#000000'; // Reset fillStyle after resize
+      }
+
+      // Resize Overlay Canvas (always clear)
+      if (overlayCanvas.width !== newWidth || overlayCanvas.height !== newHeight) {
+          overlayCanvas.width = newWidth;
+          overlayCanvas.height = newHeight;
+          overlayCtx.fillStyle = '#000000'; // Reset fillStyle after resize
       }
     };
 
@@ -152,36 +245,41 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
     });
     resizeObserver.observe(container);
 
-    // --- Native Event Binding ---
-    // We bind directly to the DOM element to use { passive: false }
-    // This allows us to call preventDefault() synchronously and reliably.
+    // --- Native Event Listeners on Overlay ---
     const opts = { passive: false };
 
-    canvas.addEventListener('pointerdown', startDrawing, opts);
-    canvas.addEventListener('pointermove', draw, opts);
-    canvas.addEventListener('pointerup', stopDrawing, opts);
-    canvas.addEventListener('pointerleave', stopDrawing, opts);
-    canvas.addEventListener('pointercancel', stopDrawing, opts);
-    canvas.addEventListener('contextmenu', preventDefaultHandler, opts);
+    // Attach listeners to the OVERLAY canvas which captures input
+    overlayCanvas.addEventListener('pointerdown', startDrawing, opts);
+    overlayCanvas.addEventListener('pointermove', draw, opts);
+    overlayCanvas.addEventListener('pointerup', stopDrawing, opts);
+    overlayCanvas.addEventListener('pointerleave', stopDrawing, opts);
+    overlayCanvas.addEventListener('pointercancel', stopDrawing, opts);
+    overlayCanvas.addEventListener('contextmenu', preventDefaultHandler, opts);
 
     return () => {
       window.removeEventListener('resize', resizeCanvas);
       resizeObserver.disconnect();
 
-      canvas.removeEventListener('pointerdown', startDrawing);
-      canvas.removeEventListener('pointermove', draw);
-      canvas.removeEventListener('pointerup', stopDrawing);
-      canvas.removeEventListener('pointerleave', stopDrawing);
-      canvas.removeEventListener('pointercancel', stopDrawing);
-      canvas.removeEventListener('contextmenu', preventDefaultHandler);
+      overlayCanvas.removeEventListener('pointerdown', startDrawing);
+      overlayCanvas.removeEventListener('pointermove', draw);
+      overlayCanvas.removeEventListener('pointerup', stopDrawing);
+      overlayCanvas.removeEventListener('pointerleave', stopDrawing);
+      overlayCanvas.removeEventListener('pointercancel', stopDrawing);
+      overlayCanvas.removeEventListener('contextmenu', preventDefaultHandler);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Run once on mount
+  }, []);
 
   const clearCanvas = () => {
-    const canvas = canvasRef.current;
-    if (!canvas || !contextRef.current) return;
-    contextRef.current.clearRect(0, 0, canvas.width, canvas.height);
+    const mainCanvas = mainCanvasRef.current;
+    const overlayCanvas = overlayCanvasRef.current;
+    if (mainCanvas && mainContextRef.current) {
+        mainContextRef.current.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
+    }
+    if (overlayCanvas && overlayContextRef.current) {
+        overlayContextRef.current.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+    }
+    pointsRef.current = [];
   };
 
   useImperativeHandle(ref, () => ({
@@ -199,8 +297,16 @@ const DrawingCanvas = forwardRef<DrawingCanvasHandle>((_, ref) => {
       <div className="absolute top-2 left-4 text-slate-400 font-bold select-none pointer-events-none z-10">
         けいさん用紙
       </div>
+
+      {/* Main Canvas (Bottom Layer: Committed Strokes) */}
       <canvas
-        ref={canvasRef}
+        ref={mainCanvasRef}
+        className="absolute inset-0 z-0 pointer-events-none"
+      />
+
+      {/* Overlay Canvas (Top Layer: Active Stroke & Input) */}
+      <canvas
+        ref={overlayCanvasRef}
         className="absolute inset-0 cursor-crosshair z-0"
         style={{ touchAction: 'none' }}
       />
