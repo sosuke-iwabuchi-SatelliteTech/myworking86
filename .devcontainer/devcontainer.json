@@ -1,0 +1,78 @@
+{
+    "name": "Laravel React App",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "app",
+    "workspaceFolder": "/workspace",
+    // Features to install
+    "features": {
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "20"
+        },
+        "ghcr.io/devcontainers/features/php:1": {
+            "version": "8.3",
+            "installComposer": true
+        },
+        "ghcr.io/devcontainers/features/git:1": {}
+    },
+    // Configure tool-specific properties
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                // PHP Extensions
+                "bmewburn.vscode-intelephense-client",
+                "xdebug.php-debug",
+                "devsense.phptools-vscode",
+                // Laravel Extensions
+                "amiralizadeh9480.laravel-extra-intellisense",
+                "onecentlin.laravel-blade",
+                "onecentlin.laravel5-snippets",
+                // JavaScript/TypeScript/React Extensions
+                "dbaeumer.vscode-eslint",
+                "esbenp.prettier-vscode",
+                "dsznajder.es7-react-js-snippets",
+                "bradlc.vscode-tailwindcss",
+                // General Development
+                "eamodio.gitlens",
+                "editorconfig.editorconfig",
+                "mikestead.dotenv",
+                "usernamehw.errorlens"
+            ],
+            "settings": {
+                "php.validate.executablePath": "/usr/local/bin/php",
+                "php.suggest.basic": false,
+                "editor.formatOnSave": true,
+                "editor.defaultFormatter": "esbenp.prettier-vscode",
+                "[php]": {
+                    "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
+                },
+                "files.associations": {
+                    "*.blade.php": "blade"
+                },
+                "emmet.includeLanguages": {
+                    "blade": "html"
+                },
+                "tailwindCSS.experimental.classRegex": [
+                    [
+                        "cva\\(([^)]*)\\)",
+                        "[\"'`]([^\"'`]*).*?[\"'`]"
+                    ],
+                    [
+                        "cx\\(([^)]*)\\)",
+                        "(?:'|\"|`)([^']*)(?:'|\"|`)"
+                    ]
+                ]
+            }
+        }
+    },
+    // Use 'forwardPorts' to make a list of ports inside the container available locally
+    "forwardPorts": [
+        8000,
+        5173
+    ],
+    // Use 'postCreateCommand' to run commands after the container is created
+    "postCreateCommand": "composer install && npm install",
+    // Use 'postStartCommand' to run commands after the container starts
+    "postStartCommand": "touch database/database.sqlite && php artisan migrate --force || true",
+    // Comment out to connect as root instead
+    "remoteUser": "vscode"
+}
