@@ -158,7 +158,7 @@ export function updateLevelStats(levelId: string, score: number, time: number): 
 export function getSettings(): GameSettings {
   try {
     const json = localStorage.getItem(SETTINGS_STORAGE_KEY);
-    const defaults: GameSettings = { showTimer: true, penSize: 2 };
+    const defaults: GameSettings = { showTimer: true };
     if (!json) {
       return defaults;
     }
@@ -166,7 +166,7 @@ export function getSettings(): GameSettings {
     return { ...defaults, ...stored };
   } catch (e) {
     console.error("Failed to parse settings", e);
-    return { showTimer: true, penSize: 2 };
+    return { showTimer: true };
   }
 }
 

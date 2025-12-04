@@ -180,10 +180,6 @@ export interface GameSettings {
    * クイズ中にタイマーを表示するかどうか
    */
   showTimer: boolean;
-  /**
-   * 計算用紙のペンの太さ（ピクセル）
-   */
-  penSize?: number;
 }
 
 /**

@@ -1,8 +1,7 @@
-import { useRef, useMemo } from 'react';
+import { useMemo } from 'react';
 import { AnswerMode } from '../types';
 import { GRADES, DEFAULT_MEDAL_CRITERIA } from '../constants';
 import CalculationPad from './CalculationPad';
-import DrawingCanvas, { DrawingCanvasHandle } from './quiz/DrawingCanvas';
 import { useQuiz } from '../hooks/useQuiz';
 import QuizHeader from './quiz/QuizHeader';
 import QuestionDisplay from './quiz/QuestionDisplay';
@@ -21,8 +20,6 @@ interface QuizScreenProps {
 }
 
 export default function QuizScreen({ level, answerMode, onQuizComplete, onGoToTop, showTimer }: QuizScreenProps) {
-    const drawingCanvasRef = useRef<DrawingCanvasHandle>(null);
-
     const {
         currentQuestionIndex,
         correctAnswerCount,
@@ -40,11 +37,6 @@ export default function QuizScreen({ level, answerMode, onQuizComplete, onGoToTo
         level,
         answerMode,
         onQuizComplete,
-        onBeforeNextQuestion: () => {
-            if (drawingCanvasRef.current) {
-                drawingCanvasRef.current.clear();
-            }
-        },
     });
 
     const progress = ((currentQuestionIndex - 1) / totalQuestions) * 100;
@@ -88,8 +80,8 @@ export default function QuizScreen({ level, answerMode, onQuizComplete, onGoToTo
     }
 
     return (
-        <div className="flex flex-col lg:flex-row gap-6 h-full items-stretch">
-            {/* Quiz Section - Left */}
+        <div className="flex flex-col h-full items-center justify-center pt-4">
+            {/* Quiz Section */}
             <div className={`bg-white rounded-3xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] p-8 pb-20 text-center border-4 border-white ring-4 ring-purple-100 relative overflow-hidden w-full lg:max-w-md lg:w-[450px] shrink-0 mx-auto ${isAnswering ? 'pointer-events-none' : ''}`}>
                 <QuizHeader
                     progress={progress}
@@ -133,11 +125,6 @@ export default function QuizScreen({ level, answerMode, onQuizComplete, onGoToTo
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
                     </svg>
                 </button>
-            </div>
-
-            {/* Drawing Canvas Section - Right (Visible only on large screens) */}
-            <div className="hidden lg:block flex-1 bg-white/50 backdrop-blur-sm rounded-3xl shadow-sm p-2 border-2 border-dashed border-slate-200">
-                <DrawingCanvas ref={drawingCanvasRef} />
             </div>
         </div>
     );
