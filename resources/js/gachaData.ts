@@ -9,6 +9,12 @@ export interface GachaItem {
 }
 
 export const GACHA_ITEMS: GachaItem[] = [
+  // UR - Special
+  { id: 'ur-x-1', name: '天空のセレスティアルドラゴン', rarity: 'UR', description: 'URランクのスペシャル景品: 天空のセレスティアルドラゴン', imageUrl: '/gacha/ur-x-1-celestial-dragon.png' },
+  { id: 'ur-x-2', name: '金剛のダイヤモンドフェニックス', rarity: 'UR', description: 'URランクのスペシャル景品: 金剛のダイヤモンドフェニックス', imageUrl: '/gacha/ur-x-2-diamond-phoenix.png' },
+  { id: 'ur-x-3', name: '亡霊のサムライ将軍', rarity: 'UR', description: 'URランクのスペシャル景品: 亡霊のサムライ将軍', imageUrl: '/gacha/ur-x-3-samurai-warlord.png' },
+  { id: 'ur-x-4', name: '黄金の獅子王', rarity: 'UR', description: 'URランクのスペシャル景品: 黄金の獅子王', imageUrl: '/gacha/ur-x-4-golden-lion-king.png' },
+  { id: 'ur-x-5', name: '古代樹の守護者', rarity: 'UR', description: 'URランクのスペシャル景品: 古代樹の守護者', imageUrl: '/gacha/ur-x-5-ancient-tree-guardian.png' },
   // UR - Animals
   { id: 'ur-a-1', name: '伝説のドラゴン', rarity: 'UR', description: 'URランクのどうぶつ: 伝説のドラゴン', imageUrl: '/gacha/ur-a-1-dragon.svg' },
   { id: 'ur-a-2', name: '灼熱のフェニックス', rarity: 'UR', description: 'URランクのどうぶつ: 灼熱のフェニックス', imageUrl: '/gacha/ur-a-2-phoenix.svg' },
