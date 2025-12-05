@@ -6,6 +6,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { initializeTheme } from './hooks/use-appearance';
 import { initializeCsrf } from './utils/csrf';
+import './bootstrap';
 
 // Initialize CSRF protection
 initializeCsrf();
