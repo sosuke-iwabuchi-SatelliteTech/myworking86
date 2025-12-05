@@ -1,8 +1,7 @@
 import os
-import random
-import json
 import argparse
 import sys
+import hashlib
 
 OUTPUT_DIR = "public/gacha"
 DATA_OUTPUT_FILE = "gacha_data_snippet.ts"
@@ -122,8 +121,204 @@ JAPANESE_NAMES = {
     "Jinmenken": "人面犬", "Tsuchinoko": "ツチノコ", "Kesaran-pasaran": "ケサランパサラン", "Hahakigami": "箒神", "Buruburu": "震々"
 }
 
-def generate_svg_content(name, type_cat, rarity):
-    """Generates SVG content based on rarity and type."""
+# --- Specific SVG Generators for Uncommon (UC) Items ---
+# Designed to be distinct and use natural colors.
+SPECIFIC_SVGS = {
+    # --- ANIMALS ---
+    "uc-a-1": """<rect width="100" height="100" fill="#E6E6FA"/>
+        <path d="M25,30 L40,80 L80,30 L50,60 Z" fill="#FF8C00"/> <!-- Fox: Orange Ears/Head -->
+        <circle cx="50" cy="65" r="25" fill="#FF8C00"/>
+        <path d="M50,90 L35,65 L65,65 Z" fill="#FFF"/> <!-- Muzzle -->
+        <circle cx="42" cy="60" r="3" fill="black"/><circle cx="58" cy="60" r="3" fill="black"/>
+        <circle cx="50" cy="78" r="4" fill="black"/>""", # Fox (Kitsune)
+
+    "uc-a-2": """<rect width="100" height="100" fill="#F0FFF0"/>
+        <circle cx="50" cy="55" r="30" fill="#A9A9A9"/> <!-- Raccoon: Grey -->
+        <ellipse cx="50" cy="55" rx="25" ry="12" fill="#333"/> <!-- Mask -->
+        <circle cx="40" cy="55" r="3" fill="white"/><circle cx="60" cy="55" r="3" fill="white"/>
+        <circle cx="40" cy="55" r="1.5" fill="black"/><circle cx="60" cy="55" r="1.5" fill="black"/>
+        <circle cx="50" cy="70" r="3" fill="black"/>""", # Raccoon (Araiguma)
+
+    "uc-a-3": """<rect width="100" height="100" fill="#F5F5DC"/>
+        <circle cx="50" cy="55" r="30" fill="#333"/> <!-- Badger: Black -->
+        <rect x="45" y="25" width="10" height="40" fill="white"/> <!-- Stripe -->
+        <circle cx="40" cy="55" r="3" fill="white"/><circle cx="60" cy="55" r="3" fill="white"/>""", # Badger (Anaguma)
+
+    "uc-a-4": """<rect width="100" height="100" fill="#E0F7FA"/>
+        <circle cx="50" cy="50" r="30" fill="#8B4513"/> <!-- Beaver: Brown -->
+        <rect x="45" y="70" width="4" height="8" fill="white"/><rect x="51" y="70" width="4" height="8" fill="white"/> <!-- Teeth -->
+        <circle cx="42" cy="45" r="3" fill="black"/><circle cx="58" cy="45" r="3" fill="black"/>
+        <ellipse cx="50" cy="60" rx="10" ry="5" fill="#333"/>""", # Beaver
+
+    "uc-a-5": """<rect width="100" height="100" fill="#E6E6FA"/>
+        <ellipse cx="50" cy="50" rx="25" ry="20" fill="#CD853F"/> <!-- Otter: Brown -->
+        <circle cx="30" cy="40" r="5" fill="#CD853F"/><circle cx="70" cy="40" r="5" fill="#CD853F"/> <!-- Ears -->
+        <circle cx="42" cy="50" r="2" fill="black"/><circle cx="58" cy="50" r="2" fill="black"/>
+        <ellipse cx="50" cy="58" rx="8" ry="4" fill="#FFE4B5"/>""", # Otter (Kawauso)
+
+    "uc-a-6": """<rect width="100" height="100" fill="#F0FFF0"/>
+        <path d="M30,20 L35,40 M70,20 L65,40" stroke="#8B4513" stroke-width="3"/> <!-- Antlers -->
+        <ellipse cx="50" cy="60" rx="20" ry="25" fill="#DEB887"/> <!-- Deer: Light Brown -->
+        <circle cx="42" cy="55" r="3" fill="black"/><circle cx="58" cy="55" r="3" fill="black"/>
+        <circle cx="50" cy="70" r="3" fill="black"/>""", # Deer (Shika)
+
+    "uc-a-7": """<rect width="100" height="100" fill="#FFFACD"/>
+        <path d="M30,30 Q40,50 50,50 Q60,50 70,30" stroke="#A9A9A9" stroke-width="4" fill="none"/> <!-- Horns -->
+        <ellipse cx="50" cy="60" rx="20" ry="25" fill="white"/> <!-- Goat: White -->
+        <path d="M50,85 L45,95 L55,95 Z" fill="white"/> <!-- Beard -->
+        <circle cx="42" cy="55" r="3" fill="black"/><circle cx="58" cy="55" r="3" fill="black"/>""", # Goat (Yagi)
+
+    "uc-a-8": """<rect width="100" height="100" fill="#E0FFFF"/>
+        <circle cx="50" cy="50" r="35" fill="white" stroke="#D3D3D3" stroke-width="5" stroke-dasharray="5,5"/> <!-- Wool -->
+        <circle cx="50" cy="50" r="20" fill="#333"/> <!-- Face -->
+        <circle cx="42" cy="45" r="2" fill="white"/><circle cx="58" cy="45" r="2" fill="white"/>""", # Sheep (Hitsuji)
+
+    "uc-a-9": """<rect width="100" height="100" fill="#FFE4E1"/>
+        <circle cx="50" cy="50" r="30" fill="#FFB6C1"/> <!-- Pig: Pink -->
+        <ellipse cx="50" cy="55" rx="10" ry="8" fill="#FF69B4"/> <!-- Snout -->
+        <circle cx="47" cy="55" r="2" fill="black"/><circle cx="53" cy="55" r="2" fill="black"/>
+        <path d="M30,30 L35,45 L45,30 Z" fill="#FFB6C1"/><path d="M70,30 L65,45 L55,30 Z" fill="#FFB6C1"/> <!-- Ears -->""", # Pig (Buta)
+
+    "uc-a-10": """<rect width="100" height="100" fill="#F0F8FF"/>
+        <circle cx="50" cy="55" r="30" fill="white" stroke="black" stroke-width="2"/> <!-- Cow -->
+        <path d="M30,40 Q40,30 45,50 T60,60" fill="black" opacity="0.8"/> <!-- Spots -->
+        <ellipse cx="50" cy="70" rx="15" ry="10" fill="#FFC0CB"/> <!-- Muzzle -->
+        <circle cx="45" cy="70" r="2" fill="black"/><circle cx="55" cy="70" r="2" fill="black"/>""", # Cow (Ushi)
+
+    "uc-a-11": """<rect width="100" height="100" fill="#FDF5E6"/>
+        <ellipse cx="50" cy="50" rx="15" ry="30" fill="#8B4513"/> <!-- Horse: Brown -->
+        <path d="M50,20 L50,60" stroke="#333" stroke-width="5" opacity="0.5"/> <!-- Mane -->
+        <circle cx="45" cy="40" r="2" fill="black"/><circle cx="55" cy="40" r="2" fill="black"/>""", # Horse (Uma)
+
+    "uc-a-12": """<rect width="100" height="100" fill="#FFF8DC"/>
+        <circle cx="50" cy="55" r="28" fill="#CD853F"/> <!-- Dog: Brown -->
+        <path d="M20,40 L30,60 L40,40 Z" fill="#CD853F"/> <!-- Left Ear -->
+        <path d="M80,40 L70,60 L60,40 Z" fill="#CD853F"/> <!-- Right Ear -->
+        <circle cx="42" cy="50" r="3" fill="black"/><circle cx="58" cy="50" r="3" fill="black"/>
+        <circle cx="50" cy="65" r="4" fill="black"/>""", # Dog (Inu)
+
+    "uc-a-13": """<rect width="100" height="100" fill="#F5F5F5"/>
+        <circle cx="50" cy="55" r="28" fill="white"/> <!-- Cat: White -->
+        <path d="M30,30 L35,50 L45,40 Z" fill="#FFA500"/> <!-- Orange Ear -->
+        <path d="M70,30 L65,50 L55,40 Z" fill="#333"/> <!-- Black Ear -->
+        <line x1="20" y1="55" x2="40" y2="55" stroke="black"/><line x1="80" y1="55" x2="60" y2="55" stroke="black"/> <!-- Whiskers -->
+        <circle cx="42" cy="50" r="3" fill="black"/><circle cx="58" cy="50" r="3" fill="black"/>""", # Cat (Neko)
+
+    "uc-a-14": """<rect width="100" height="100" fill="#FFF0F5"/>
+        <ellipse cx="50" cy="60" rx="25" ry="20" fill="white"/> <!-- Rabbit -->
+        <ellipse cx="40" cy="30" rx="5" ry="15" fill="white" stroke="#FFC0CB" stroke-width="3"/> <!-- Ears -->
+        <ellipse cx="60" cy="30" rx="5" ry="15" fill="white" stroke="#FFC0CB" stroke-width="3"/>
+        <circle cx="42" cy="55" r="2" fill="red"/><circle cx="58" cy="55" r="2" fill="red"/>""", # Rabbit (Usagi)
+
+    "uc-a-15": """<rect width="100" height="100" fill="#F0FFF0"/>
+        <circle cx="40" cy="60" r="20" fill="#8B4513"/> <!-- Squirrel -->
+        <path d="M50,70 Q70,90 80,60 Q90,30 60,40" fill="#A0522D" stroke="#8B4513"/> <!-- Tail -->
+        <circle cx="35" cy="55" r="2" fill="black"/>""", # Squirrel (Risu)
+
+    # --- YOKAI ---
+    "uc-y-1": """<rect width="100" height="100" fill="#F0E68C"/>
+        <path d="M20,60 L50,10 L80,60 Z" fill="#800080"/> <!-- Karakasa: Umbrella -->
+        <rect x="48" y="60" width="4" height="30" fill="#DEB887"/> <!-- Leg -->
+        <circle cx="50" cy="40" r="10" fill="white"/><circle cx="50" cy="40" r="3" fill="black"/> <!-- Eye -->
+        <path d="M45,50 Q50,65 55,50" fill="red"/> <!-- Tongue -->""", # Karakasa
+
+    "uc-y-2": """<rect width="100" height="100" fill="#FFFACD"/>
+        <ellipse cx="50" cy="50" rx="25" ry="40" fill="#F4A460"/> <!-- Bake-zori -->
+        <path d="M50,15 L30,40 M50,15 L70,40" stroke="red" stroke-width="3" fill="none"/> <!-- Strap -->
+        <circle cx="40" cy="60" r="4" fill="black"/><circle cx="60" cy="60" r="4" fill="black"/>
+        <path d="M40,75 Q50,85 60,75" stroke="black" stroke-width="2" fill="none"/>""", # Bake-zori
+
+    "uc-y-3": """<rect width="100" height="100" fill="#D3D3D3"/>
+        <rect x="20" y="20" width="60" height="60" fill="#FFF8DC" stroke="#8B4513" stroke-width="4"/> <!-- Mokumokuren: Shoji -->
+        <line x1="50" y1="20" x2="50" y2="80" stroke="#8B4513" stroke-width="2"/>
+        <line x1="20" y1="50" x2="80" y2="50" stroke="#8B4513" stroke-width="2"/>
+        <circle cx="35" cy="35" r="5" fill="black"/><circle cx="65" cy="65" r="5" fill="black"/>
+        <circle cx="35" cy="65" r="5" fill="black"/><circle cx="65" cy="35" r="5" fill="black"/>""", # Mokumokuren
+
+    "uc-y-4": """<rect width="100" height="100" fill="#F5F5DC"/>
+        <circle cx="50" cy="50" r="35" fill="#696969"/> <!-- Keukegen: Hairball -->
+        <path d="M15,50 Q50,10 85,50 Q50,90 15,50" fill="none" stroke="#A9A9A9" stroke-width="2"/> <!-- Hairs -->
+        <circle cx="40" cy="45" r="4" fill="white"/><circle cx="40" cy="45" r="1.5" fill="black"/>
+        <circle cx="60" cy="45" r="4" fill="white"/><circle cx="60" cy="45" r="1.5" fill="black"/>""", # Keukegen
+
+    "uc-y-5": """<rect width="100" height="100" fill="#E6E6FA"/>
+        <ellipse cx="50" cy="50" rx="30" ry="25" fill="#FFE4E1"/> <!-- Shirime: Butt-like shape (abstract) -->
+        <circle cx="50" cy="50" r="12" fill="white"/> <!-- Eye -->
+        <circle cx="50" cy="50" r="4" fill="black"/>
+        <path d="M20,80 L30,60 M80,80 L70,60" stroke="#FFE4E1" stroke-width="5"/> <!-- Legs -->""", # Shirime
+
+    "uc-y-6": """<rect width="100" height="100" fill="#F0F8FF"/>
+        <circle cx="50" cy="40" r="25" fill="#E0FFFF" opacity="0.6"/> <!-- Betobeto-san: Transparent -->
+        <path d="M40,40 Q50,50 60,40" stroke="black" stroke-width="2" fill="none"/> <!-- Smile -->
+        <rect x="35" y="70" width="10" height="5" fill="#8B4513"/> <!-- Clogs -->
+        <rect x="55" y="70" width="10" height="5" fill="#8B4513"/>""", # Betobeto-san
+
+    "uc-y-7": """<rect width="100" height="100" fill="#228B22"/>
+        <circle cx="50" cy="40" r="20" fill="white"/> <!-- Kodama: Head -->
+        <circle cx="50" cy="70" r="10" fill="white"/> <!-- Body -->
+        <circle cx="42" cy="40" r="3" fill="black"/>
+        <circle cx="58" cy="40" r="3" fill="black"/>
+        <circle cx="50" cy="48" r="2" fill="black"/> <!-- Mouth -->""", # Kodama
+
+    "uc-y-8": """<rect width="100" height="100" fill="#E0FFFF"/>
+        <path d="M30,30 L70,30 L60,80 L40,80 Z" fill="#98FB98"/> <!-- Amabie: Body -->
+        <path d="M50,20 L30,80 M50,20 L70,80" stroke="#FF69B4" stroke-width="2"/> <!-- Hair -->
+        <rect x="48" y="40" width="4" height="6" fill="#FFD700"/> <!-- Beak -->
+        <circle cx="40" cy="35" r="3" fill="black"/>""", # Amabie
+
+    "uc-y-9": """<rect width="100" height="100" fill="#E0F7FA"/>
+        <circle cx="50" cy="30" r="15" fill="#FFE4E1"/> <!-- Ningyo: Head -->
+        <path d="M35,45 Q50,90 65,45" fill="#FF7F50"/> <!-- Fish Tail -->
+        <path d="M30,20 L70,20" stroke="black" stroke-width="1"/> <!-- Hair -->
+        <circle cx="45" cy="30" r="2" fill="black"/><circle cx="55" cy="30" r="2" fill="black"/>""", # Ningyo
+
+    "uc-y-10": """<rect width="100" height="100" fill="#F5DEB3"/>
+        <ellipse cx="50" cy="50" rx="20" ry="30" fill="#8B4513"/> <!-- Kawauso (Yokai) -->
+        <path d="M30,20 L70,20" stroke="#F4A460" stroke-width="5"/> <!-- Straw Hat rim -->
+        <path d="M40,20 L50,5 L60,20" fill="#F4A460"/> <!-- Hat top -->
+        <circle cx="45" cy="40" r="2" fill="black"/><circle cx="55" cy="40" r="2" fill="black"/>
+        <rect x="60" y="50" width="10" height="20" fill="white" stroke="black"/> <!-- Sake bottle -->""", # Kawauso
+
+    "uc-y-11": """<rect width="100" height="100" fill="#2F4F4F"/>
+        <circle cx="50" cy="50" r="25" fill="#696969"/> <!-- Mujina -->
+        <path d="M20,10 L80,10 L50,90 Z" fill="none" stroke="black" opacity="0.1"/> <!-- Shadow -->
+        <circle cx="40" cy="50" r="2" fill="white"/><circle cx="60" cy="50" r="2" fill="white"/>
+        <path d="M45,20 Q50,10 55,20" fill="#228B22"/> <!-- Leaf on head -->""", # Mujina
+
+    "uc-y-12": """<rect width="100" height="100" fill="#FFE4B5"/>
+        <circle cx="50" cy="50" r="30" fill="#8B4513"/> <!-- Satori -->
+        <circle cx="40" cy="45" r="4" fill="white"/><circle cx="40" cy="45" r="1" fill="black"/>
+        <circle cx="60" cy="45" r="4" fill="white"/><circle cx="60" cy="45" r="1" fill="black"/>
+        <path d="M45,25 Q50,15 55,25" fill="none" stroke="red" stroke-width="2"/> <!-- Third Eye slit -->""", # Satori
+
+    "uc-y-13": """<rect width="100" height="100" fill="#E6E6FA"/>
+        <circle cx="50" cy="60" r="20" fill="#A9A9A9"/> <!-- Yama-biko -->
+        <circle cx="25" cy="50" r="10" fill="#A9A9A9"/> <!-- Big Ears -->
+        <circle cx="75" cy="50" r="10" fill="#A9A9A9"/>
+        <path d="M45,60 Q50,70 55,60" stroke="black" stroke-width="1" fill="none"/>""", # Yama-biko
+
+    "uc-y-14": """<rect width="100" height="100" fill="#F08080"/>
+        <circle cx="50" cy="50" r="25" fill="#FF4500"/> <!-- Kijimuna: Red Body -->
+        <path d="M30,20 L40,30 L50,15 L60,30 L70,20" stroke="#FF0000" stroke-width="3" fill="none"/> <!-- Wild Hair -->
+        <circle cx="42" cy="45" r="3" fill="white"/><circle cx="58" cy="45" r="3" fill="white"/>
+        <path d="M45,60 Q50,65 55,60" stroke="white" stroke-width="2" fill="none"/>""", # Kijimuna
+
+    "uc-y-15": """<rect width="100" height="100" fill="#90EE90"/>
+        <rect x="40" y="40" width="20" height="40" fill="#8B4513"/> <!-- Gajumaru: Trunk -->
+        <circle cx="50" cy="40" r="30" fill="#228B22"/> <!-- Leaves -->
+        <circle cx="45" cy="40" r="2" fill="black"/><circle cx="55" cy="40" r="2" fill="black"/>
+        <path d="M45,50 Q50,55 55,50" stroke="black" stroke-width="1" fill="none"/>""", # Gajumaru
+}
+
+def generate_svg_content(name, type_cat, rarity, item_id):
+    """Generates SVG content based on rarity and type. Prefer specific SVG if available."""
+
+    # Check for specific SVG definition first
+    if item_id in SPECIFIC_SVGS:
+        content = SPECIFIC_SVGS[item_id]
+        return f'<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">{content}</svg>'
+
+    # Fallback to procedural generation for other rarities
     config = RARITY_CONFIG[rarity]
     complexity = config["complexity"]
 
@@ -132,7 +327,6 @@ def generate_svg_content(name, type_cat, rarity):
     border_color = config["border"]
 
     # Deterministic "Random" colors based on name hash
-    import hashlib
     h = int(hashlib.sha256(name.encode('utf-8')).hexdigest(), 16)
     hue = h % 360
 
@@ -243,7 +437,7 @@ def main():
 
             if rarity in target_rarities:
                 with open(filepath, 'w', encoding='utf-8') as f:
-                    f.write(generate_svg_content(name, "Animal", rarity))
+                    f.write(generate_svg_content(name, "Animal", rarity, item_id))
 
             items_list.append({
                 "id": item_id,
@@ -262,7 +456,7 @@ def main():
 
             if rarity in target_rarities:
                 with open(filepath, 'w', encoding='utf-8') as f:
-                    f.write(generate_svg_content(name, "Yokai", rarity))
+                    f.write(generate_svg_content(name, "Yokai", rarity, item_id))
 
             items_list.append({
                 "id": item_id,
