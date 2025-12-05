@@ -29,6 +29,7 @@ import {
 } from "../utils/storage";
 import { setUserProperties, trackQuizComplete } from "../utils/analytics";
 import { GRADES } from "../constants";
+import { loginUser } from "../utils/auth";
 
 /**
  * アプリケーションのメインコンポーネント。
@@ -55,6 +56,7 @@ export default function Home() {
         // Track user properties if profile is loaded on mount
         if (userProfile) {
             setUserProperties(userProfile.nickname, String(userProfile.grade));
+            loginUser(userProfile.id, userProfile.nickname, userProfile.grade).catch((e) => console.error("Auto-login failed", e));
         }
     }, [userProfile]);
 

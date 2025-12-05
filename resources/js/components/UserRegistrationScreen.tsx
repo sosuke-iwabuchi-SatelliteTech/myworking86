@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { UserProfile } from "../types";
+import { saveUserProfile } from "../utils/storage";
 
 interface UserRegistrationScreenProps {
   onComplete: (profile: UserProfile) => void;
@@ -39,11 +40,15 @@ export default function UserRegistrationScreen({ onComplete }: UserRegistrationS
           throw new Error(data.message || '登録に失敗しました');
         }
 
-        onComplete({
+        const profile: UserProfile = {
           id,
           nickname,
           grade: gradeNum,
-        });
+        };
+
+        saveUserProfile(profile);
+
+        onComplete(profile);
       } catch (err) {
         if (err instanceof Error) {
           setError(err.message);
