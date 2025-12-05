@@ -1,18 +1,7 @@
-<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" filter="url(#glow_313)">
-
-        <defs>
-            <radialGradient id="grad_313" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-                <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#B8860B;stop-opacity:1" />
-            </radialGradient>
-            <filter id="glow_313">
-                <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
-                <feMerge>
-                    <feMergeNode in="coloredBlur"/>
-                    <feMergeNode in="SourceGraphic"/>
-                </feMerge>
-            </filter>
-        </defs>
-        <rect width="100" height="100" fill="url(#grad_313)" />
-        <rect x="10" y="10" width="80" height="80" fill="hsl(313, 70%, 50%)" stroke="#B8860B" stroke-width="5" rx="5" /><circle cx="35" cy="40" r="8" fill="white" /><circle cx="65" cy="40" r="8" fill="white" /><circle cx="35" cy="40" r="4.0" fill="black" /><circle cx="65" cy="40" r="4.0" fill="black" /><path d="M 40 60 Q 50 70 60 60" stroke="black" stroke-width="2" fill="none" /><circle cx="25" cy="15" r="10" fill="hsl(313, 70%, 50%)" /><circle cx="75" cy="15" r="10" fill="hsl(313, 70%, 50%)" />
-    </svg>
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#DAA520"/>
+        <path d="M20,40 L50,80 L80,40 L50,20 Z" fill="#CD853F"/> <!-- Lion Body -->
+        <path d="M20,40 L10,20 L30,30 Z" fill="white"/> <!-- Wing -->
+        <path d="M80,40 L90,20 L70,30 Z" fill="white"/> <!-- Wing -->
+        <circle cx="50" cy="30" r="12" fill="white"/> <!-- Eagle Head -->
+        <path d="M50,32 L55,38 L45,38 Z" fill="#FFD700"/> <!-- Beak -->
+        <circle cx="48" cy="30" r="2" fill="black"/></svg>

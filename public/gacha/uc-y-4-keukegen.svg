@@ -1,3 +1,5 @@
-<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" >
-    <rect width="100" height="100" fill="#90EE90" rx="10" ry="10" /><polygon points="50,16 84,84 16,84" fill="hsl(347, 70%, 50%)" stroke="#228B22" stroke-width="2" /><circle cx="38" cy="40" r="5" fill="white" /><circle cx="62" cy="40" r="5" fill="white" /><circle cx="38" cy="40" r="2.5" fill="black" /><circle cx="62" cy="40" r="2.5" fill="black" /><line x1="45" y1="65" x2="55" y2="65" stroke="black" stroke-width="2" />
-    </svg>
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#F5F5DC"/>
+        <circle cx="50" cy="50" r="35" fill="#696969"/> <!-- Keukegen: Hairball -->
+        <path d="M15,50 Q50,10 85,50 Q50,90 15,50" fill="none" stroke="#A9A9A9" stroke-width="2"/> <!-- Hairs -->
+        <circle cx="40" cy="45" r="4" fill="white"/><circle cx="40" cy="45" r="1.5" fill="black"/>
+        <circle cx="60" cy="45" r="4" fill="white"/><circle cx="60" cy="45" r="1.5" fill="black"/></svg>

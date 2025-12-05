@@ -1,18 +1,6 @@
-<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" filter="url(#glow_202)">
-
-        <defs>
-            <radialGradient id="grad_202" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-                <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#B8860B;stop-opacity:1" />
-            </radialGradient>
-            <filter id="glow_202">
-                <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
-                <feMerge>
-                    <feMergeNode in="coloredBlur"/>
-                    <feMergeNode in="SourceGraphic"/>
-                </feMerge>
-            </filter>
-        </defs>
-        <rect width="100" height="100" fill="url(#grad_202)" />
-        <rect x="10" y="10" width="80" height="80" fill="hsl(202, 70%, 50%)" stroke="#B8860B" stroke-width="5" rx="5" /><circle cx="35" cy="40" r="8" fill="white" /><circle cx="65" cy="40" r="8" fill="white" /><circle cx="35" cy="40" r="4.0" fill="black" /><circle cx="65" cy="40" r="4.0" fill="black" /><path d="M 40 60 Q 50 70 60 60" stroke="black" stroke-width="2" fill="none" /><circle cx="25" cy="15" r="10" fill="hsl(202, 70%, 50%)" /><circle cx="75" cy="15" r="10" fill="hsl(202, 70%, 50%)" />
-    </svg>
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#5D4037"/>
+        <circle cx="50" cy="60" r="35" fill="#3E2723"/> <!-- Body -->
+        <rect x="20" y="80" width="15" height="20" fill="#3E2723"/> <!-- Leg -->
+        <rect x="65" y="80" width="15" height="20" fill="#3E2723"/>
+        <circle cx="40" cy="40" r="5" fill="white"/> <!-- Eye -->
+        <path d="M60,50 L80,30" stroke="#EEE" stroke-width="10"/> <!-- Tusk --></svg>

@@ -1,18 +1,9 @@
-<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" filter="url(#glow_113)">
-
-        <defs>
-            <radialGradient id="grad_113" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-                <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#B8860B;stop-opacity:1" />
-            </radialGradient>
-            <filter id="glow_113">
-                <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
-                <feMerge>
-                    <feMergeNode in="coloredBlur"/>
-                    <feMergeNode in="SourceGraphic"/>
-                </feMerge>
-            </filter>
-        </defs>
-        <rect width="100" height="100" fill="url(#grad_113)" />
-        <polygon points="50,10 90,90 10,90" fill="hsl(113, 70%, 50%)" stroke="#B8860B" stroke-width="5" /><circle cx="35" cy="40" r="8" fill="white" /><circle cx="65" cy="40" r="8" fill="white" /><circle cx="35" cy="40" r="4.0" fill="black" /><circle cx="65" cy="40" r="4.0" fill="black" /><path d="M 40 60 Q 50 70 60 60" stroke="black" stroke-width="2" fill="none" /><circle cx="85" cy="20" r="8" fill="hsl(143, 70%, 60%)" opacity="0.7" /><circle cx="15" cy="20" r="8" fill="hsl(143, 70%, 60%)" opacity="0.7" />
-    </svg>
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#FFD700"/> <!-- Kyubi -->
+        <circle cx="50" cy="60" r="20" fill="#DAA520"/> <!-- Body -->
+        <circle cx="50" cy="40" r="15" fill="#DAA520"/> <!-- Head -->
+        <path d="M40,25 L35,10 L45,25 Z" fill="#DAA520"/> <!-- Ear -->
+        <path d="M60,25 L65,10 L55,25 Z" fill="#DAA520"/> <!-- Ear -->
+        <path d="M30,60 Q10,40 20,20" stroke="#DAA520" stroke-width="5" fill="none"/> <!-- Tail 1 -->
+        <path d="M70,60 Q90,40 80,20" stroke="#DAA520" stroke-width="5" fill="none"/> <!-- Tail 2 -->
+        <path d="M20,70 Q0,60 10,40" stroke="#DAA520" stroke-width="5" fill="none"/> <!-- Tail 3 -->
+        <path d="M80,70 Q100,60 90,40" stroke="#DAA520" stroke-width="5" fill="none"/> <!-- Tail 4 --></svg>

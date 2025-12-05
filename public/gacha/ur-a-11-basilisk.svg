@@ -1,18 +1,8 @@
-<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" filter="url(#glow_248)">
-
-        <defs>
-            <radialGradient id="grad_248" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-                <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#B8860B;stop-opacity:1" />
-            </radialGradient>
-            <filter id="glow_248">
-                <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
-                <feMerge>
-                    <feMergeNode in="coloredBlur"/>
-                    <feMergeNode in="SourceGraphic"/>
-                </feMerge>
-            </filter>
-        </defs>
-        <rect width="100" height="100" fill="url(#grad_248)" />
-        <polygon points="50,10 90,90 10,90" fill="hsl(248, 70%, 50%)" stroke="#B8860B" stroke-width="5" /><circle cx="35" cy="40" r="8" fill="white" /><circle cx="65" cy="40" r="8" fill="white" /><circle cx="35" cy="40" r="4.0" fill="black" /><circle cx="65" cy="40" r="4.0" fill="black" /><path d="M 40 60 Q 50 70 60 60" stroke="black" stroke-width="2" fill="none" /><circle cx="25" cy="15" r="10" fill="hsl(248, 70%, 50%)" /><circle cx="75" cy="15" r="10" fill="hsl(248, 70%, 50%)" />
-    </svg>
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><filter id="glow"><feGaussianBlur stdDeviation="2.5" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+        <rect width="100" height="100" fill="#228B22"/>
+        <path d="M30,60 Q50,20 70,60" fill="#006400"/> <!-- Lizard Body -->
+        <path d="M20,60 Q50,80 80,60" fill="#006400"/>
+        <circle cx="50" cy="40" r="10" fill="#32CD32"/> <!-- Head -->
+        <circle cx="50" cy="35" r="2" fill="yellow" filter="url(#glow)"/> <!-- Petrifying Eye -->
+        <path d="M40,30 L30,20" stroke="#32CD32" stroke-width="3"/> <!-- Crest -->
+        <path d="M60,30 L70,20" stroke="#32CD32" stroke-width="3"/></svg>
