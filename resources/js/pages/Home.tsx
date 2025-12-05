@@ -1,3 +1,4 @@
+import { router } from '@inertiajs/react';
 import { useState, useEffect } from "react";
 import WelcomeScreen from "../components/WelcomeScreen";
 import QuizScreen from "../components/QuizScreen";
@@ -140,6 +141,10 @@ export default function Home() {
         setScreen("gacha");
     };
 
+    const handleGoToPrizeList = () => {
+        router.visit('/prizes');
+    };
+
     const handleSettingsChange = (newSettings: GameSettings) => {
         setSettings(newSettings);
     };
@@ -198,6 +203,7 @@ export default function Home() {
                         hasHistory={history.length > 0}
                         onGoToSettings={handleGoToSettings}
                         onGoToGacha={handleGoToGacha}
+                        onGoToPrizeList={handleGoToPrizeList}
                         userProfile={userProfile}
                         onOpenUserSwitch={handleOpenUserSwitch}
                     />

@@ -1,5 +1,61 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../wayfinder'
 /**
+* @see \App\Http\Controllers\UserController::login
+* @see app/Http/Controllers/UserController.php:35
+* @route '/login'
+*/
+export const login = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: login.url(options),
+    method: 'post',
+})
+
+login.definition = {
+    methods: ["post"],
+    url: '/login',
+} satisfies RouteDefinition<["post"]>
+
+/**
+* @see \App\Http\Controllers\UserController::login
+* @see app/Http/Controllers/UserController.php:35
+* @route '/login'
+*/
+login.url = (options?: RouteQueryOptions) => {
+    return login.definition.url + queryParams(options)
+}
+
+/**
+* @see \App\Http\Controllers\UserController::login
+* @see app/Http/Controllers/UserController.php:35
+* @route '/login'
+*/
+login.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+    url: login.url(options),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\UserController::login
+* @see app/Http/Controllers/UserController.php:35
+* @route '/login'
+*/
+const loginForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: login.url(options),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\UserController::login
+* @see app/Http/Controllers/UserController.php:35
+* @route '/login'
+*/
+loginForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: login.url(options),
+    method: 'post',
+})
+
+login.form = loginForm
+
+/**
 * @see \App\Http\Controllers\UserController::store
 * @see app/Http/Controllers/UserController.php:16
 * @route '/api/user'
@@ -55,62 +111,6 @@ storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => (
 
 store.form = storeForm
 
-/**
-* @see \App\Http\Controllers\UserController::login
-* @see app/Http/Controllers/UserController.php:35
-* @route '/api/login'
-*/
-export const login = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
-    url: login.url(options),
-    method: 'post',
-})
-
-login.definition = {
-    methods: ["post"],
-    url: '/api/login',
-} satisfies RouteDefinition<["post"]>
-
-/**
-* @see \App\Http\Controllers\UserController::login
-* @see app/Http/Controllers/UserController.php:35
-* @route '/api/login'
-*/
-login.url = (options?: RouteQueryOptions) => {
-    return login.definition.url + queryParams(options)
-}
-
-/**
-* @see \App\Http\Controllers\UserController::login
-* @see app/Http/Controllers/UserController.php:35
-* @route '/api/login'
-*/
-login.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
-    url: login.url(options),
-    method: 'post',
-})
-
-/**
-* @see \App\Http\Controllers\UserController::login
-* @see app/Http/Controllers/UserController.php:35
-* @route '/api/login'
-*/
-const loginForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
-    action: login.url(options),
-    method: 'post',
-})
-
-/**
-* @see \App\Http\Controllers\UserController::login
-* @see app/Http/Controllers/UserController.php:35
-* @route '/api/login'
-*/
-loginForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
-    action: login.url(options),
-    method: 'post',
-})
-
-login.form = loginForm
-
-const UserController = { store, login }
+const UserController = { login, store }
 
 export default UserController

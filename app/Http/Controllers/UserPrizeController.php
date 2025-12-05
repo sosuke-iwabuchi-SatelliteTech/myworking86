@@ -16,7 +16,7 @@ class UserPrizeController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'prize_id' => 'required|uuid',
+            'prize_id' => 'required|string',
             'rarity' => 'required|string',
         ]);
 
@@ -38,6 +38,13 @@ class UserPrizeController extends Controller
         $userPrizes = UserPrize::where('user_id', Auth::id())
             ->select('prize_id', 'rarity', DB::raw('count(*) as count'))
             ->groupBy('prize_id', 'rarity')
+            ->orderByRaw("CASE rarity 
+                WHEN 'UR' THEN 1 
+                WHEN 'SR' THEN 2 
+                WHEN 'R' THEN 3 
+                WHEN 'UC' THEN 4 
+                WHEN 'C' THEN 5 
+                ELSE 6 END")
             ->get();
 
         return response()->json($userPrizes);

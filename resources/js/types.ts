@@ -18,6 +18,18 @@ export interface MedalCriteria {
   silverThreshold: number; // in milliseconds
 }
 
+export interface BreadcrumbItem {
+  title: string;
+  href: string;
+}
+
+export interface NavItem {
+  title: string;
+  href: string;
+  icon?: any; // Avoiding complex import for now, or use generic
+  isActive?: boolean;
+}
+
 
 
 /**

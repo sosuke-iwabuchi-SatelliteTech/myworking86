@@ -57,10 +57,33 @@ const GachaScreen: React.FC<GachaScreenProps> = ({ onBack }) => {
   const [visualType, setVisualType] = useState<VisualType>('normal');
   const [capsuleColor, setCapsuleColor] = useState<string>('bg-blue-500');
 
-  const handlePull = () => {
+  const handlePull = async () => {
     // 1. Determine Result
     const item = pullGacha();
     setResult(item);
+
+    // Register Prize via API
+    try {
+      const csrfToken = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('XSRF-TOKEN='))
+        ?.split('=')[1];
+
+      await fetch('/api/user/prizes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'X-XSRF-TOKEN': decodeURIComponent(csrfToken || ''),
+        },
+        body: JSON.stringify({
+          prize_id: item.id,
+          rarity: item.rarity,
+        }),
+      });
+    } catch (error) {
+      console.error("Failed to register prize:", error);
+    }
 
     // 2. Determine Visuals
     let visual: VisualType = 'normal';
