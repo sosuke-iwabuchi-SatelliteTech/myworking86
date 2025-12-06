@@ -60,7 +60,7 @@ export default function PrizeListScreen({ onBack }: PrizeListScreenProps) {
             <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div className="p-6 text-gray-900">
                     <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-2xl font-bold">Your Prize Collection</h2>
+                        <h2 className="text-2xl font-bold">景品りすと</h2>
                         <button
                             onClick={onBack}
                             className="px-4 py-2 bg-slate-200 text-slate-700 rounded-lg hover:bg-slate-300 transition-colors font-bold"
@@ -73,10 +73,10 @@ export default function PrizeListScreen({ onBack }: PrizeListScreenProps) {
                         <div className="text-center py-10">Loading...</div>
                     ) : prizes.length === 0 ? (
                         <div className="text-center py-10 text-gray-500">
-                            You haven't collected any prizes yet. Go play Gacha!
+                            ガチャしてみてね！
                         </div>
                     ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                        <div className="grid grid-cols-2 gap-6">
                             {prizes.map((prize) => (
                                 <div
                                     key={prize.prize_id}
@@ -97,7 +97,7 @@ export default function PrizeListScreen({ onBack }: PrizeListScreenProps) {
                                         {prize.description}
                                     </div>
                                     <div className="mt-auto text-sm font-medium bg-white/80 px-3 py-1 rounded-full">
-                                        Owned: {prize.count}
+                                        {prize.count}コ
                                     </div>
                                 </div>
                             ))}

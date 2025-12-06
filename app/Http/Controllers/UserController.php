@@ -40,15 +40,17 @@ class UserController extends Controller
             'grade' => 'nullable|integer',
         ]);
 
-        $user = User::firstOrCreate(
-            ['id' => $request->id],
-            [
+        $user = User::find($request->id);
+
+        if (!$user) {
+            $user = User::create([
+                'id' => $request->id,
                 'name' => $request->name ?? 'Unknown',
-                'grade' => $request->grade ?? 1,
+                'grade' => (int) ($request->grade ?? 1),
                 'email' => $request->id . '@example.com', // Dummy email
                 'password' => bcrypt('password'), // Dummy password
-            ]
-        );
+            ]);
+        }
 
         Auth::login($user);
 

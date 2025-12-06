@@ -34,15 +34,25 @@ describe('PrizeListScreen Component', () => {
 
         // Wait for content (Dragon is UR)
         await waitFor(() => {
-            expect(screen.getByText('伝説のドラゴン')).toBeDefined();
+            expect(screen.getByText('ドラゴン')).toBeDefined();
         });
 
         expect(screen.queryByText('Loading...')).toBeNull();
-        expect(screen.getByText('Owned: 1')).toBeDefined();
+        expect(screen.getByText('1コ')).toBeDefined();
 
         // Check for "Lion" (SR)
-        expect(screen.getByText('百獣の王ライオン')).toBeDefined();
-        expect(screen.getByText('Owned: 2')).toBeDefined();
+        expect(screen.getByText('ライオン')).toBeDefined();
+        expect(screen.getByText('2コ')).toBeDefined();
+
+        // Verify layout
+        const prizeItem = screen.getByText('ドラゴン');
+        // The prize item is inside a div with class 'border', which is inside the grid
+        // prizeItem -> div -> div (grid item) -> div (grid container)
+        // Let's find the grid container more robustly
+        const grid = prizeItem.closest('.grid');
+        expect(grid?.className).toContain('grid-cols-2');
+        expect(grid?.className).not.toContain('grid-cols-1');
+        expect(grid?.className).not.toContain('md:grid-cols-3');
     });
 
     it('displays empty message when no prizes', async () => {
@@ -56,7 +66,7 @@ describe('PrizeListScreen Component', () => {
             expect(screen.queryByText('Loading...')).toBeNull();
         });
 
-        expect(screen.getByText("You haven't collected any prizes yet. Go play Gacha!")).toBeDefined();
+        expect(screen.getByText("ガチャしてみてね！")).toBeDefined();
     });
 
     it('calls onBack when back button is clicked', async () => {
