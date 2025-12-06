@@ -7,6 +7,7 @@ on:
     paths:
       # 画像フォルダに変更があった場合のみ実行（無駄な実行を防ぐ）
       - 'public/gacha/**'
+  workflow_dispatch:
 
 jobs:
   deploy:
