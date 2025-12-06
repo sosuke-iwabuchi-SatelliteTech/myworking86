@@ -46,7 +46,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
-          source: "app,bootstrap,config,database/migrations,database/seeders,database/factories,public,resources,routes,vendor,artisan,composer.json,composer.lock,vite.config.js,package.json"
+          source: "app,bootstrap,config,database/migrations,database/seeders,database/factories,public/build,public/textbook,public/index.php,public/.htaccess,public/*.png,public/*.svg,public/*.ico,public/*.json,public/*.txt,resources,routes,vendor,artisan,composer.json,composer.lock,vite.config.js,package.json"
           target: ${{ secrets.APP_ROUTE_PATH }}
 
       - name: Execute remote commands

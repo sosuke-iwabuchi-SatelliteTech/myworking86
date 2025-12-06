@@ -1,5 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import PrizeList from '../../../resources/js/pages/PrizeList';
 import React from 'react';
 import axios from 'axios';
@@ -47,11 +47,11 @@ describe('PrizeList Component', () => {
         });
 
         expect(screen.queryByText('Loading...')).toBeNull();
-        expect(screen.getByText('Owned: 1')).toBeDefined();
+        expect(screen.getByText('1コ')).toBeDefined();
 
         // Check for "Lion" (sr-a-1)
         expect(screen.getByText('ライオン')).toBeDefined();
-        expect(screen.getByText('Owned: 2')).toBeDefined();
+        expect(screen.getByText('2コ')).toBeDefined();
     });
 
     it('displays empty message when no prizes', async () => {

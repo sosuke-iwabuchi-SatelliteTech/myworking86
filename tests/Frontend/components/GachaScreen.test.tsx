@@ -2,6 +2,10 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import GachaScreen from '../../../resources/js/components/GachaScreen';
 import * as gachaData from '../../../resources/js/gachaData';
+import axios from 'axios';
+
+// Mock axios
+vi.mock('axios');
 
 // Mock gachaData
 vi.mock('../../../resources/js/gachaData', async (importOriginal) => {
@@ -14,15 +18,13 @@ vi.mock('../../../resources/js/gachaData', async (importOriginal) => {
 
 describe('GachaScreen', () => {
   const mockOnBack = vi.fn();
-  const mockFetch = vi.fn();
 
   beforeEach(() => {
     vi.resetAllMocks();
-    global.fetch = mockFetch;
+
     // Mock success response
-    mockFetch.mockResolvedValue({
-      ok: true,
-      json: async () => ({ status: 'success' }),
+    vi.mocked(axios.post).mockResolvedValue({
+      data: { status: 'success' }
     });
 
     // Mock a predictable gacha result
@@ -32,12 +34,6 @@ describe('GachaScreen', () => {
       rarity: 'UR',
       description: 'A powerful dragon',
       imageUrl: '/test-dragon.png'
-    });
-
-    // Mock document.cookie
-    Object.defineProperty(document, 'cookie', {
-      writable: true,
-      value: 'XSRF-TOKEN=test-token',
     });
   });
 
@@ -53,22 +49,15 @@ describe('GachaScreen', () => {
     const pullButton = screen.getByText('ガチャをまわす');
     fireEvent.click(pullButton);
 
-    // Wait for fetch to be called
+    // Wait for axios to be called
     await waitFor(() => {
-      expect(mockFetch).toHaveBeenCalledTimes(1);
+      expect(axios.post).toHaveBeenCalledTimes(1);
     });
 
     // Verify API call details
-    expect(mockFetch).toHaveBeenCalledWith('/api/user/prizes', expect.objectContaining({
-      method: 'POST',
-      headers: expect.objectContaining({
-        'Content-Type': 'application/json',
-        'X-XSRF-TOKEN': 'test-token',
-      }),
-      body: JSON.stringify({
-        prize_id: 'ur-a-1',
-        rarity: 'UR',
-      }),
+    expect(axios.post).toHaveBeenCalledWith('/api/user/prizes', expect.objectContaining({
+      prize_id: 'ur-a-1',
+      rarity: 'UR',
     }));
   });
 });

@@ -1,0 +1,32 @@
+name: Deploy Images to Cloudflare R2
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      # 画像フォルダに変更があった場合のみ実行（無駄な実行を防ぐ）
+      - 'public/gacha/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Sync images to R2
+        env:
+          # R2はS3互換なのでAWS CLIがそのまま使えます
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+          R2_ENDPOINT: https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
+          BUCKET_NAME: ${{ secrets.R2_BUCKET_NAME }}
+          SOURCE_DIR: ./public/gacha  # 同期元のディレクトリ
+        run: |
+          # --delete オプションにより、Git側で削除されたファイルはR2からも削除されます
+          aws s3 sync $SOURCE_DIR s3://$BUCKET_NAME \
+            --endpoint-url $R2_ENDPOINT \
+            --delete \
+            --no-progress

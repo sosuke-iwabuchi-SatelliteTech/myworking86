@@ -12,9 +12,9 @@ vi.mock('axios', async (importOriginal) => {
             ...actual.default,
             post: vi.fn(),
             get: vi.fn(),
-            isAxiosError: (payload: any) => payload?.isAxiosError === true,
+            isAxiosError: (payload: unknown) => (payload as { isAxiosError?: boolean })?.isAxiosError === true,
         },
-        isAxiosError: (payload: any) => payload?.isAxiosError === true,
+        isAxiosError: (payload: unknown) => (payload as { isAxiosError?: boolean })?.isAxiosError === true,
     };
 });
 

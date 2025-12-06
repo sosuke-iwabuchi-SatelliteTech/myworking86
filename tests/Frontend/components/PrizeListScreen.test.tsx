@@ -1,5 +1,5 @@
 import { render, screen, waitFor, fireEvent, within } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import PrizeListScreen from '../../../resources/js/components/PrizeListScreen';
 import React from 'react';
 import axios from 'axios';
