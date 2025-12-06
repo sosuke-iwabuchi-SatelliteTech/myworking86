@@ -1,7 +1,7 @@
-<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#2F4F4F"/>
-        <rect x="25" y="30" width="50" height="60" rx="15" fill="#333"/> <!-- Body -->
-        <ellipse cx="50" cy="35" rx="15" ry="20" fill="#333"/> <!-- Head Shape -->
-        <ellipse cx="50" cy="35" rx="12" ry="8" fill="#555"/> <!-- Brow -->
-        <circle cx="45" cy="40" r="2" fill="black"/><circle cx="55" cy="40" r="2" fill="black"/>
-        <rect x="40" y="50" width="20" height="10" rx="5" fill="#111"/> <!-- Nose -->
-        <rect x="30" y="60" width="40" height="30" fill="#222"/> <!-- Chest --></svg>
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#F5F5F5"/> <!-- Gorilla -->
+        <circle cx="50" cy="50" r="35" fill="#4F4F4F"/> <!-- Body/Head -->
+        <ellipse cx="50" cy="55" rx="20" ry="15" fill="#696969"/> <!-- Face Area -->
+        <circle cx="42" cy="50" r="3" fill="black"/><circle cx="43" cy="49" r="1" fill="white"/>
+        <circle cx="58" cy="50" r="3" fill="black"/><circle cx="59" cy="49" r="1" fill="white"/>
+        <path d="M45,58 Q50,60 55,58" stroke="black" stroke-width="1.5" fill="none"/> <!-- Nostrils -->
+        <rect x="35" y="75" width="30" height="20" rx="5" fill="#4F4F4F"/> <!-- Chest --></svg>

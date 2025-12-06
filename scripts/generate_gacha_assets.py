@@ -489,112 +489,131 @@ SPECIFIC_SVGS = {
         <rect x="30" y="60" width="40" height="30" fill="#DA70D6"/>""",
 
     # === SUPER RARE (SR) ===
-    # More complex, shading, dynamic
-    "sr-a-1": """<defs><radialGradient id="lionMane" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#FFD700"/><stop offset="100%" stop-color="#8B4513"/></radialGradient></defs>
-        <rect width="100" height="100" fill="#FFF8DC"/>
-        <circle cx="50" cy="50" r="40" fill="url(#lionMane)"/> <!-- Mane -->
+    # "Cute" style: Rounded shapes, big eyes, blushing, vibrant/soft colors
+    "sr-a-1": """<rect width="100" height="100" fill="#FFF8DC"/> <!-- Lion -->
+        <circle cx="50" cy="50" r="38" fill="#FF8C00"/> <!-- Mane -->
         <circle cx="50" cy="50" r="25" fill="#F4A460"/> <!-- Face -->
-        <path d="M40,45 Q50,55 60,45" fill="none" stroke="black" stroke-width="2"/> <!-- Nose bridge -->
-        <path d="M45,60 L50,65 L55,60" fill="black"/> <!-- Nose -->
-        <circle cx="42" cy="45" r="3" fill="white"/><circle cx="42" cy="45" r="1.5" fill="black"/>
-        <circle cx="58" cy="45" r="3" fill="white"/><circle cx="58" cy="45" r="1.5" fill="black"/>""",
-    "sr-a-2": """<rect width="100" height="100" fill="#FFA500"/>
-        <path d="M30,20 L35,40 L25,30 Z" fill="black"/> <!-- Stripe -->
-        <path d="M70,20 L65,40 L75,30 Z" fill="black"/>
-        <path d="M10,50 L30,55 L10,60 Z" fill="black"/>
-        <path d="M90,50 L70,55 L90,60 Z" fill="black"/>
-        <circle cx="50" cy="50" r="30" fill="#FFA500" stroke="black" stroke-width="2"/> <!-- Head -->
-        <path d="M45,20 L55,20 L50,60 Z" fill="black" opacity="0.3"/> <!-- Forehead mark -->
-        <circle cx="40" cy="45" r="4" fill="yellow"/><circle cx="40" cy="45" r="1.5" fill="black"/>
-        <circle cx="60" cy="45" r="4" fill="yellow"/><circle cx="60" cy="45" r="1.5" fill="black"/>""",
-    "sr-a-3": """<rect width="100" height="100" fill="#F0F8FF"/>
-        <circle cx="50" cy="50" r="35" fill="#A9A9A9"/> <!-- Head -->
-        <path d="M10,30 Q30,10 30,50" fill="#A9A9A9"/> <!-- Ear -->
-        <path d="M90,30 Q70,10 70,50" fill="#A9A9A9"/> <!-- Ear -->
-        <path d="M45,60 Q50,90 55,60" fill="#A9A9A9" stroke="black"/> <!-- Trunk -->
-        <path d="M35,60 L30,75 L35,70" fill="white"/> <!-- Tusk -->
-        <path d="M65,60 L70,75 L65,70" fill="white"/> <!-- Tusk -->
-        <circle cx="40" cy="45" r="2" fill="black"/><circle cx="60" cy="45" r="2" fill="black"/>""",
-    "sr-a-4": """<rect width="100" height="100" fill="#2F4F4F"/>
-        <rect x="25" y="30" width="50" height="60" rx="15" fill="#333"/> <!-- Body -->
-        <ellipse cx="50" cy="35" rx="15" ry="20" fill="#333"/> <!-- Head Shape -->
-        <ellipse cx="50" cy="35" rx="12" ry="8" fill="#555"/> <!-- Brow -->
-        <circle cx="45" cy="40" r="2" fill="black"/><circle cx="55" cy="40" r="2" fill="black"/>
-        <rect x="40" y="50" width="20" height="10" rx="5" fill="#111"/> <!-- Nose -->
-        <rect x="30" y="60" width="40" height="30" fill="#222"/> <!-- Chest -->""",
-    "sr-a-5": """<rect width="100" height="100" fill="#E0FFFF"/>
-        <circle cx="50" cy="50" r="35" fill="white"/>
-        <circle cx="30" cy="30" r="8" fill="white"/> <!-- Ear -->
-        <circle cx="70" cy="30" r="8" fill="white"/>
-        <ellipse cx="50" cy="60" rx="10" ry="8" fill="#333"/> <!-- Snout -->
-        <circle cx="47" cy="58" r="1" fill="white"/><circle cx="53" cy="58" r="1" fill="white"/>
-        <circle cx="40" cy="45" r="2" fill="black"/><circle cx="60" cy="45" r="2" fill="black"/>""",
-    "sr-a-6": """<rect width="100" height="100" fill="#D3D3D3"/>
-        <path d="M45,40 L50,10 L55,40 Z" fill="#F5F5F5" stroke="gray"/> <!-- Horn Big -->
-        <path d="M52,45 L55,30 L58,45 Z" fill="#F5F5F5" stroke="gray"/> <!-- Horn Small -->
-        <ellipse cx="50" cy="55" rx="25" ry="30" fill="#808080"/> <!-- Head -->
-        <circle cx="35" cy="50" r="2" fill="black"/><circle cx="65" cy="50" r="2" fill="black"/>""",
-    "sr-a-7": """<rect width="100" height="100" fill="#BC8F8F"/>
-        <rect x="20" y="50" width="60" height="40" rx="10" fill="#800000"/> <!-- Body -->
-        <rect x="30" y="30" width="40" height="40" rx="15" fill="#A52A2A"/> <!-- Head -->
-        <rect x="35" y="60" width="10" height="15" fill="white"/> <!-- Tooth -->
-        <rect x="55" y="60" width="10" height="15" fill="white"/>
-        <circle cx="40" cy="45" r="2" fill="black"/><circle cx="60" cy="45" r="2" fill="black"/>
-        <ellipse cx="30" cy="35" rx="5" ry="8" fill="#A52A2A"/> <!-- Ear -->
-        <ellipse cx="70" cy="35" rx="5" ry="8" fill="#A52A2A"/>""",
-    "sr-a-8": """<rect width="100" height="100" fill="#8B4513"/>
-        <circle cx="50" cy="50" r="35" fill="#5D4037"/>
-        <circle cx="25" cy="30" r="10" fill="#5D4037"/>
-        <circle cx="75" cy="30" r="10" fill="#5D4037"/>
-        <ellipse cx="50" cy="60" rx="12" ry="8" fill="#3E2723"/> <!-- Snout -->
-        <path d="M40,20 L60,20 L50,60 Z" fill="#3E2723" opacity="0.3"/> <!-- Shadow -->
-        <circle cx="42" cy="45" r="2" fill="black"/><circle cx="58" cy="45" r="2" fill="black"/>""",
-    "sr-a-9": """<rect width="100" height="100" fill="#FFD700"/>
-        <circle cx="50" cy="50" r="30" fill="#DAA520"/>
-        <path d="M20,20 Q30,10 40,20" stroke="black" fill="none"/> <!-- Ear -->
-        <path d="M80,20 Q70,10 60,20" stroke="black" fill="none"/>
-        <circle cx="40" cy="45" r="3" fill="#00FF7F"/> <!-- Eye -->
-        <circle cx="60" cy="45" r="3" fill="#00FF7F"/>
-        <path d="M30,30 Q40,40 35,50" fill="black" opacity="0.5"/> <!-- Rosette -->
-        <path d="M70,30 Q60,40 65,50" fill="black" opacity="0.5"/>""",
-    "sr-a-10": """<rect width="100" height="100" fill="#FFA500"/>
-        <circle cx="50" cy="50" r="30" fill="#FF8C00"/>
-        <circle cx="40" cy="45" r="3" fill="#32CD32"/> <!-- Eye -->
-        <circle cx="60" cy="45" r="3" fill="#32CD32"/>
-        <circle cx="50" cy="60" r="5" fill="black" opacity="0.5"/>
-        <path d="M30,30 L35,35 L30,40 Z" fill="black"/> <!-- Spot -->
-        <path d="M70,30 L65,35 L70,40 Z" fill="black"/>
-        <path d="M50,20 L55,25 L50,30 Z" fill="black"/>""",
-    "sr-a-11": """<rect width="100" height="100" fill="#2F4F4F"/>
-        <path d="M50,20 L30,80 L70,80 Z" fill="#708090"/> <!-- Body -->
-        <path d="M35,15 L40,30 L45,15 Z" fill="#708090"/> <!-- Ear -->
-        <path d="M65,15 L60,30 L55,15 Z" fill="#708090"/> <!-- Ear -->
-        <circle cx="50" cy="45" r="20" fill="#778899"/>
-        <path d="M40,40 L50,55 L60,40" fill="white" opacity="0.8"/> <!-- Snout mask -->
-        <circle cx="45" cy="40" r="2" fill="yellow"/><circle cx="55" cy="40" r="2" fill="yellow"/>""",
-    "sr-a-12": """<rect width="100" height="100" fill="#87CEEB"/>
-        <path d="M20,40 L80,40 L50,90 Z" fill="#A0522D"/> <!-- Body -->
-        <rect x="20" y="40" width="60" height="10" fill="#8B4513"/> <!-- Wings top -->
-        <circle cx="50" cy="30" r="15" fill="white"/> <!-- Head -->
-        <path d="M50,32 L50,38 L60,35 Z" fill="#FFD700"/> <!-- Beak -->
-        <circle cx="48" cy="30" r="2" fill="black"/>""",
-    "sr-a-13": """<rect width="100" height="100" fill="#00008B"/>
-        <path d="M20,50 Q50,20 80,50 Q50,80 20,50" fill="#708090"/>
-        <path d="M50,20 L60,10 L70,25 Z" fill="#708090"/> <!-- Fin -->
-        <circle cx="30" cy="50" r="2" fill="black"/>
-        <path d="M35,60 L45,55 L55,60 L65,55 L75,60" fill="white"/> <!-- Teeth -->
-        <path d="M25,55 Q50,70 75,55" stroke="black" fill="none"/> <!-- Mouth -->""",
-    "sr-a-14": """<rect width="100" height="100" fill="#191970"/>
-        <path d="M10,40 Q50,10 90,40 Q90,80 10,80" fill="#4682B4"/>
-        <circle cx="30" cy="60" r="2" fill="black"/>
-        <path d="M20,70 L80,70" fill="none" stroke="#B0C4DE" stroke-width="2"/> <!-- Belly lines -->
-        <path d="M40,30 L40,20 L30,25" fill="#4682B4"/> <!-- Spout water -->""",
-    "sr-a-15": """<rect width="100" height="100" fill="#2E8B57"/>
-        <rect x="20" y="40" width="60" height="30" fill="#006400"/>
-        <path d="M80,40 L95,55 L80,70" fill="#006400"/> <!-- Jaw -->
-        <path d="M20,55 L10,60 L20,65" fill="#006400"/> <!-- Tail -->
-        <circle cx="75" cy="45" r="2" fill="yellow"/>
-        <path d="M80,55 L82,50 L84,55 L86,50" fill="white"/> <!-- Teeth -->""",
+        <circle cx="40" cy="45" r="4" fill="black"/><circle cx="42" cy="43" r="1.5" fill="white"/> <!-- Eyes with highlight -->
+        <circle cx="60" cy="45" r="4" fill="black"/><circle cx="62" cy="43" r="1.5" fill="white"/>
+        <ellipse cx="50" cy="55" rx="5" ry="3" fill="#3E2723"/> <!-- Nose -->
+        <path d="M45,60 Q50,65 55,60" fill="none" stroke="#3E2723" stroke-width="2" stroke-linecap="round"/> <!-- Mouth -->
+        <ellipse cx="35" cy="52" rx="4" ry="2" fill="#FF6347" opacity="0.4"/> <!-- Blush -->
+        <ellipse cx="65" cy="52" rx="4" ry="2" fill="#FF6347" opacity="0.4"/>""",
+    "sr-a-2": """<rect width="100" height="100" fill="#FFFACD"/> <!-- Tiger -->
+        <path d="M25,25 L35,35 L45,25" fill="#FFA500" stroke="#FFA500" stroke-width="5" stroke-linejoin="round"/> <!-- Left Ear -->
+        <path d="M75,25 L65,35 L55,25" fill="#FFA500" stroke="#FFA500" stroke-width="5" stroke-linejoin="round"/> <!-- Right Ear -->
+        <circle cx="50" cy="50" r="30" fill="#FFA500"/> <!-- Head -->
+        <path d="M50,25 L45,35 L55,35 Z" fill="#3E2723"/> <!-- Stripe Top -->
+        <path d="M25,50 L35,50 L30,60 Z" fill="#3E2723"/> <!-- Stripe Left -->
+        <path d="M75,50 L65,50 L70,60 Z" fill="#3E2723"/> <!-- Stripe Right -->
+        <circle cx="40" cy="48" r="4" fill="black"/><circle cx="42" cy="46" r="1.5" fill="white"/>
+        <circle cx="60" cy="48" r="4" fill="black"/><circle cx="62" cy="46" r="1.5" fill="white"/>
+        <ellipse cx="50" cy="58" rx="4" ry="3" fill="#3E2723"/> <!-- Nose -->""",
+    "sr-a-3": """<rect width="100" height="100" fill="#F0F8FF"/> <!-- Elephant -->
+        <circle cx="50" cy="45" r="30" fill="#B0C4DE"/> <!-- Head -->
+        <circle cx="25" cy="40" r="15" fill="#B0C4DE"/> <!-- Ear Left -->
+        <circle cx="75" cy="40" r="15" fill="#B0C4DE"/> <!-- Ear Right -->
+        <path d="M45,60 Q50,80 60,65" fill="none" stroke="#B0C4DE" stroke-width="8" stroke-linecap="round"/> <!-- Trunk -->
+        <circle cx="40" cy="45" r="4" fill="black"/><circle cx="42" cy="43" r="1.5" fill="white"/>
+        <circle cx="60" cy="45" r="4" fill="black"/><circle cx="62" cy="43" r="1.5" fill="white"/>
+        <ellipse cx="30" cy="50" rx="3" ry="2" fill="#FFC0CB" opacity="0.5"/> <!-- Blush -->
+        <ellipse cx="70" cy="50" rx="3" ry="2" fill="#FFC0CB" opacity="0.5"/>""",
+    "sr-a-4": """<rect width="100" height="100" fill="#F5F5F5"/> <!-- Gorilla -->
+        <circle cx="50" cy="50" r="35" fill="#4F4F4F"/> <!-- Body/Head -->
+        <ellipse cx="50" cy="55" rx="20" ry="15" fill="#696969"/> <!-- Face Area -->
+        <circle cx="42" cy="50" r="3" fill="black"/><circle cx="43" cy="49" r="1" fill="white"/>
+        <circle cx="58" cy="50" r="3" fill="black"/><circle cx="59" cy="49" r="1" fill="white"/>
+        <path d="M45,58 Q50,60 55,58" stroke="black" stroke-width="1.5" fill="none"/> <!-- Nostrils -->
+        <rect x="35" y="75" width="30" height="20" rx="5" fill="#4F4F4F"/> <!-- Chest -->""",
+    "sr-a-5": """<rect width="100" height="100" fill="#E0FFFF"/> <!-- Polar Bear -->
+        <circle cx="25" cy="30" r="10" fill="white"/> <!-- Ear -->
+        <circle cx="75" cy="30" r="10" fill="white"/>
+        <circle cx="50" cy="50" r="35" fill="white"/> <!-- Face -->
+        <circle cx="40" cy="45" r="4" fill="black"/><circle cx="42" cy="43" r="1.5" fill="white"/>
+        <circle cx="60" cy="45" r="4" fill="black"/><circle cx="62" cy="43" r="1.5" fill="white"/>
+        <ellipse cx="50" cy="55" rx="6" ry="4" fill="#333"/> <!-- Nose -->
+        <path d="M50,59 L50,65" stroke="#333" stroke-width="2"/>
+        <ellipse cx="30" cy="55" rx="5" ry="3" fill="#FFC0CB" opacity="0.5"/>
+        <ellipse cx="70" cy="55" rx="5" ry="3" fill="#FFC0CB" opacity="0.5"/>""",
+    "sr-a-6": """<rect width="100" height="100" fill="#E8E8E8"/> <!-- Rhino -->
+        <circle cx="50" cy="50" r="32" fill="#A9A9A9"/> <!-- Head -->
+        <path d="M48,35 L52,20 L56,35 Z" fill="#D3D3D3" stroke="#A9A9A9" stroke-width="1"/> <!-- Horn -->
+        <circle cx="38" cy="48" r="4" fill="black"/><circle cx="40" cy="46" r="1.5" fill="white"/>
+        <circle cx="62" cy="48" r="4" fill="black"/><circle cx="64" cy="46" r="1.5" fill="white"/>
+        <ellipse cx="30" cy="55" rx="4" ry="2" fill="#FFC0CB" opacity="0.5"/>
+        <ellipse cx="70" cy="55" rx="4" ry="2" fill="#FFC0CB" opacity="0.5"/>""",
+    "sr-a-7": """<rect width="100" height="100" fill="#E6E6FA"/> <!-- Hippo -->
+        <ellipse cx="50" cy="60" rx="30" ry="25" fill="#D8BFD8"/> <!-- Snout -->
+        <circle cx="50" cy="35" r="20" fill="#D8BFD8"/> <!-- Head Top -->
+        <circle cx="35" cy="25" r="6" fill="#D8BFD8"/> <!-- Ear -->
+        <circle cx="65" cy="25" r="6" fill="#D8BFD8"/>
+        <circle cx="42" cy="40" r="3" fill="black"/><circle cx="43" cy="39" r="1" fill="white"/>
+        <circle cx="58" cy="40" r="3" fill="black"/><circle cx="59" cy="39" r="1" fill="white"/>
+        <rect x="40" y="70" width="5" height="8" fill="white" rx="2"/> <!-- Tooth -->
+        <rect x="55" y="70" width="5" height="8" fill="white" rx="2"/>""",
+    "sr-a-8": """<rect width="100" height="100" fill="#FFF8DC"/> <!-- Grizzly -->
+        <circle cx="25" cy="30" r="10" fill="#8B4513"/> <!-- Ear -->
+        <circle cx="75" cy="30" r="10" fill="#8B4513"/>
+        <circle cx="50" cy="50" r="35" fill="#8B4513"/> <!-- Face -->
+        <ellipse cx="50" cy="60" rx="12" ry="8" fill="#D2691E"/> <!-- Snout -->
+        <circle cx="40" cy="45" r="4" fill="black"/><circle cx="42" cy="43" r="1.5" fill="white"/>
+        <circle cx="60" cy="45" r="4" fill="black"/><circle cx="62" cy="43" r="1.5" fill="white"/>
+        <ellipse cx="50" cy="58" rx="4" ry="3" fill="#3E2723"/> <!-- Nose -->""",
+    "sr-a-9": """<rect width="100" height="100" fill="#FFFACD"/> <!-- Leopard -->
+        <circle cx="20" cy="30" r="8" fill="#FFD700"/> <!-- Ear -->
+        <circle cx="80" cy="30" r="8" fill="#FFD700"/>
+        <circle cx="50" cy="50" r="32" fill="#FFD700"/> <!-- Head -->
+        <circle cx="40" cy="48" r="4" fill="black"/><circle cx="42" cy="46" r="1.5" fill="white"/>
+        <circle cx="60" cy="48" r="4" fill="black"/><circle cx="62" cy="46" r="1.5" fill="white"/>
+        <ellipse cx="50" cy="55" rx="3" ry="2" fill="black"/> <!-- Nose -->
+        <circle cx="30" cy="35" r="3" fill="#8B4513" opacity="0.7"/> <!-- Spot -->
+        <circle cx="70" cy="35" r="3" fill="#8B4513" opacity="0.7"/>
+        <circle cx="50" cy="25" r="3" fill="#8B4513" opacity="0.7"/>""",
+    "sr-a-10": """<rect width="100" height="100" fill="#F0E68C"/> <!-- Jaguar -->
+        <circle cx="50" cy="50" r="32" fill="#FFA500"/>
+        <circle cx="40" cy="48" r="4" fill="black"/><circle cx="42" cy="46" r="1.5" fill="white"/>
+        <circle cx="60" cy="48" r="4" fill="black"/><circle cx="62" cy="46" r="1.5" fill="white"/>
+        <ellipse cx="50" cy="55" rx="3" ry="2" fill="black"/>
+        <path d="M30,30 L35,35 L30,40" fill="none" stroke="black" stroke-width="2"/> <!-- Rosette mark -->
+        <path d="M70,30 L65,35 L70,40" fill="none" stroke="black" stroke-width="2"/>
+        <ellipse cx="35" cy="55" rx="4" ry="2" fill="#FF6347" opacity="0.4"/> <!-- Blush -->
+        <ellipse cx="65" cy="55" rx="4" ry="2" fill="#FF6347" opacity="0.4"/>""",
+    "sr-a-11": """<rect width="100" height="100" fill="#F0F8FF"/> <!-- Wolf -->
+        <path d="M25,25 L35,40 L45,30" fill="#A9A9A9"/> <!-- Ear -->
+        <path d="M75,25 L65,40 L55,30" fill="#A9A9A9"/>
+        <circle cx="50" cy="50" r="30" fill="#A9A9A9"/>
+        <ellipse cx="50" cy="60" rx="12" ry="10" fill="white"/> <!-- Muzzle -->
+        <circle cx="40" cy="48" r="4" fill="black"/><circle cx="42" cy="46" r="1.5" fill="white"/>
+        <circle cx="60" cy="48" r="4" fill="black"/><circle cx="62" cy="46" r="1.5" fill="white"/>
+        <ellipse cx="50" cy="55" rx="3" ry="2" fill="black"/>""",
+    "sr-a-12": """<rect width="100" height="100" fill="#E0FFFF"/> <!-- Eagle -->
+        <path d="M20,50 L50,80 L80,50 L50,20 Z" fill="#8B4513"/> <!-- Body (Diamond shape but cute) -->
+        <circle cx="50" cy="40" r="25" fill="#8B4513"/> <!-- Head -->
+        <circle cx="42" cy="35" r="4" fill="white"/><circle cx="42" cy="35" r="2" fill="black"/>
+        <circle cx="58" cy="35" r="4" fill="white"/><circle cx="58" cy="35" r="2" fill="black"/>
+        <path d="M45,45 Q50,55 55,45" fill="#FFD700"/> <!-- Beak -->""",
+    "sr-a-13": """<rect width="100" height="100" fill="#E0F7FA"/> <!-- Shark -->
+        <circle cx="50" cy="50" r="35" fill="#00CED1"/> <!-- Body -->
+        <path d="M50,15 L60,30 L40,30 Z" fill="#00CED1"/> <!-- Fin -->
+        <circle cx="35" cy="45" r="4" fill="black"/><circle cx="37" cy="43" r="1.5" fill="white"/>
+        <circle cx="65" cy="45" r="4" fill="black"/><circle cx="67" cy="43" r="1.5" fill="white"/>
+        <path d="M40,60 Q50,70 60,60" fill="none" stroke="black" stroke-width="2" stroke-linecap="round"/> <!-- Smile -->
+        <path d="M80,50 L90,40 L90,60 Z" fill="#00CED1"/> <!-- Tail -->""",
+    "sr-a-14": """<rect width="100" height="100" fill="#E6E6FA"/> <!-- Whale -->
+        <ellipse cx="50" cy="60" rx="35" ry="25" fill="#4682B4"/> <!-- Body -->
+        <circle cx="40" cy="55" r="3" fill="black"/><circle cx="41" cy="54" r="1" fill="white"/>
+        <path d="M50,35 L45,25 L55,25 Z" fill="#E0FFFF"/> <!-- Spout -->
+        <path d="M45,25 Q40,15 35,25" stroke="#E0FFFF" fill="none" stroke-width="2"/>
+        <path d="M55,25 Q60,15 65,25" stroke="#E0FFFF" fill="none" stroke-width="2"/>
+        <path d="M35,65 Q45,70 50,65" stroke="white" fill="none" stroke-width="2" stroke-linecap="round"/> <!-- Smile -->""",
+    "sr-a-15": """<rect width="100" height="100" fill="#F0FFF0"/> <!-- Crocodile -->
+        <rect x="25" y="40" width="50" height="40" rx="10" fill="#32CD32"/> <!-- Head -->
+        <circle cx="35" cy="40" r="6" fill="#32CD32"/> <!-- Eye Bump -->
+        <circle cx="65" cy="40" r="6" fill="#32CD32"/>
+        <circle cx="35" cy="38" r="3" fill="black"/><circle cx="36" cy="37" r="1" fill="white"/>
+        <circle cx="65" cy="38" r="3" fill="black"/><circle cx="66" cy="37" r="1" fill="white"/>
+        <path d="M35,65 Q50,75 65,65" fill="none" stroke="black" stroke-width="2" stroke-linecap="round"/> <!-- Smile -->
+        <path d="M35,65 L37,60 L39,65 L41,60" fill="none" stroke="white" stroke-width="2"/> <!-- Teeth hint -->""",
 
     "sr-y-1": """<rect width="100" height="100" fill="#B22222"/> <!-- Tengu -->
         <circle cx="50" cy="40" r="25" fill="#FF4500"/> <!-- Red Face -->
