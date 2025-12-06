@@ -1,5 +1,7 @@
 import { useState } from "react";
+import axios from 'axios';
 import { UserProfile } from "../types";
+import { saveUserProfile } from "../utils/storage";
 
 interface UserRegistrationScreenProps {
   onComplete: (profile: UserProfile) => void;
@@ -8,15 +10,49 @@ interface UserRegistrationScreenProps {
 export default function UserRegistrationScreen({ onComplete }: UserRegistrationScreenProps) {
   const [nickname, setNickname] = useState("");
   const [grade, setGrade] = useState<number | "">("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (nickname.length > 0 && nickname.length <= 10 && grade !== "") {
-      onComplete({
-        id: crypto.randomUUID(),
-        nickname,
-        grade: Number(grade),
-      });
+      setIsLoading(true);
+      setError(null);
+
+      const id = crypto.randomUUID();
+      const gradeNum = Number(grade);
+
+      try {
+        await axios.post('/api/user', {
+          id,
+          name: nickname,
+          grade: gradeNum,
+        });
+
+        // axios throws on non-2xx by default, so we don't need manual check unless validateStatus is changed
+
+
+        const profile: UserProfile = {
+          id,
+          nickname,
+          grade: gradeNum,
+        };
+
+        saveUserProfile(profile);
+
+        onComplete(profile);
+      } catch (err: unknown) {
+        // Simple error handling for axios
+        let message = '予期せぬエラーが発生しました';
+        if (axios.isAxiosError(err) && err.response?.data?.message) {
+          message = err.response.data.message;
+        } else if (err instanceof Error) {
+          message = err.message;
+        }
+        setError(message);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -49,6 +85,7 @@ export default function UserRegistrationScreen({ onComplete }: UserRegistrationS
               placeholder="なまえを入力してね"
               className="w-full text-xl p-4 rounded-xl border-2 border-slate-200 focus:border-brand-blue focus:ring-4 focus:ring-blue-100 outline-none transition-all placeholder:text-slate-300 font-bold text-slate-800"
               required
+              disabled={isLoading}
             />
           </div>
 
@@ -63,6 +100,7 @@ export default function UserRegistrationScreen({ onComplete }: UserRegistrationS
                 onChange={(e) => setGrade(Number(e.target.value))}
                 className="w-full text-xl p-4 rounded-xl border-2 border-slate-200 focus:border-brand-blue focus:ring-4 focus:ring-blue-100 outline-none transition-all appearance-none font-bold text-slate-800 bg-white"
                 required
+                disabled={isLoading}
               >
                 <option value="" disabled>がくねんをえらんでね</option>
                 {[1, 2, 3, 4, 5, 6].map((g) => (
@@ -79,15 +117,21 @@ export default function UserRegistrationScreen({ onComplete }: UserRegistrationS
             </div>
           </div>
 
+          {error && (
+            <div className="text-red-500 font-bold text-center">
+              {error}
+            </div>
+          )}
+
           <button
             type="submit"
-            disabled={!isFormValid}
-            className={`w-full font-black text-2xl py-4 rounded-2xl shadow-[0_6px_0_rgb(74,168,209)] transition-all mt-8 ${isFormValid
+            disabled={!isFormValid || isLoading}
+            className={`w-full font-black text-2xl py-4 rounded-2xl shadow-[0_6px_0_rgb(74,168,209)] transition-all mt-8 ${isFormValid && !isLoading
               ? "bg-brand-blue hover:bg-blue-300 text-slate-800 active:shadow-[0_0px_0_rgb(74,168,209)] active:translate-y-[6px]"
               : "bg-slate-200 text-slate-400 shadow-none cursor-not-allowed"
               }`}
           >
-            はじめる！
+            {isLoading ? "とうろくちゅう..." : "はじめる！"}
           </button>
         </form>
       </div>

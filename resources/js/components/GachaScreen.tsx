@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { GachaItem, pullGacha } from '../gachaData';
 
 interface GachaScreenProps {
@@ -57,10 +58,20 @@ const GachaScreen: React.FC<GachaScreenProps> = ({ onBack }) => {
   const [visualType, setVisualType] = useState<VisualType>('normal');
   const [capsuleColor, setCapsuleColor] = useState<string>('bg-blue-500');
 
-  const handlePull = () => {
+  const handlePull = async () => {
     // 1. Determine Result
     const item = pullGacha();
     setResult(item);
+
+    // Register Prize via API
+    try {
+      await axios.post('/api/user/prizes', {
+        prize_id: item.id,
+        rarity: item.rarity,
+      });
+    } catch (error) {
+      console.error("Failed to register prize:", error);
+    }
 
     // 2. Determine Visuals
     let visual: VisualType = 'normal';

@@ -1,0 +1,9 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><filter id="glow"><feGaussianBlur stdDeviation="2.5" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+        <rect width="100" height="100" fill="#000080"/>
+        <path d="M20,80 Q50,20 80,80" fill="#800080" stroke="#4B0082" stroke-width="2"/> <!-- Head Dome -->
+        <rect x="20" y="80" width="10" height="20" fill="#800080"/> <!-- Tentacle -->
+        <rect x="40" y="80" width="10" height="20" fill="#800080"/>
+        <rect x="60" y="80" width="10" height="20" fill="#800080"/>
+        <rect x="80" y="80" width="10" height="20" fill="#800080"/>
+        <circle cx="35" cy="50" r="5" fill="red" filter="url(#glow)"/> <!-- Eye -->
+        <circle cx="65" cy="50" r="5" fill="red" filter="url(#glow)"/></svg>

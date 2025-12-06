@@ -1,0 +1,8 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="phx" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FF4500"/><stop offset="100%" stop-color="#FFD700"/></linearGradient></defs>
+        <rect width="100" height="100" fill="#800000"/>
+        <path d="M10,50 Q50,0 90,50 L50,90 Z" fill="url(#phx)"/> <!-- Bird Body -->
+        <path d="M10,50 L0,30 L20,40 Z" fill="#FFD700"/> <!-- Wing Tip -->
+        <path d="M90,50 L100,30 L80,40 Z" fill="#FFD700"/>
+        <circle cx="50" cy="30" r="10" fill="#FF8C00"/> <!-- Head -->
+        <circle cx="50" cy="30" r="2" fill="white"/>
+        <path d="M45,80 L50,100 L55,80" fill="url(#phx)"/> <!-- Tail --></svg>

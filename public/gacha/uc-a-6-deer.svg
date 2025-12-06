@@ -1,0 +1,5 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#F0FFF0"/>
+        <path d="M30,20 L35,40 M70,20 L65,40" stroke="#8B4513" stroke-width="3"/> <!-- Antlers -->
+        <ellipse cx="50" cy="60" rx="20" ry="25" fill="#DEB887"/> <!-- Deer: Light Brown -->
+        <circle cx="42" cy="55" r="3" fill="black"/><circle cx="58" cy="55" r="3" fill="black"/>
+        <circle cx="50" cy="70" r="3" fill="black"/></svg>

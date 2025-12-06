@@ -1,0 +1,10 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#2F4F4F"/> <!-- Nekomata -->
+        <circle cx="50" cy="50" r="25" fill="black"/> <!-- Body -->
+        <path d="M20,30 L30,50 L40,40 Z" fill="black"/> <!-- Ear -->
+        <path d="M80,30 L70,50 L60,40 Z" fill="black"/> <!-- Ear -->
+        <ellipse cx="40" cy="50" rx="5" ry="8" fill="yellow"/> <!-- Eye -->
+        <ellipse cx="60" cy="50" rx="5" ry="8" fill="yellow"/>
+        <line x1="40" y1="45" x2="40" y2="55" stroke="black"/>
+        <line x1="60" y1="45" x2="60" y2="55" stroke="black"/>
+        <path d="M30,80 Q20,60 30,50" stroke="black" stroke-width="4" fill="none"/> <!-- Tail 1 -->
+        <path d="M70,80 Q80,60 70,50" stroke="black" stroke-width="4" fill="none"/> <!-- Tail 2 --></svg>

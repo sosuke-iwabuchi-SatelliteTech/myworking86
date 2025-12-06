@@ -1,0 +1,6 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#D3D3D3"/>
+        <rect x="20" y="20" width="60" height="60" fill="#FFF8DC" stroke="#8B4513" stroke-width="4"/> <!-- Mokumokuren: Shoji -->
+        <line x1="50" y1="20" x2="50" y2="80" stroke="#8B4513" stroke-width="2"/>
+        <line x1="20" y1="50" x2="80" y2="50" stroke="#8B4513" stroke-width="2"/>
+        <circle cx="35" cy="35" r="5" fill="black"/><circle cx="65" cy="65" r="5" fill="black"/>
+        <circle cx="35" cy="65" r="5" fill="black"/><circle cx="65" cy="35" r="5" fill="black"/></svg>

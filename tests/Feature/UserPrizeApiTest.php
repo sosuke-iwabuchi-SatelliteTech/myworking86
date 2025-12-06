@@ -1,0 +1,86 @@
+<?php
+
+use App\Models\User;
+use App\Models\UserPrize;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
+use Laravel\Sanctum\Sanctum;
+use Tests\TestCase;
+
+class UserPrizeApiTest extends TestCase
+{
+    use RefreshDatabase;
+
+    public function test_user_can_register_prize()
+    {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+
+        $prizeId = 'ur-a-1'; // String ID
+        $rarity = 'SSR';
+
+        $response = $this->postJson('/api/user/prizes', [
+            'prize_id' => $prizeId,
+            'rarity' => $rarity,
+        ]);
+
+        $response->assertStatus(201)
+            ->assertJson([
+                'user_id' => $user->id,
+                'prize_id' => $prizeId,
+                'rarity' => $rarity,
+            ]);
+
+        $this->assertDatabaseHas('user_prizes', [
+            'user_id' => $user->id,
+            'prize_id' => $prizeId,
+            'rarity' => $rarity,
+        ]);
+    }
+
+    public function test_user_can_get_owned_prizes_with_counts_sorted_by_rarity()
+    {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+
+        // Create prizes with different rarities
+        UserPrize::factory()->create(['user_id' => $user->id, 'prize_id' => 'r-1', 'rarity' => 'R']);
+        UserPrize::factory()->create(['user_id' => $user->id, 'prize_id' => 'ur-1', 'rarity' => 'UR']);
+        UserPrize::factory()->create(['user_id' => $user->id, 'prize_id' => 'c-1', 'rarity' => 'C']);
+        UserPrize::factory()->create(['user_id' => $user->id, 'prize_id' => 'sr-1', 'rarity' => 'SR']);
+        UserPrize::factory()->create(['user_id' => $user->id, 'prize_id' => 'uc-1', 'rarity' => 'UC']);
+
+        // Duplicate to test count
+        UserPrize::factory()->create(['user_id' => $user->id, 'prize_id' => 'ur-1', 'rarity' => 'UR']);
+
+        $response = $this->getJson('/api/user/prizes');
+
+        $response->assertStatus(200);
+
+        $data = $response->json();
+
+        // Verify count
+        $this->assertCount(5, $data);
+
+        // Verify Order: UR -> SR -> R -> UC -> C
+        $this->assertEquals('UR', $data[0]['rarity']);
+        $this->assertEquals('SR', $data[1]['rarity']);
+        $this->assertEquals('R', $data[2]['rarity']);
+        $this->assertEquals('UC', $data[3]['rarity']);
+        $this->assertEquals('C', $data[4]['rarity']);
+
+        // Verify specific item count
+        $this->assertEquals('ur-1', $data[0]['prize_id']);
+        $this->assertEquals(2, $data[0]['count']);
+    }
+
+    public function test_unauthenticated_user_cannot_access_prize_apis()
+    {
+        $this->postJson('/api/user/prizes', [
+            'prize_id' => (string) Str::uuid(),
+            'rarity' => 'N',
+        ])->assertStatus(401);
+
+        $this->getJson('/api/user/prizes')->assertStatus(401);
+    }
+}

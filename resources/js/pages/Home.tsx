@@ -8,6 +8,7 @@ import GachaScreen from "../components/GachaScreen";
 import AnswerModeModal from "../components/AnswerModeModal";
 import UserRegistrationScreen from "../components/UserRegistrationScreen";
 import UserSwitchModal from "../components/UserSwitchModal";
+import PrizeListScreen from "../components/PrizeListScreen";
 import {
     Screen,
     HistoryRecord,
@@ -29,6 +30,7 @@ import {
 } from "../utils/storage";
 import { setUserProperties, trackQuizComplete } from "../utils/analytics";
 import { GRADES } from "../constants";
+import { loginUser } from "../utils/auth";
 
 /**
  * アプリケーションのメインコンポーネント。
@@ -55,6 +57,7 @@ export default function Home() {
         // Track user properties if profile is loaded on mount
         if (userProfile) {
             setUserProperties(userProfile.nickname, String(userProfile.grade));
+            loginUser(userProfile.id, userProfile.nickname, userProfile.grade).catch((e) => console.error("Auto-login failed", e));
         }
     }, [userProfile]);
 
@@ -138,6 +141,10 @@ export default function Home() {
         setScreen("gacha");
     };
 
+    const handleGoToPrizeList = () => {
+        setScreen("prizeList");
+    };
+
     const handleSettingsChange = (newSettings: GameSettings) => {
         setSettings(newSettings);
     };
@@ -196,6 +203,7 @@ export default function Home() {
                         hasHistory={history.length > 0}
                         onGoToSettings={handleGoToSettings}
                         onGoToGacha={handleGoToGacha}
+                        onGoToPrizeList={handleGoToPrizeList}
                         userProfile={userProfile}
                         onOpenUserSwitch={handleOpenUserSwitch}
                     />
@@ -215,6 +223,11 @@ export default function Home() {
                 )}
                 {screen === "gacha" && (
                     <GachaScreen
+                        onBack={handleGoToTop}
+                    />
+                )}
+                {screen === "prizeList" && (
+                    <PrizeListScreen
                         onBack={handleGoToTop}
                     />
                 )}

@@ -1,0 +1,7 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#E0FFFF"/> <!-- Falcon -->
+        <path d="M20,40 L50,80 L80,40 L50,20 Z" fill="#708090"/> <!-- Body -->
+        <path d="M20,40 L10,60 L30,50 Z" fill="#708090"/> <!-- Wing Tip -->
+        <path d="M80,40 L90,60 L70,50 Z" fill="#708090"/> <!-- Wing Tip -->
+        <circle cx="50" cy="30" r="10" fill="white"/> <!-- Head -->
+        <path d="M45,30 L55,30" stroke="black" stroke-width="2"/> <!-- Mask -->
+        <path d="M50,32 L50,38 L55,35 Z" fill="#FFD700"/> <!-- Beak --></svg>

@@ -1,0 +1,9 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#FFD700"/> <!-- Kyubi -->
+        <circle cx="50" cy="60" r="20" fill="#DAA520"/> <!-- Body -->
+        <circle cx="50" cy="40" r="15" fill="#DAA520"/> <!-- Head -->
+        <path d="M40,25 L35,10 L45,25 Z" fill="#DAA520"/> <!-- Ear -->
+        <path d="M60,25 L65,10 L55,25 Z" fill="#DAA520"/> <!-- Ear -->
+        <path d="M30,60 Q10,40 20,20" stroke="#DAA520" stroke-width="5" fill="none"/> <!-- Tail 1 -->
+        <path d="M70,60 Q90,40 80,20" stroke="#DAA520" stroke-width="5" fill="none"/> <!-- Tail 2 -->
+        <path d="M20,70 Q0,60 10,40" stroke="#DAA520" stroke-width="5" fill="none"/> <!-- Tail 3 -->
+        <path d="M80,70 Q100,60 90,40" stroke="#DAA520" stroke-width="5" fill="none"/> <!-- Tail 4 --></svg>

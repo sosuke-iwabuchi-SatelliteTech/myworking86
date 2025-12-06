@@ -1,3 +1,5 @@
+import { LucideIcon } from 'lucide-react';
+
 /**
  * 利用可能なゲームレベルIDを表す型。
  * NOTE: 循環依存を避けるため、`constants.ts`から動的に生成する代わりに手動で定義しています。
@@ -16,6 +18,18 @@ export type GameLevel =
 export interface MedalCriteria {
   goldThreshold: number; // in milliseconds
   silverThreshold: number; // in milliseconds
+}
+
+export interface BreadcrumbItem {
+  title: string;
+  href: string;
+}
+
+export interface NavItem {
+  title: string;
+  href: string;
+  icon?: LucideIcon;
+  isActive?: boolean;
 }
 
 
@@ -38,7 +52,8 @@ export type Screen =
   | "settings"
   | "selectAnswerMode"
   | "registration"
-  | "gacha";
+  | "gacha"
+  | "prizeList";
 export type AnswerMode = "choice" | "calculationPad";
 
 /**
@@ -228,3 +243,32 @@ export interface LevelStats {
  * キーはレベルID。
  */
 export type UserLevelStats = Record<string, LevelStats>;
+
+export interface Auth {
+    user: User;
+}
+
+export interface NavGroup {
+    title: string;
+    items: NavItem[];
+}
+
+export interface SharedData {
+    name: string;
+    quote: { message: string; author: string };
+    auth: Auth;
+    sidebarOpen: boolean;
+    [key: string]: unknown;
+}
+
+export interface User {
+    id: number;
+    name: string;
+    email: string;
+    avatar?: string;
+    email_verified_at: string | null;
+    two_factor_enabled?: boolean;
+    created_at: string;
+    updated_at: string;
+    [key: string]: unknown; // This allows for additional properties...
+}

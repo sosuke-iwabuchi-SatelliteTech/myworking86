@@ -76,7 +76,7 @@ describe('storage', () => {
 
   describe('Settings', () => {
     it('should get default settings', () => {
-      expect(getSettings()).toEqual({ showTimer: true, penSize: 2 });
+      expect(getSettings()).toEqual({ showTimer: true });
     });
 
     it('should save and get settings', () => {

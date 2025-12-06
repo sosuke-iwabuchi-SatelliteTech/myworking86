@@ -1,0 +1,12 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#4B0082"/> <!-- Yamata no Orochi -->
+        <path d="M20,90 Q50,50 80,90" fill="#2F4F4F"/> <!-- Base -->
+        <path d="M20,90 L10,50" stroke="#2F4F4F" stroke-width="4"/> <!-- Neck 1 -->
+        <circle cx="10" cy="45" r="5" fill="red"/> <!-- Head 1 -->
+        <path d="M30,90 L25,40" stroke="#2F4F4F" stroke-width="4"/>
+        <circle cx="25" cy="35" r="5" fill="red"/>
+        <path d="M50,90 L50,30" stroke="#2F4F4F" stroke-width="4"/>
+        <circle cx="50" cy="25" r="5" fill="red"/>
+        <path d="M70,90 L75,40" stroke="#2F4F4F" stroke-width="4"/>
+        <circle cx="75" cy="35" r="5" fill="red"/>
+        <path d="M80,90 L90,50" stroke="#2F4F4F" stroke-width="4"/>
+        <circle cx="90" cy="45" r="5" fill="red"/></svg>

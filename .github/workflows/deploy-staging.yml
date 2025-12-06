@@ -46,7 +46,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
-          source: "app,bootstrap,config,database,public,resources,routes,storage,vendor,artisan,composer.json,composer.lock,vite.config.js,package.json"
+          source: "app,bootstrap,config,database/migrations,database/seeders,database/factories,public,resources,routes,vendor,artisan,composer.json,composer.lock,vite.config.js,package.json"
           target: ${{ secrets.APP_ROUTE_PATH_STG }}
 
       - name: Execute remote commands
@@ -59,6 +59,7 @@ jobs:
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           script: |
             cd ${{ secrets.APP_ROUTE_PATH_STG }}
+            chmod -R 775 storage database
             php artisan migrate --force
             php artisan config:cache
             php artisan route:cache

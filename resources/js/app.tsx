@@ -5,8 +5,13 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { initializeTheme } from './hooks/use-appearance';
+import { initializeCsrf } from './utils/csrf';
+import './bootstrap';
 
-const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+// Initialize CSRF protection
+initializeCsrf();
+
+const appName = import.meta.env.VITE_APP_NAME || 'けいさんアプリ';
 
 createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),

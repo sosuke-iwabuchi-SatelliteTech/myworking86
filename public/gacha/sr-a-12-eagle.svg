@@ -1,0 +1,6 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#E0FFFF"/> <!-- Eagle -->
+        <path d="M20,50 L50,80 L80,50 L50,20 Z" fill="#8B4513"/> <!-- Body (Diamond shape but cute) -->
+        <circle cx="50" cy="40" r="25" fill="#8B4513"/> <!-- Head -->
+        <circle cx="42" cy="35" r="4" fill="white"/><circle cx="42" cy="35" r="2" fill="black"/>
+        <circle cx="58" cy="35" r="4" fill="white"/><circle cx="58" cy="35" r="2" fill="black"/>
+        <path d="M45,45 Q50,55 55,45" fill="#FFD700"/> <!-- Beak --></svg>

@@ -1,0 +1,7 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#DAA520"/>
+        <path d="M20,40 L50,80 L80,40 L50,20 Z" fill="#CD853F"/> <!-- Lion Body -->
+        <path d="M20,40 L10,20 L30,30 Z" fill="white"/> <!-- Wing -->
+        <path d="M80,40 L90,20 L70,30 Z" fill="white"/> <!-- Wing -->
+        <circle cx="50" cy="30" r="12" fill="white"/> <!-- Eagle Head -->
+        <path d="M50,32 L55,38 L45,38 Z" fill="#FFD700"/> <!-- Beak -->
+        <circle cx="48" cy="30" r="2" fill="black"/></svg>

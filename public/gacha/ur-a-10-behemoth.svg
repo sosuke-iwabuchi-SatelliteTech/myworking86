@@ -1,0 +1,6 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#5D4037"/>
+        <circle cx="50" cy="60" r="35" fill="#3E2723"/> <!-- Body -->
+        <rect x="20" y="80" width="15" height="20" fill="#3E2723"/> <!-- Leg -->
+        <rect x="65" y="80" width="15" height="20" fill="#3E2723"/>
+        <circle cx="40" cy="40" r="5" fill="white"/> <!-- Eye -->
+        <path d="M60,50 L80,30" stroke="#EEE" stroke-width="10"/> <!-- Tusk --></svg>

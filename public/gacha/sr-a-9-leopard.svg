@@ -1,0 +1,10 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#FFFACD"/> <!-- Leopard -->
+        <circle cx="20" cy="30" r="8" fill="#FFD700"/> <!-- Ear -->
+        <circle cx="80" cy="30" r="8" fill="#FFD700"/>
+        <circle cx="50" cy="50" r="32" fill="#FFD700"/> <!-- Head -->
+        <circle cx="40" cy="48" r="4" fill="black"/><circle cx="42" cy="46" r="1.5" fill="white"/>
+        <circle cx="60" cy="48" r="4" fill="black"/><circle cx="62" cy="46" r="1.5" fill="white"/>
+        <ellipse cx="50" cy="55" rx="3" ry="2" fill="black"/> <!-- Nose -->
+        <circle cx="30" cy="35" r="3" fill="#8B4513" opacity="0.7"/> <!-- Spot -->
+        <circle cx="70" cy="35" r="3" fill="#8B4513" opacity="0.7"/>
+        <circle cx="50" cy="25" r="3" fill="#8B4513" opacity="0.7"/></svg>

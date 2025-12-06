@@ -1,0 +1,6 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#F5DEB3"/>
+        <ellipse cx="50" cy="50" rx="20" ry="30" fill="#8B4513"/> <!-- Kawauso (Yokai) -->
+        <path d="M30,20 L70,20" stroke="#F4A460" stroke-width="5"/> <!-- Straw Hat rim -->
+        <path d="M40,20 L50,5 L60,20" fill="#F4A460"/> <!-- Hat top -->
+        <circle cx="45" cy="40" r="2" fill="black"/><circle cx="55" cy="40" r="2" fill="black"/>
+        <rect x="60" y="50" width="10" height="20" fill="white" stroke="black"/> <!-- Sake bottle --></svg>

@@ -1,0 +1,8 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><filter id="glow"><feGaussianBlur stdDeviation="2.5" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+        <rect width="100" height="100" fill="#228B22"/>
+        <path d="M30,60 Q50,20 70,60" fill="#006400"/> <!-- Lizard Body -->
+        <path d="M20,60 Q50,80 80,60" fill="#006400"/>
+        <circle cx="50" cy="40" r="10" fill="#32CD32"/> <!-- Head -->
+        <circle cx="50" cy="35" r="2" fill="yellow" filter="url(#glow)"/> <!-- Petrifying Eye -->
+        <path d="M40,30 L30,20" stroke="#32CD32" stroke-width="3"/> <!-- Crest -->
+        <path d="M60,30 L70,20" stroke="#32CD32" stroke-width="3"/></svg>

@@ -1,0 +1,6 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#F4A460"/>
+        <rect x="20" y="50" width="60" height="30" fill="#DAA520"/> <!-- Body -->
+        <circle cx="30" cy="35" r="15" fill="#DAA520"/> <!-- Head -->
+        <path d="M20,35 L10,60 L30,60 Z" fill="#F0E68C"/> <!-- Headdress -->
+        <path d="M70,50 L90,30 L80,80 Z" fill="#DAA520"/> <!-- Wing -->
+        <circle cx="28" cy="33" r="2" fill="black"/></svg>

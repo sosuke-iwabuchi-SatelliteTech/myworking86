@@ -1,0 +1,8 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#F5F5F5"/> <!-- Ostrich -->
+        <ellipse cx="50" cy="65" rx="30" ry="20" fill="#333"/> <!-- Body -->
+        <rect x="45" y="25" width="5" height="40" fill="#FFC0CB"/> <!-- Neck -->
+        <circle cx="47" cy="20" r="8" fill="#FFC0CB"/> <!-- Head -->
+        <circle cx="45" cy="18" r="2" fill="black"/>
+        <path d="M52,20 L58,22 L52,24 Z" fill="#FFA500"/> <!-- Beak -->
+        <line x1="40" y1="80" x2="35" y2="95" stroke="#FFA500" stroke-width="2"/> <!-- Legs -->
+        <line x1="60" y1="80" x2="65" y2="95" stroke="#FFA500" stroke-width="2"/></svg>

@@ -1,0 +1,6 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#556B2F"/> <!-- Nue -->
+        <circle cx="40" cy="40" r="15" fill="#FFA500"/> <!-- Monkey Head -->
+        <rect x="30" y="50" width="40" height="30" fill="#FFD700"/> <!-- Tiger Body -->
+        <path d="M30,50 L35,80 L25,80 Z" fill="#FFD700"/>
+        <path d="M70,50 Q90,30 90,50" fill="none" stroke="#228B22" stroke-width="4"/> <!-- Snake Tail -->
+        <circle cx="90" cy="50" r="3" fill="#228B22"/> <!-- Snake Head --></svg>

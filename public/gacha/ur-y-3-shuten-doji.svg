@@ -1,0 +1,7 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#8B0000"/> <!-- Shuten Doji -->
+        <rect x="30" y="50" width="40" height="40" fill="#B22222"/> <!-- Robe -->
+        <circle cx="50" cy="30" r="20" fill="#FFE4C4"/> <!-- Face -->
+        <path d="M40,15 L35,5 L45,15" fill="gold"/> <!-- Horn -->
+        <path d="M60,15 L65,5 L55,15" fill="gold"/> <!-- Horn -->
+        <rect x="40" y="70" width="20" height="20" fill="#8B4513"/> <!-- Sake Cup -->
+        <path d="M30,30 L70,30" fill="black" opacity="0.5"/> <!-- Hair --></svg>
