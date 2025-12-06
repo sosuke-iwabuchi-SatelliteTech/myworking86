@@ -82,7 +82,7 @@ const GachaScreen: React.FC<GachaScreenProps> = ({ onBack }) => {
     });
 
     // 2. Start Image Preloading (Option B)
-    if (item.imageUrl && item.imageUrl.startsWith('/')) {
+    if (item.imageUrl && (item.imageUrl.startsWith('/') || item.imageUrl.startsWith('http'))) {
       imageLoadPromiseRef.current = new Promise((resolve) => {
         const img = new Image();
         img.src = item.imageUrl!;
@@ -301,7 +301,7 @@ const GachaScreen: React.FC<GachaScreenProps> = ({ onBack }) => {
                 {result.rarity}
               </div>
               <div className="text-9xl mb-4 drop-shadow-md transform transition-transform hover:scale-110 duration-300 flex justify-center items-center">
-                {result.imageUrl && result.imageUrl.startsWith('/') ? (
+                {result.imageUrl && (result.imageUrl.startsWith('/') || result.imageUrl.startsWith('http')) ? (
                   <img
                     src={result.imageUrl}
                     alt={result.name}
