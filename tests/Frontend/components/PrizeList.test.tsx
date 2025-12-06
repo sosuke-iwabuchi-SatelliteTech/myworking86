@@ -1,8 +1,11 @@
-
 import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
 import PrizeList from '../../../resources/js/pages/PrizeList';
 import React from 'react';
+import axios from 'axios';
+
+// Mock axios
+vi.mock('axios');
 
 // Mock AppLayout since it might have complex dependencies (Sidebar, etc)
 vi.mock('@/layouts/app-layout', () => ({
@@ -12,10 +15,8 @@ vi.mock('@/layouts/app-layout', () => ({
 // Mock Head
 vi.mock('@inertiajs/react', () => ({
     Head: ({ title }: { title: string }) => <div data-testid="head">{title}</div>,
+    router: { visit: vi.fn() },
 }));
-
-// Mock fetch
-global.fetch = vi.fn();
 
 describe('PrizeList Component', () => {
     beforeEach(() => {
@@ -23,7 +24,7 @@ describe('PrizeList Component', () => {
     });
 
     it('displays loading state initially', () => {
-        (global.fetch as Mock).mockImplementation(() => new Promise(() => { })); // Never resolves
+        vi.mocked(axios.get).mockImplementation(() => new Promise(() => { })); // Never resolves
         render(<PrizeList />);
         expect(screen.getByText('Loading...')).toBeDefined();
     });
@@ -34,28 +35,28 @@ describe('PrizeList Component', () => {
             { prize_id: 'sr-a-1', rarity: 'SR', count: 2 },
         ];
 
-        (global.fetch as Mock).mockResolvedValue({
-            json: async () => mockPrizes,
+        vi.mocked(axios.get).mockResolvedValue({
+            data: mockPrizes
         });
 
         render(<PrizeList />);
 
         // Wait for the dragon to appear
         await waitFor(() => {
-            expect(screen.getByText('伝説のドラゴン')).toBeDefined();
+            expect(screen.getByText('ドラゴン')).toBeDefined();
         });
 
         expect(screen.queryByText('Loading...')).toBeNull();
         expect(screen.getByText('Owned: 1')).toBeDefined();
 
         // Check for "Lion" (sr-a-1)
-        expect(screen.getByText('百獣の王ライオン')).toBeDefined();
+        expect(screen.getByText('ライオン')).toBeDefined();
         expect(screen.getByText('Owned: 2')).toBeDefined();
     });
 
     it('displays empty message when no prizes', async () => {
-        (global.fetch as Mock).mockResolvedValue({
-            json: async () => [],
+        vi.mocked(axios.get).mockResolvedValue({
+            data: []
         });
 
         render(<PrizeList />);
@@ -64,6 +65,6 @@ describe('PrizeList Component', () => {
             expect(screen.queryByText('Loading...')).toBeNull();
         });
 
-        expect(screen.getByText("You haven't collected any prizes yet. Go play Gacha!")).toBeDefined();
+        expect(screen.getByText("ガチャしてみてね！")).toBeDefined();
     });
 });

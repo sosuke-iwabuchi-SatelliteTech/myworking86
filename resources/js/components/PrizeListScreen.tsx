@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { GACHA_ITEMS, GachaRarity } from '../gachaData';
+import axios from 'axios';
 
 interface UserPrize {
     prize_id: string;
@@ -23,9 +24,9 @@ export default function PrizeListScreen({ onBack }: PrizeListScreenProps) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch('/api/user/prizes')
-            .then(res => res.json())
-            .then((data: UserPrize[]) => {
+        axios.get<UserPrize[]>('/api/user/prizes')
+            .then(res => {
+                const data = res.data;
                 const detailedPrizes = data.map(prize => {
                     const itemDetails = GACHA_ITEMS.find(item => item.id === prize.prize_id);
                     return {

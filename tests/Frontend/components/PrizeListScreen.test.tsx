@@ -1,11 +1,11 @@
-
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
 import PrizeListScreen from '../../../resources/js/components/PrizeListScreen';
 import React from 'react';
+import axios from 'axios';
 
-// Mock fetch
-global.fetch = vi.fn();
+// Mock axios
+vi.mock('axios');
 
 describe('PrizeListScreen Component', () => {
     const mockOnBack = vi.fn();
@@ -15,7 +15,7 @@ describe('PrizeListScreen Component', () => {
     });
 
     it('displays loading state initially', () => {
-        (global.fetch as Mock).mockImplementation(() => new Promise(() => { })); // Never resolves
+        vi.mocked(axios.get).mockImplementation(() => new Promise(() => { })); // Never resolves
         render(<PrizeListScreen onBack={mockOnBack} />);
         expect(screen.getByText('Loading...')).toBeDefined();
     });
@@ -26,8 +26,8 @@ describe('PrizeListScreen Component', () => {
             { prize_id: 'sr-a-1', rarity: 'SR', count: 2 },
         ];
 
-        (global.fetch as Mock).mockResolvedValue({
-            json: async () => mockPrizes,
+        vi.mocked(axios.get).mockResolvedValue({
+            data: mockPrizes
         });
 
         render(<PrizeListScreen onBack={mockOnBack} />);
@@ -46,9 +46,6 @@ describe('PrizeListScreen Component', () => {
 
         // Verify layout
         const prizeItem = screen.getByText('ドラゴン');
-        // The prize item is inside a div with class 'border', which is inside the grid
-        // prizeItem -> div -> div (grid item) -> div (grid container)
-        // Let's find the grid container more robustly
         const grid = prizeItem.closest('.grid');
         expect(grid?.className).toContain('grid-cols-2');
         expect(grid?.className).not.toContain('grid-cols-1');
@@ -56,8 +53,8 @@ describe('PrizeListScreen Component', () => {
     });
 
     it('displays empty message when no prizes', async () => {
-        (global.fetch as Mock).mockResolvedValue({
-            json: async () => [],
+        vi.mocked(axios.get).mockResolvedValue({
+            data: []
         });
 
         render(<PrizeListScreen onBack={mockOnBack} />);
@@ -70,8 +67,8 @@ describe('PrizeListScreen Component', () => {
     });
 
     it('calls onBack when back button is clicked', async () => {
-        (global.fetch as Mock).mockResolvedValue({
-            json: async () => [],
+        vi.mocked(axios.get).mockResolvedValue({
+            data: []
         });
 
         render(<PrizeListScreen onBack={mockOnBack} />);

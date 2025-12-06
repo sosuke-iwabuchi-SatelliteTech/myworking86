@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from 'axios';
 import { UserProfile } from "../types";
 import { saveUserProfile } from "../utils/storage";
 
@@ -22,23 +23,14 @@ export default function UserRegistrationScreen({ onComplete }: UserRegistrationS
       const gradeNum = Number(grade);
 
       try {
-        const response = await fetch('/api/user', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-          },
-          body: JSON.stringify({
-            id,
-            name: nickname,
-            grade: gradeNum,
-          }),
+        await axios.post('/api/user', {
+          id,
+          name: nickname,
+          grade: gradeNum,
         });
 
-        if (!response.ok) {
-          const data = await response.json().catch(() => ({}));
-          throw new Error(data.message || '登録に失敗しました');
-        }
+        // axios throws on non-2xx by default, so we don't need manual check unless validateStatus is changed
+
 
         const profile: UserProfile = {
           id,
@@ -49,12 +41,15 @@ export default function UserRegistrationScreen({ onComplete }: UserRegistrationS
         saveUserProfile(profile);
 
         onComplete(profile);
-      } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError('予期せぬエラーが発生しました');
+      } catch (err: unknown) {
+        // Simple error handling for axios
+        let message = '予期せぬエラーが発生しました';
+        if (axios.isAxiosError(err) && err.response?.data?.message) {
+          message = err.response.data.message;
+        } else if (err instanceof Error) {
+          message = err.message;
         }
+        setError(message);
       } finally {
         setIsLoading(false);
       }

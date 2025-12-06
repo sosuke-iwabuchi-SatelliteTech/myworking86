@@ -1,14 +1,12 @@
-
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { initializeCsrf } from './csrf';
+import axios from 'axios';
+
+vi.mock('axios');
 
 describe('initializeCsrf', () => {
-    beforeEach(() => {
-        global.fetch = vi.fn();
-    });
-
     it('calls the sanctum csrf-cookie endpoint', async () => {
         await initializeCsrf();
-        expect(global.fetch).toHaveBeenCalledWith('/sanctum/csrf-cookie');
+        expect(axios.get).toHaveBeenCalledWith('/sanctum/csrf-cookie');
     });
 });

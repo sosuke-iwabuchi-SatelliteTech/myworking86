@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { GachaItem, pullGacha } from '../gachaData';
 
 interface GachaScreenProps {
@@ -64,22 +65,9 @@ const GachaScreen: React.FC<GachaScreenProps> = ({ onBack }) => {
 
     // Register Prize via API
     try {
-      const csrfToken = document.cookie
-        .split('; ')
-        .find(row => row.startsWith('XSRF-TOKEN='))
-        ?.split('=')[1];
-
-      await fetch('/api/user/prizes', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'X-XSRF-TOKEN': decodeURIComponent(csrfToken || ''),
-        },
-        body: JSON.stringify({
-          prize_id: item.id,
-          rarity: item.rarity,
-        }),
+      await axios.post('/api/user/prizes', {
+        prize_id: item.id,
+        rarity: item.rarity,
       });
     } catch (error) {
       console.error("Failed to register prize:", error);
