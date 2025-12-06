@@ -36,6 +36,8 @@ jobs:
         run: npm ci
 
       - name: Build
+        env:
+          VITE_GACHA_IMAGE_HOST: ${{ secrets.VITE_GACHA_IMAGE_HOST }}
         run: npm run build
 
       - name: Deploy via SCP

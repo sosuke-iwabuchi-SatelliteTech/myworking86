@@ -175,4 +175,45 @@ describe('GachaScreen', () => {
     // Should be visible
     expect(screen.getByText('Emoji Prize')).toBeTruthy();
   });
+
+  it('supports absolute image URLs (http/https)', async () => {
+    // Mock result with absolute URL
+    vi.mocked(gachaData.pullGacha).mockReturnValue({
+      id: 'ur-cloud',
+      name: 'Cloud Dragon',
+      rarity: 'UR',
+      description: 'Lives in the cloud',
+      imageUrl: 'https://example.com/dragon.png'
+    });
+
+    render(<GachaScreen onBack={mockOnBack} />);
+    fireEvent.click(screen.getByText('ガチャをまわす'));
+
+    // Drop -> Shake
+    await act(async () => {
+      vi.advanceTimersByTime(1000);
+    });
+
+    // Shake wait (3s)
+    await act(async () => {
+      vi.advanceTimersByTime(3000);
+    });
+
+    // Manually resolve image load since we can't easily trigger the real Image onload for external URL in jsdom without more setup,
+    // but the component logic creates the promise.
+    // In our mock, Image.onload sets the resolver.
+    await act(async () => {
+      if (imageLoadResolver) imageLoadResolver();
+    });
+
+    // Opening -> Result
+    await act(async () => {
+      vi.advanceTimersByTime(800);
+    });
+
+    // Verify img tag is present with correct src
+    const img = screen.getByAltText('Cloud Dragon') as HTMLImageElement;
+    expect(img).toBeTruthy();
+    expect(img.src).toBe('https://example.com/dragon.png');
+  });
 });
