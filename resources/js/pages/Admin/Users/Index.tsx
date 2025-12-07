@@ -1,4 +1,5 @@
 import AdminLayout from '@/layouts/AdminLayout';
+import PointEditDialog from '@/components/Admin/PointEditDialog';
 import { Head, router } from '@inertiajs/react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -15,6 +16,8 @@ interface User {
     email: string;
     grade: string | number;
     created_at: string;
+    last_login_at: string | null;
+    user_point?: { points: number };
 }
 
 interface IndexProps {
@@ -28,6 +31,8 @@ interface IndexProps {
 
 export default function Index({ users, filters }: IndexProps) {
     const [search, setSearch] = useState(filters.search || '');
+    const [selectedUser, setSelectedUser] = useState<User | null>(null);
+    const [isPointDialogOpen, setIsPointDialogOpen] = useState(false);
 
     // Debounce search requests
     const debouncedSearch = useCallback(
@@ -101,15 +106,24 @@ export default function Index({ users, filters }: IndexProps) {
                                 <thead className="[&_tr]:border-b">
                                     <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
                                         <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">
+                                            <Button variant="ghost" onClick={() => handleSort('last_login_at')} className="-ml-4 h-8 data-[state=open]:bg-accent">
+                                                Last Login <SortIcon column="last_login_at" />
+                                            </Button>
+                                        </th>
+                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">
+                                            <Button variant="ghost" onClick={() => handleSort('points')} className="-ml-4 h-8 data-[state=open]:bg-accent">
+                                                Points <SortIcon column="points" />
+                                            </Button>
+                                        </th>
+                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">
+                                            Actions
+                                        </th>
+                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">
                                             <Button variant="ghost" onClick={() => handleSort('name')} className="-ml-4 h-8 data-[state=open]:bg-accent">
                                                 Name <SortIcon column="name" />
                                             </Button>
                                         </th>
-                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">
-                                            <Button variant="ghost" onClick={() => handleSort('email')} className="-ml-4 h-8 data-[state=open]:bg-accent">
-                                                Email <SortIcon column="email" />
-                                            </Button>
-                                        </th>
+
                                         <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">
                                             <Button variant="ghost" onClick={() => handleSort('grade')} className="-ml-4 h-8 data-[state=open]:bg-accent">
                                                 Grade <SortIcon column="grade" />
@@ -134,11 +148,27 @@ export default function Index({ users, filters }: IndexProps) {
                                                 className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
                                             >
                                                 <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0">
-                                                    {user.name}
+                                                    {user.last_login_at ? new Date(user.last_login_at).toLocaleString() : '-'}
                                                 </td>
                                                 <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0">
-                                                    {user.email}
+                                                    {user.user_point?.points || 0}
                                                 </td>
+                                                <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0">
+                                                    <Button
+                                                        variant="outline"
+                                                        size="sm"
+                                                        onClick={() => {
+                                                            setSelectedUser(user);
+                                                            setIsPointDialogOpen(true);
+                                                        }}
+                                                    >
+                                                        Edit Points
+                                                    </Button>
+                                                </td>
+                                                <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0">
+                                                    {user.name}
+                                                </td>
+
                                                 <td className="p-4 align-middle [&:has([role=checkbox])]:pr-0">
                                                     {user.grade}
                                                 </td>
@@ -155,6 +185,11 @@ export default function Index({ users, filters }: IndexProps) {
                     </CardContent>
                 </Card>
             </div>
+            <PointEditDialog
+                user={selectedUser}
+                open={isPointDialogOpen}
+                onOpenChange={setIsPointDialogOpen}
+            />
         </AdminLayout>
     );
 }

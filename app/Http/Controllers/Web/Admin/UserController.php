@@ -36,4 +36,37 @@ class UserController extends Controller
             'filters' => $request->only(['search', 'sort', 'direction']),
         ]);
     }
+    public function updatePoints(Request $request, User $user)
+    {
+        $request->validate([
+            'points' => 'required|integer',
+            'action' => 'required|in:add,sub,set',
+        ]);
+
+        $currentPoints = $user->userPoint ? $user->userPoint->points : 0;
+        $newPoints = $currentPoints;
+
+        switch ($request->action) {
+            case 'add':
+                $newPoints += $request->points;
+                break;
+            case 'sub':
+                $newPoints -= $request->points;
+                break;
+            case 'set':
+                $newPoints = $request->points;
+                break;
+        }
+
+        // Ensure points don't go below 0 (optional, but good practice)
+        $newPoints = max(0, $newPoints);
+
+        if ($user->userPoint) {
+            $user->userPoint->update(['points' => $newPoints]);
+        } else {
+            $user->userPoint()->create(['points' => $newPoints]);
+        }
+
+        return back();
+    }
 }

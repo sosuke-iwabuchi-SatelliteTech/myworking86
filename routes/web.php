@@ -40,6 +40,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::get('users', [AdminUserController::class, 'index'])->name('users.index');
+    Route::put('users/{user}/points', [AdminUserController::class, 'updatePoints'])->name('users.updatePoints');
 });
 
 require __DIR__ . '/settings.php';

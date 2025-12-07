@@ -55,6 +55,8 @@ class UserController extends Controller
 
         Auth::login($user);
 
+        $user->update(['last_login_at' => now()]);
+
         return response()->json([
             'message' => 'ログインしました。',
             'user' => [
