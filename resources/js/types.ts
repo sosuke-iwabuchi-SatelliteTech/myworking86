@@ -272,3 +272,13 @@ export interface User {
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
 }
+
+export type GachaRarity = 'UR' | 'SR' | 'R' | 'UC' | 'C';
+
+export interface GachaItem {
+  id: string;
+  name: string;
+  rarity: GachaRarity;
+  description: string;
+  imageUrl?: string; // Optional for now, we'll use emojis/placeholders
+}

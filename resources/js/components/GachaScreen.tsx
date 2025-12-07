@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { GachaItem, pullGacha } from '../gachaData';
-import { getPoints } from '../utils/pointApi';
+import { GachaItem } from '../types';
 
 interface GachaScreenProps {
   onBack: () => void;
@@ -45,8 +44,7 @@ const GachaCapsule: React.FC<{ type: VisualType; color?: string; className?: str
         {/* Bottom Half */}
         <div className="absolute bottom-0 left-0 w-full h-1/2 bg-white/90 z-10"></div>
 
-        {/* Middle Belt (attached to bottom half conceptually, but for now just z-index managed) */}
-        {/* We hide the belt when opening because the top moves away. Actually the belt is usually part of the bottom or top. Let's keep it simple. */}
+        {/* Middle Belt */}
         <div className={`absolute top-1/2 left-0 w-full h-0 border-t-4 border-black/5 z-30 -translate-y-1/2 ${isOpening ? 'opacity-0 transition-opacity duration-100' : ''}`}></div>
       </div>
     </div>
@@ -60,63 +58,93 @@ const GachaScreen: React.FC<GachaScreenProps> = ({ onBack }) => {
   const [capsuleColor, setCapsuleColor] = useState<string>('bg-blue-500');
   const [points, setPoints] = useState<number>(0);
 
+  // New State for Server Integration
+  const [isFreeAvailable, setIsFreeAvailable] = useState<boolean>(false);
+  const [cost, setCost] = useState<number>(300);
+  const [loading, setLoading] = useState<boolean>(false);
+
   useEffect(() => {
-    getPoints().then(setPoints).catch(console.error);
+    fetchStatus();
   }, []);
+
+  const fetchStatus = () => {
+    axios.get('/api/gacha/status')
+      .then(res => {
+        setPoints(res.data.points);
+        setIsFreeAvailable(res.data.isFreeAvailable);
+        setCost(res.data.cost);
+      })
+      .catch(err => console.error("Failed to fetch gacha status:", err));
+  };
+
   // Use a ref to store the image loading promise so we can check it in useEffect
   const imageLoadPromiseRef = useRef<Promise<void> | null>(null);
 
-  const handlePull = () => {
-    // 1. Determine Result
-    const item = pullGacha();
-    setResult(item);
+  const handlePull = async () => {
+    if (loading) return;
+    setLoading(true);
+    setResult(null);
 
-    // Register Prize via API - FIRE AND FORGET (Option A)
-    // We do NOT await this, so the animation starts immediately.
-    axios.post('/api/user/prizes', {
-      prize_id: item.id,
-      rarity: item.rarity,
-    }).catch(error => {
-      // Log error silently, do not interrupt the child's experience
-      console.error("Failed to register prize (background):", error);
-    });
+    try {
+        const res = await axios.post('/api/gacha/pull');
+        const data = res.data;
 
-    // 2. Start Image Preloading (Option B)
-    if (item.imageUrl && (item.imageUrl.startsWith('/') || item.imageUrl.startsWith('http'))) {
-      imageLoadPromiseRef.current = new Promise((resolve) => {
-        const img = new Image();
-        img.src = item.imageUrl!;
-        img.onload = () => resolve();
-        img.onerror = () => {
-          console.error("Failed to preload image:", item.imageUrl);
-          resolve(); // Resolve anyway to not block the animation forever
-        };
-      });
-    } else {
-      imageLoadPromiseRef.current = Promise.resolve();
+        const item: GachaItem = data.result;
+        setResult(item);
+        setPoints(data.points);
+        setIsFreeAvailable(data.isFreeAvailable);
+
+        // Start Image Preloading
+        if (item.imageUrl && (item.imageUrl.startsWith('/') || item.imageUrl.startsWith('http'))) {
+            imageLoadPromiseRef.current = new Promise((resolve) => {
+                const img = new Image();
+                img.src = item.imageUrl!;
+                img.onload = () => resolve();
+                img.onerror = () => {
+                    console.error("Failed to preload image:", item.imageUrl);
+                    resolve();
+                };
+            });
+        } else {
+            imageLoadPromiseRef.current = Promise.resolve();
+        }
+
+        // Determine Visuals
+        let visual: VisualType = 'normal';
+        if (item.rarity === 'UR') {
+            visual = 'rainbow';
+        } else if (item.rarity === 'SR') {
+            visual = 'gold';
+        } else {
+            if (Math.random() < FAKE_GOLD_CHANCE) {
+                visual = 'gold';
+            } else {
+                visual = 'normal';
+                const colors = ['bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-pink-500', 'bg-orange-500'];
+                setCapsuleColor(colors[Math.floor(Math.random() * colors.length)]);
+            }
+        }
+        setVisualType(visual);
+
+        // Start Animation
+        setStatus('dropping');
+
+    } catch (err: any) {
+        if (err.response && err.response.status === 400) {
+            alert(err.response.data.message || 'ポイントが足りません');
+        } else {
+            console.error(err);
+            alert('エラーが発生しました');
+        }
+        setLoading(false); // Reset loading only on error, otherwise animation handles state flow?
+        // Actually, if we start animation, we are technically "busy" until reset.
+        // But `loading` blocks the request.
+        // We can set loading false here, as `status !== 'idle'` will block button.
+    } finally {
+        // If successful, status changes to 'dropping', which disables button.
+        // So we can safely set loading false.
+        setLoading(false);
     }
-
-    // 3. Determine Visuals
-    let visual: VisualType = 'normal';
-    if (item.rarity === 'UR') {
-      visual = 'rainbow';
-    } else if (item.rarity === 'SR') {
-      visual = 'gold';
-    } else {
-      // Fake out logic
-      if (Math.random() < FAKE_GOLD_CHANCE) {
-        visual = 'gold';
-      } else {
-        visual = 'normal';
-        // Random color for normal capsules
-        const colors = ['bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-pink-500', 'bg-orange-500'];
-        setCapsuleColor(colors[Math.floor(Math.random() * colors.length)]);
-      }
-    }
-    setVisualType(visual);
-
-    // 4. Start Animation Sequence Immediately
-    setStatus('dropping');
   };
 
   // Animation Sequence Logic
@@ -151,6 +179,7 @@ const GachaScreen: React.FC<GachaScreenProps> = ({ onBack }) => {
     setStatus('idle');
     setResult(null);
     imageLoadPromiseRef.current = null;
+    fetchStatus(); // Refresh status (points/free) just in case
   };
 
   // Helper functions for Result Display
@@ -267,10 +296,7 @@ const GachaScreen: React.FC<GachaScreenProps> = ({ onBack }) => {
       {/* Dynamic Background during Shaking */}
       {(status === 'shaking' || status === 'opening') && renderShakingBackground()}
 
-      {/* Opening Flash Overlay - REMOVED */}
-
       <h1 className="text-3xl font-bold text-slate-800 mb-8 tracking-wider">どうぶつガチャ</h1>
-      <h3 className="text-3xl text-slate-800 mb-8 tracking-wider">お試し中</h3>
 
       <div className="flex-1 w-full flex items-center justify-center min-h-[300px] mb-8 relative">
         {status === 'idle' && (
@@ -341,10 +367,14 @@ const GachaScreen: React.FC<GachaScreenProps> = ({ onBack }) => {
         ) : (
           <button
             onClick={handlePull}
-            disabled={status !== 'idle'}
-            className="flex-1 py-3 px-6 rounded-full font-bold text-white bg-pink-500 hover:bg-pink-600 active:bg-pink-700 disabled:bg-pink-300 disabled:cursor-not-allowed transition-colors shadow-md border-b-4 border-pink-700 active:border-b-0 active:translate-y-1"
+            disabled={status !== 'idle' || loading || (!isFreeAvailable && points < cost)}
+            className={`flex-1 py-3 px-6 rounded-full font-bold text-white transition-colors shadow-md border-b-4 active:border-b-0 active:translate-y-1 ${
+               (status !== 'idle' || loading || (!isFreeAvailable && points < cost))
+               ? 'bg-slate-400 border-slate-600 cursor-not-allowed'
+               : 'bg-pink-500 hover:bg-pink-600 active:bg-pink-700 border-pink-700'
+            }`}
           >
-            {status === 'idle' ? 'ガチャをまわす' : '......'}
+            {loading ? '......' : (status === 'idle' ? (isFreeAvailable ? '無料ガチャ' : `${cost}ptガチャ`) : '......')}
           </button>
         )}
       </div>
