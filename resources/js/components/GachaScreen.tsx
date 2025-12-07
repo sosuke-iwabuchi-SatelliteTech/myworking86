@@ -129,8 +129,8 @@ const GachaScreen: React.FC<GachaScreenProps> = ({ onBack }) => {
       // Start Animation
       setStatus('dropping');
 
-    } catch (err: any) {
-      if (err.response && err.response.status === 400) {
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err) && err.response && err.response.status === 400) {
         alert(err.response.data.message || 'ポイントが足りません');
       } else {
         console.error(err);
@@ -296,7 +296,7 @@ const GachaScreen: React.FC<GachaScreenProps> = ({ onBack }) => {
       {/* Dynamic Background during Shaking */}
       {(status === 'shaking' || status === 'opening') && renderShakingBackground()}
 
-      <h1 className="text-3xl font-bold text-slate-800 mb-8 tracking-wider">どうぶつガチャ</h1>
+      <h1 className="text-3xl font-bold text-slate-800 mb-8 tracking-wider">がちゃ</h1>
 
       <div className="flex-1 w-full flex items-center justify-center min-h-[300px] mb-8 relative">
         {status === 'idle' && (
@@ -369,8 +369,8 @@ const GachaScreen: React.FC<GachaScreenProps> = ({ onBack }) => {
             onClick={handlePull}
             disabled={status !== 'idle' || loading || points === null || (!isFreeAvailable && (points ?? 0) < cost)}
             className={`flex-1 py-3 px-6 rounded-full font-bold text-white transition-colors shadow-md border-b-4 active:border-b-0 active:translate-y-1 ${(status !== 'idle' || loading || points === null || (!isFreeAvailable && (points ?? 0) < cost))
-                ? 'bg-slate-400 border-slate-600 cursor-not-allowed'
-                : 'bg-pink-500 hover:bg-pink-600 active:bg-pink-700 border-pink-700'
+              ? 'bg-slate-400 border-slate-600 cursor-not-allowed'
+              : 'bg-pink-500 hover:bg-pink-600 active:bg-pink-700 border-pink-700'
               }`}
           >
             {loading ? '......' : (status === 'idle' ? (isFreeAvailable ? '無料ガチャ' : `${cost}ptガチャ`) : '......')}
