@@ -126,7 +126,6 @@ class GachaController extends Controller
                 'points' => $userPoint->points,
                 'isFreeAvailable' => false,
             ]);
-
         } catch (\Exception $e) {
             if ($e->getMessage() === 'Not enough points') {
                 return response()->json(['message' => 'ポイントが足りません'], 400);

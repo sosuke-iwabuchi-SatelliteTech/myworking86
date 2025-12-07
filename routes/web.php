@@ -8,9 +8,16 @@ use App\Http\Controllers\PointController;
 
 Route::post('/login', [UserController::class, 'login']);
 
-Route::middleware('auth')->group(function () {
-    Route::post('/api/points/award', [PointController::class, 'award']);
-    Route::get('/api/points', [PointController::class, 'show']);
+Route::middleware('auth')->prefix('api')->group(function () {
+    Route::post('points/award', [PointController::class, 'award']);
+    Route::get('points', [PointController::class, 'show']);
+
+    Route::post('user/prizes', [\App\Http\Controllers\UserPrizeController::class, 'store']);
+    Route::get('user/prizes', [\App\Http\Controllers\UserPrizeController::class, 'index']);
+
+    // Gacha Routes
+    Route::get('gacha/status', [\App\Http\Controllers\GachaController::class, 'status']);
+    Route::post('gacha/pull', [\App\Http\Controllers\GachaController::class, 'pull']);
 });
 
 Route::get('/', function () {
