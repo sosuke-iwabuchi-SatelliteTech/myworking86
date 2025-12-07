@@ -56,7 +56,7 @@ const GachaScreen: React.FC<GachaScreenProps> = ({ onBack }) => {
   const [result, setResult] = useState<GachaItem | null>(null);
   const [visualType, setVisualType] = useState<VisualType>('normal');
   const [capsuleColor, setCapsuleColor] = useState<string>('bg-blue-500');
-  const [points, setPoints] = useState<number>(0);
+  const [points, setPoints] = useState<number | null>(null);
 
   // New State for Server Integration
   const [isFreeAvailable, setIsFreeAvailable] = useState<boolean>(false);
@@ -86,64 +86,64 @@ const GachaScreen: React.FC<GachaScreenProps> = ({ onBack }) => {
     setResult(null);
 
     try {
-        const res = await axios.post('/api/gacha/pull');
-        const data = res.data;
+      const res = await axios.post('/api/gacha/pull');
+      const data = res.data;
 
-        const item: GachaItem = data.result;
-        setResult(item);
-        setPoints(data.points);
-        setIsFreeAvailable(data.isFreeAvailable);
+      const item: GachaItem = data.result;
+      setResult(item);
+      setPoints(data.points);
+      setIsFreeAvailable(data.isFreeAvailable);
 
-        // Start Image Preloading
-        if (item.imageUrl && (item.imageUrl.startsWith('/') || item.imageUrl.startsWith('http'))) {
-            imageLoadPromiseRef.current = new Promise((resolve) => {
-                const img = new Image();
-                img.src = item.imageUrl!;
-                img.onload = () => resolve();
-                img.onerror = () => {
-                    console.error("Failed to preload image:", item.imageUrl);
-                    resolve();
-                };
-            });
+      // Start Image Preloading
+      if (item.imageUrl && (item.imageUrl.startsWith('/') || item.imageUrl.startsWith('http'))) {
+        imageLoadPromiseRef.current = new Promise((resolve) => {
+          const img = new Image();
+          img.src = item.imageUrl!;
+          img.onload = () => resolve();
+          img.onerror = () => {
+            console.error("Failed to preload image:", item.imageUrl);
+            resolve();
+          };
+        });
+      } else {
+        imageLoadPromiseRef.current = Promise.resolve();
+      }
+
+      // Determine Visuals
+      let visual: VisualType = 'normal';
+      if (item.rarity === 'UR') {
+        visual = 'rainbow';
+      } else if (item.rarity === 'SR') {
+        visual = 'gold';
+      } else {
+        if (Math.random() < FAKE_GOLD_CHANCE) {
+          visual = 'gold';
         } else {
-            imageLoadPromiseRef.current = Promise.resolve();
+          visual = 'normal';
+          const colors = ['bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-pink-500', 'bg-orange-500'];
+          setCapsuleColor(colors[Math.floor(Math.random() * colors.length)]);
         }
+      }
+      setVisualType(visual);
 
-        // Determine Visuals
-        let visual: VisualType = 'normal';
-        if (item.rarity === 'UR') {
-            visual = 'rainbow';
-        } else if (item.rarity === 'SR') {
-            visual = 'gold';
-        } else {
-            if (Math.random() < FAKE_GOLD_CHANCE) {
-                visual = 'gold';
-            } else {
-                visual = 'normal';
-                const colors = ['bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-pink-500', 'bg-orange-500'];
-                setCapsuleColor(colors[Math.floor(Math.random() * colors.length)]);
-            }
-        }
-        setVisualType(visual);
-
-        // Start Animation
-        setStatus('dropping');
+      // Start Animation
+      setStatus('dropping');
 
     } catch (err: any) {
-        if (err.response && err.response.status === 400) {
-            alert(err.response.data.message || 'ポイントが足りません');
-        } else {
-            console.error(err);
-            alert('エラーが発生しました');
-        }
-        setLoading(false); // Reset loading only on error, otherwise animation handles state flow?
-        // Actually, if we start animation, we are technically "busy" until reset.
-        // But `loading` blocks the request.
-        // We can set loading false here, as `status !== 'idle'` will block button.
+      if (err.response && err.response.status === 400) {
+        alert(err.response.data.message || 'ポイントが足りません');
+      } else {
+        console.error(err);
+        alert('エラーが発生しました');
+      }
+      setLoading(false); // Reset loading only on error, otherwise animation handles state flow?
+      // Actually, if we start animation, we are technically "busy" until reset.
+      // But `loading` blocks the request.
+      // We can set loading false here, as `status !== 'idle'` will block button.
     } finally {
-        // If successful, status changes to 'dropping', which disables button.
-        // So we can safely set loading false.
-        setLoading(false);
+      // If successful, status changes to 'dropping', which disables button.
+      // So we can safely set loading false.
+      setLoading(false);
     }
   };
 
@@ -367,12 +367,11 @@ const GachaScreen: React.FC<GachaScreenProps> = ({ onBack }) => {
         ) : (
           <button
             onClick={handlePull}
-            disabled={status !== 'idle' || loading || (!isFreeAvailable && points < cost)}
-            className={`flex-1 py-3 px-6 rounded-full font-bold text-white transition-colors shadow-md border-b-4 active:border-b-0 active:translate-y-1 ${
-               (status !== 'idle' || loading || (!isFreeAvailable && points < cost))
-               ? 'bg-slate-400 border-slate-600 cursor-not-allowed'
-               : 'bg-pink-500 hover:bg-pink-600 active:bg-pink-700 border-pink-700'
-            }`}
+            disabled={status !== 'idle' || loading || points === null || (!isFreeAvailable && (points ?? 0) < cost)}
+            className={`flex-1 py-3 px-6 rounded-full font-bold text-white transition-colors shadow-md border-b-4 active:border-b-0 active:translate-y-1 ${(status !== 'idle' || loading || points === null || (!isFreeAvailable && (points ?? 0) < cost))
+                ? 'bg-slate-400 border-slate-600 cursor-not-allowed'
+                : 'bg-pink-500 hover:bg-pink-600 active:bg-pink-700 border-pink-700'
+              }`}
           >
             {loading ? '......' : (status === 'idle' ? (isFreeAvailable ? '無料ガチャ' : `${cost}ptガチャ`) : '......')}
           </button>
@@ -380,7 +379,7 @@ const GachaScreen: React.FC<GachaScreenProps> = ({ onBack }) => {
       </div>
 
       <div className="mt-6 text-slate-600 font-bold text-xl bg-white/80 px-6 py-2 rounded-full shadow-sm border-2 border-slate-100">
-        しょじポイント: <span className="text-2xl text-brand-yellow font-black">{points}</span> pt
+        しょじポイント: <span className="text-2xl text-brand-yellow font-black">{points !== null ? points : '-'}</span> pt
       </div>
     </div>
   );
