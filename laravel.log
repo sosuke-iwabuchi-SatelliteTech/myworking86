@@ -1,0 +1,13 @@
+
+   WARN  Unable to respect the `PHP_CLI_SERVER_WORKERS` environment variable without the `--no-reload` flag. Only creating a single server.
+
+   INFO  Server running on [http://0.0.0.0:8000].
+
+  Press Ctrl+C to stop the server
+
+  2025-12-07 08:43:34 / .......................................... ~ 500.53ms
+  2025-12-07 08:43:38 /sanctum/csrf-cookie ......................... ~ 0.21ms
+  2025-12-07 08:43:40 /api/user .................................... ~ 0.21ms
+  2025-12-07 08:43:40 /login ....................................... ~ 0.05ms
+  2025-12-07 08:43:43 /api/gacha/status ............................ ~ 0.23ms
+  2025-12-07 08:43:43 /api/gacha/status ............................ ~ 0.06ms

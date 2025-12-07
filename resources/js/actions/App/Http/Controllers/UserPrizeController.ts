@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\UserPrizeController::store
-* @see app/Http/Controllers/UserPrizeController.php:16
+* @see Http/Controllers/UserPrizeController.php:16
 * @route '/api/user/prizes'
 */
 export const store = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -16,7 +16,7 @@ store.definition = {
 
 /**
 * @see \App\Http\Controllers\UserPrizeController::store
-* @see app/Http/Controllers/UserPrizeController.php:16
+* @see Http/Controllers/UserPrizeController.php:16
 * @route '/api/user/prizes'
 */
 store.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ store.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\UserPrizeController::store
-* @see app/Http/Controllers/UserPrizeController.php:16
+* @see Http/Controllers/UserPrizeController.php:16
 * @route '/api/user/prizes'
 */
 store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -35,7 +35,7 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\UserPrizeController::store
-* @see app/Http/Controllers/UserPrizeController.php:16
+* @see Http/Controllers/UserPrizeController.php:16
 * @route '/api/user/prizes'
 */
 const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -45,7 +45,7 @@ const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => 
 
 /**
 * @see \App\Http\Controllers\UserPrizeController::store
-* @see app/Http/Controllers/UserPrizeController.php:16
+* @see Http/Controllers/UserPrizeController.php:16
 * @route '/api/user/prizes'
 */
 storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -57,7 +57,7 @@ store.form = storeForm
 
 /**
 * @see \App\Http\Controllers\UserPrizeController::index
-* @see app/Http/Controllers/UserPrizeController.php:36
+* @see Http/Controllers/UserPrizeController.php:36
 * @route '/api/user/prizes'
 */
 export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -72,7 +72,7 @@ index.definition = {
 
 /**
 * @see \App\Http\Controllers\UserPrizeController::index
-* @see app/Http/Controllers/UserPrizeController.php:36
+* @see Http/Controllers/UserPrizeController.php:36
 * @route '/api/user/prizes'
 */
 index.url = (options?: RouteQueryOptions) => {
@@ -81,7 +81,7 @@ index.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\UserPrizeController::index
-* @see app/Http/Controllers/UserPrizeController.php:36
+* @see Http/Controllers/UserPrizeController.php:36
 * @route '/api/user/prizes'
 */
 index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -91,7 +91,7 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\UserPrizeController::index
-* @see app/Http/Controllers/UserPrizeController.php:36
+* @see Http/Controllers/UserPrizeController.php:36
 * @route '/api/user/prizes'
 */
 index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -101,7 +101,7 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\UserPrizeController::index
-* @see app/Http/Controllers/UserPrizeController.php:36
+* @see Http/Controllers/UserPrizeController.php:36
 * @route '/api/user/prizes'
 */
 const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -111,7 +111,7 @@ const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => (
 
 /**
 * @see \App\Http\Controllers\UserPrizeController::index
-* @see app/Http/Controllers/UserPrizeController.php:36
+* @see Http/Controllers/UserPrizeController.php:36
 * @route '/api/user/prizes'
 */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -121,7 +121,7 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\UserPrizeController::index
-* @see app/Http/Controllers/UserPrizeController.php:36
+* @see Http/Controllers/UserPrizeController.php:36
 * @route '/api/user/prizes'
 */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({

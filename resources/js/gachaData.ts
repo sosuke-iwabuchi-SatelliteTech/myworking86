@@ -1,12 +1,4 @@
-export type GachaRarity = 'UR' | 'SR' | 'R' | 'UC' | 'C';
-
-export interface GachaItem {
-  id: string;
-  name: string;
-  rarity: GachaRarity;
-  description: string;
-  imageUrl?: string; // Optional for now, we'll use emojis/placeholders
-}
+import { GachaItem, GachaRarity } from "./types";
 
 const IMAGE_HOST = import.meta.env.VITE_GACHA_IMAGE_HOST || '';
 
@@ -179,35 +171,3 @@ export const GACHA_ITEMS: GachaItem[] = [
   { id: 'c-y-15', name: 'ブルブル', rarity: 'C', description: 'Cランクのようかい: 寒がりの震々', imageUrl: `${IMAGE_HOST}/gacha/c-y-15-buruburu.svg` },
 ];
 
-const RARITY_WEIGHTS: Record<GachaRarity, number> = {
-  UR: 1,
-  SR: 4,
-  R: 15,
-  UC: 30,
-  C: 50,
-};
-
-export function pullGacha(): GachaItem {
-  const totalWeight = Object.values(RARITY_WEIGHTS).reduce((sum, weight) => sum + weight, 0);
-  let randomValue = Math.random() * totalWeight;
-
-  let selectedRarity: GachaRarity = 'C';
-
-  for (const [rarity, weight] of Object.entries(RARITY_WEIGHTS)) {
-    randomValue -= weight;
-    if (randomValue <= 0) {
-      selectedRarity = rarity as GachaRarity;
-      break;
-    }
-  }
-
-  const itemsOfRarity = GACHA_ITEMS.filter(item => item.rarity === selectedRarity);
-
-  // Fallback to Common if something goes wrong (shouldn't happen with correct logic)
-  if (itemsOfRarity.length === 0) {
-    return GACHA_ITEMS.filter(item => item.rarity === 'C')[0];
-  }
-
-  const randomIndex = Math.floor(Math.random() * itemsOfRarity.length);
-  return itemsOfRarity[randomIndex];
-}
