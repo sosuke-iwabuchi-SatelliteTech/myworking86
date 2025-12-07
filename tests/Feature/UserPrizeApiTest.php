@@ -4,7 +4,7 @@ use App\Models\User;
 use App\Models\UserPrize;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
-use Laravel\Sanctum\Sanctum;
+// use Laravel\Sanctum\Sanctum; // Removed
 use Tests\TestCase;
 
 class UserPrizeApiTest extends TestCase
@@ -14,7 +14,7 @@ class UserPrizeApiTest extends TestCase
     public function test_user_can_register_prize()
     {
         $user = User::factory()->create();
-        Sanctum::actingAs($user);
+        $this->actingAs($user); // Changed from Sanctum::actingAs
 
         $prizeId = 'ur-a-1'; // String ID
         $rarity = 'SSR';
@@ -41,7 +41,7 @@ class UserPrizeApiTest extends TestCase
     public function test_user_can_get_owned_prizes_with_counts_sorted_by_rarity()
     {
         $user = User::factory()->create();
-        Sanctum::actingAs($user);
+        $this->actingAs($user); // Changed from Sanctum::actingAs
 
         // Create prizes with different rarities
         UserPrize::factory()->create(['user_id' => $user->id, 'prize_id' => 'r-1', 'rarity' => 'R']);
@@ -76,6 +76,11 @@ class UserPrizeApiTest extends TestCase
 
     public function test_unauthenticated_user_cannot_access_prize_apis()
     {
+        // Expect 302 Redirect to login for web auth, NOT 401
+        // Or if we request JSON (Ajax), Laravel default is 401.
+        // Let's verify standard Laravel behavior for postJson/getJson on web middleware.
+        // It usually returns 401 message "Unauthenticated."
+
         $this->postJson('/api/user/prizes', [
             'prize_id' => (string) Str::uuid(),
             'rarity' => 'N',

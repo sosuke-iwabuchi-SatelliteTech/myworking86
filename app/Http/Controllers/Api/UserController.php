@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -53,6 +54,8 @@ class UserController extends Controller
         }
 
         Auth::login($user);
+
+        $user->update(['last_login_at' => now()]);
 
         return response()->json([
             'message' => 'ログインしました。',

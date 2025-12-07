@@ -1,12 +1,10 @@
-import UserController from './UserController'
-import UserPrizeController from './UserPrizeController'
-import PointController from './PointController'
+import Api from './Api'
+import Web from './Web'
 import Settings from './Settings'
 
 const Controllers = {
-    UserController: Object.assign(UserController, UserController),
-    UserPrizeController: Object.assign(UserPrizeController, UserPrizeController),
-    PointController: Object.assign(PointController, PointController),
+    Api: Object.assign(Api, Api),
+    Web: Object.assign(Web, Web),
     Settings: Object.assign(Settings, Settings),
 }
 

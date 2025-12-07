@@ -24,13 +24,19 @@ describe('PrizeListScreen Component', () => {
     });
 
     it('displays prizes when fetch succeeds', async () => {
-        const mockPrizes = [
+        const mockUserPrizes = [
             { prize_id: 'ur-a-1', rarity: 'UR', count: 1 },
             { prize_id: 'sr-a-1', rarity: 'SR', count: 2 },
         ];
+        const mockMasterPrizes = [
+            { id: 'ur-a-1', name: 'ドラゴン', rarity: 'UR', description: 'desc', imageUrl: 'img.png', type: 'animal' },
+            { id: 'sr-a-1', name: 'ライオン', rarity: 'SR', description: 'desc', imageUrl: 'img.png', type: 'animal' },
+        ];
 
-        vi.mocked(axios.get).mockResolvedValue({
-            data: mockPrizes
+        vi.mocked(axios.get).mockImplementation((url) => {
+            if (url === '/api/user/prizes') return Promise.resolve({ data: mockUserPrizes });
+            if (url === '/api/prizes') return Promise.resolve({ data: { data: mockMasterPrizes } });
+            return Promise.reject();
         });
 
         render(<PrizeListScreen onBack={mockOnBack} />);
@@ -56,8 +62,10 @@ describe('PrizeListScreen Component', () => {
     });
 
     it('displays empty message when no prizes', async () => {
-        vi.mocked(axios.get).mockResolvedValue({
-            data: []
+        vi.mocked(axios.get).mockImplementation((url) => {
+            if (url === '/api/user/prizes') return Promise.resolve({ data: [] });
+            if (url === '/api/prizes') return Promise.resolve({ data: { data: [] } });
+            return Promise.reject();
         });
 
         render(<PrizeListScreen onBack={mockOnBack} />);
@@ -70,8 +78,10 @@ describe('PrizeListScreen Component', () => {
     });
 
     it('calls onBack when back button is clicked', async () => {
-        vi.mocked(axios.get).mockResolvedValue({
-            data: []
+        vi.mocked(axios.get).mockImplementation((url) => {
+            if (url === '/api/user/prizes') return Promise.resolve({ data: [] });
+            if (url === '/api/prizes') return Promise.resolve({ data: { data: [] } });
+            return Promise.reject();
         });
 
         render(<PrizeListScreen onBack={mockOnBack} />);
@@ -87,7 +97,11 @@ describe('PrizeListScreen Component', () => {
     });
 
     it('toggles search panel visibility', async () => {
-        vi.mocked(axios.get).mockResolvedValue({ data: [] });
+        vi.mocked(axios.get).mockImplementation((url) => {
+            if (url === '/api/user/prizes') return Promise.resolve({ data: [] });
+            if (url === '/api/prizes') return Promise.resolve({ data: { data: [] } });
+            return Promise.reject();
+        });
         render(<PrizeListScreen onBack={mockOnBack} />);
         await waitFor(() => expect(screen.queryByText('Loading...')).toBeNull());
 
@@ -102,11 +116,19 @@ describe('PrizeListScreen Component', () => {
     });
 
     it('filters prizes by name', async () => {
-        const mockPrizes = [
+        const mockUserPrizes = [
             { prize_id: 'ur-a-1', rarity: 'UR', count: 1 }, // Dragon
             { prize_id: 'sr-a-1', rarity: 'SR', count: 1 }, // Lion
         ];
-        vi.mocked(axios.get).mockResolvedValue({ data: mockPrizes });
+        const mockMasterPrizes = [
+            { id: 'ur-a-1', name: 'ドラゴン', rarity: 'UR', description: 'desc', imageUrl: 'img.png', type: 'animal' },
+            { id: 'sr-a-1', name: 'ライオン', rarity: 'SR', description: 'desc', imageUrl: 'img.png', type: 'animal' },
+        ];
+        vi.mocked(axios.get).mockImplementation((url) => {
+            if (url === '/api/user/prizes') return Promise.resolve({ data: mockUserPrizes });
+            if (url === '/api/prizes') return Promise.resolve({ data: { data: mockMasterPrizes } });
+            return Promise.reject();
+        });
         render(<PrizeListScreen onBack={mockOnBack} />);
         await waitFor(() => expect(screen.getByText('ドラゴン')).toBeDefined());
 
@@ -122,11 +144,19 @@ describe('PrizeListScreen Component', () => {
     });
 
     it('filters prizes by rarity', async () => {
-        const mockPrizes = [
+        const mockUserPrizes = [
             { prize_id: 'ur-a-1', rarity: 'UR', count: 1 },
             { prize_id: 'sr-a-1', rarity: 'SR', count: 1 },
         ];
-        vi.mocked(axios.get).mockResolvedValue({ data: mockPrizes });
+        const mockMasterPrizes = [
+            { id: 'ur-a-1', name: 'ドラゴン', rarity: 'UR', description: 'desc', imageUrl: 'img.png', type: 'animal' },
+            { id: 'sr-a-1', name: 'ライオン', rarity: 'SR', description: 'desc', imageUrl: 'img.png', type: 'animal' },
+        ];
+        vi.mocked(axios.get).mockImplementation((url) => {
+            if (url === '/api/user/prizes') return Promise.resolve({ data: mockUserPrizes });
+            if (url === '/api/prizes') return Promise.resolve({ data: { data: mockMasterPrizes } });
+            return Promise.reject();
+        });
         render(<PrizeListScreen onBack={mockOnBack} />);
         await waitFor(() => expect(screen.getByText('ドラゴン')).toBeDefined());
 
@@ -146,12 +176,18 @@ describe('PrizeListScreen Component', () => {
 
     it('paginates results', async () => {
         // Create 11 items
-        const mockPrizes = Array.from({ length: 11 }, (_, i) => ({
+        const mockUserPrizes = Array.from({ length: 11 }, (_, i) => ({
             prize_id: `c-a-${i + 1}`, rarity: 'C', count: 1
         }));
-        // c-a-1 is Ant (Ari)
+        const mockMasterPrizes = Array.from({ length: 11 }, (_, i) => ({
+            id: `c-a-${i + 1}`, name: `Prize ${i + 1}`, rarity: 'C', description: 'desc', imageUrl: 'img.png'
+        }));
 
-        vi.mocked(axios.get).mockResolvedValue({ data: mockPrizes });
+        vi.mocked(axios.get).mockImplementation((url) => {
+            if (url === '/api/user/prizes') return Promise.resolve({ data: mockUserPrizes });
+            if (url === '/api/prizes') return Promise.resolve({ data: { data: mockMasterPrizes } });
+            return Promise.reject();
+        });
         render(<PrizeListScreen onBack={mockOnBack} />);
         await waitFor(() => expect(screen.queryByText('Loading...')).toBeNull());
 
