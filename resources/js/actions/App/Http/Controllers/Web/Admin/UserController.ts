@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\Web\Admin\UserController::index
 * @see app/Http/Controllers/Web/Admin/UserController.php:25
@@ -80,8 +80,6 @@ indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 index.form = indexForm
 
-const users = {
-    index: Object.assign(index, index),
-}
+const UserController = { index }
 
-export default users
+export default UserController

@@ -30,13 +30,19 @@ describe('PrizeList Component', () => {
     });
 
     it('displays prizes when fetch succeeds', async () => {
-        const mockPrizes = [
+        const mockUserPrizes = [
             { prize_id: 'ur-a-1', rarity: 'UR', count: 1 },
             { prize_id: 'sr-a-1', rarity: 'SR', count: 2 },
         ];
+        const mockMasterPrizes = [
+            { id: 'ur-a-1', name: 'ドラゴン', rarity: 'UR', description: 'desc', imageUrl: 'img.png', type: 'animal' },
+            { id: 'sr-a-1', name: 'ライオン', rarity: 'SR', description: 'desc', imageUrl: 'img.png', type: 'animal' },
+        ];
 
-        vi.mocked(axios.get).mockResolvedValue({
-            data: mockPrizes
+        vi.mocked(axios.get).mockImplementation((url) => {
+            if (url === '/api/user/prizes') return Promise.resolve({ data: mockUserPrizes });
+            if (url === '/api/prizes') return Promise.resolve({ data: { data: mockMasterPrizes } });
+            return Promise.reject();
         });
 
         render(<PrizeList />);
@@ -55,8 +61,10 @@ describe('PrizeList Component', () => {
     });
 
     it('displays empty message when no prizes', async () => {
-        vi.mocked(axios.get).mockResolvedValue({
-            data: []
+        vi.mocked(axios.get).mockImplementation((url) => {
+            if (url === '/api/user/prizes') return Promise.resolve({ data: [] });
+            if (url === '/api/prizes') return Promise.resolve({ data: { data: [] } });
+            return Promise.reject();
         });
 
         render(<PrizeList />);

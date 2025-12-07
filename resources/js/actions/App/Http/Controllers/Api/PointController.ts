@@ -1,7 +1,7 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../../wayfinder'
 /**
-* @see \App\Http\Controllers\PointController::award
-* @see app/Http/Controllers/PointController.php:14
+* @see \App\Http\Controllers\Api\PointController::award
+* @see app/Http/Controllers/Api/PointController.php:15
 * @route '/api/points/award'
 */
 export const award = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -15,8 +15,8 @@ award.definition = {
 } satisfies RouteDefinition<["post"]>
 
 /**
-* @see \App\Http\Controllers\PointController::award
-* @see app/Http/Controllers/PointController.php:14
+* @see \App\Http\Controllers\Api\PointController::award
+* @see app/Http/Controllers/Api/PointController.php:15
 * @route '/api/points/award'
 */
 award.url = (options?: RouteQueryOptions) => {
@@ -24,8 +24,8 @@ award.url = (options?: RouteQueryOptions) => {
 }
 
 /**
-* @see \App\Http\Controllers\PointController::award
-* @see app/Http/Controllers/PointController.php:14
+* @see \App\Http\Controllers\Api\PointController::award
+* @see app/Http/Controllers/Api/PointController.php:15
 * @route '/api/points/award'
 */
 award.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -34,8 +34,8 @@ award.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 })
 
 /**
-* @see \App\Http\Controllers\PointController::award
-* @see app/Http/Controllers/PointController.php:14
+* @see \App\Http\Controllers\Api\PointController::award
+* @see app/Http/Controllers/Api/PointController.php:15
 * @route '/api/points/award'
 */
 const awardForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -44,8 +44,8 @@ const awardForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => 
 })
 
 /**
-* @see \App\Http\Controllers\PointController::award
-* @see app/Http/Controllers/PointController.php:14
+* @see \App\Http\Controllers\Api\PointController::award
+* @see app/Http/Controllers/Api/PointController.php:15
 * @route '/api/points/award'
 */
 awardForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -56,8 +56,8 @@ awardForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => (
 award.form = awardForm
 
 /**
-* @see \App\Http\Controllers\PointController::show
-* @see app/Http/Controllers/PointController.php:67
+* @see \App\Http\Controllers\Api\PointController::show
+* @see app/Http/Controllers/Api/PointController.php:67
 * @route '/api/points'
 */
 export const show = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -71,8 +71,8 @@ show.definition = {
 } satisfies RouteDefinition<["get","head"]>
 
 /**
-* @see \App\Http\Controllers\PointController::show
-* @see app/Http/Controllers/PointController.php:67
+* @see \App\Http\Controllers\Api\PointController::show
+* @see app/Http/Controllers/Api/PointController.php:67
 * @route '/api/points'
 */
 show.url = (options?: RouteQueryOptions) => {
@@ -80,8 +80,8 @@ show.url = (options?: RouteQueryOptions) => {
 }
 
 /**
-* @see \App\Http\Controllers\PointController::show
-* @see app/Http/Controllers/PointController.php:67
+* @see \App\Http\Controllers\Api\PointController::show
+* @see app/Http/Controllers/Api/PointController.php:67
 * @route '/api/points'
 */
 show.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -90,8 +90,8 @@ show.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 })
 
 /**
-* @see \App\Http\Controllers\PointController::show
-* @see app/Http/Controllers/PointController.php:67
+* @see \App\Http\Controllers\Api\PointController::show
+* @see app/Http/Controllers/Api/PointController.php:67
 * @route '/api/points'
 */
 show.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -100,8 +100,8 @@ show.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
-* @see \App\Http\Controllers\PointController::show
-* @see app/Http/Controllers/PointController.php:67
+* @see \App\Http\Controllers\Api\PointController::show
+* @see app/Http/Controllers/Api/PointController.php:67
 * @route '/api/points'
 */
 const showForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -110,8 +110,8 @@ const showForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 })
 
 /**
-* @see \App\Http\Controllers\PointController::show
-* @see app/Http/Controllers/PointController.php:67
+* @see \App\Http\Controllers\Api\PointController::show
+* @see app/Http/Controllers/Api/PointController.php:67
 * @route '/api/points'
 */
 showForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -120,8 +120,8 @@ showForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 })
 
 /**
-* @see \App\Http\Controllers\PointController::show
-* @see app/Http/Controllers/PointController.php:67
+* @see \App\Http\Controllers\Api\PointController::show
+* @see app/Http/Controllers/Api/PointController.php:67
 * @route '/api/points'
 */
 showForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({

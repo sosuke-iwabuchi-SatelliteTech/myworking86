@@ -245,32 +245,32 @@ export interface LevelStats {
 export type UserLevelStats = Record<string, LevelStats>;
 
 export interface Auth {
-    user: User;
+  user: User;
 }
 
 export interface NavGroup {
-    title: string;
-    items: NavItem[];
+  title: string;
+  items: NavItem[];
 }
 
 export interface SharedData {
-    name: string;
-    quote: { message: string; author: string };
-    auth: Auth;
-    sidebarOpen: boolean;
-    [key: string]: unknown;
+  name: string;
+  quote: { message: string; author: string };
+  auth: Auth;
+  sidebarOpen: boolean;
+  [key: string]: unknown;
 }
 
 export interface User {
-    id: number;
-    name: string;
-    email: string;
-    avatar?: string;
-    email_verified_at: string | null;
-    two_factor_enabled?: boolean;
-    created_at: string;
-    updated_at: string;
-    [key: string]: unknown; // This allows for additional properties...
+  id: number;
+  name: string;
+  email: string;
+  avatar?: string;
+  email_verified_at: string | null;
+  two_factor_enabled?: boolean;
+  created_at: string;
+  updated_at: string;
+  [key: string]: unknown; // This allows for additional properties...
 }
 
 export type GachaRarity = 'UR' | 'SR' | 'R' | 'UC' | 'C';
@@ -278,6 +278,7 @@ export type GachaRarity = 'UR' | 'SR' | 'R' | 'UC' | 'C';
 export interface GachaItem {
   id: string;
   name: string;
+  type?: string; // Added type field
   rarity: GachaRarity;
   description: string;
   imageUrl?: string; // Optional for now, we'll use emojis/placeholders

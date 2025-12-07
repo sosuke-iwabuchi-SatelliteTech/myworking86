@@ -1,8 +1,8 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../../wayfinder'
 /**
-* @see \App\Http\Controllers\Admin\UserController::index
-* @see app/Http/Controllers/Admin/UserController.php:25
-* @route '/admin/users'
+* @see \App\Http\Controllers\Web\PrizeController::index
+* @see app/Http/Controllers/Web/PrizeController.php:11
+* @route '/prizes'
 */
 export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: index.url(options),
@@ -11,22 +11,22 @@ export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 index.definition = {
     methods: ["get","head"],
-    url: '/admin/users',
+    url: '/prizes',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
-* @see \App\Http\Controllers\Admin\UserController::index
-* @see app/Http/Controllers/Admin/UserController.php:25
-* @route '/admin/users'
+* @see \App\Http\Controllers\Web\PrizeController::index
+* @see app/Http/Controllers/Web/PrizeController.php:11
+* @route '/prizes'
 */
 index.url = (options?: RouteQueryOptions) => {
     return index.definition.url + queryParams(options)
 }
 
 /**
-* @see \App\Http\Controllers\Admin\UserController::index
-* @see app/Http/Controllers/Admin/UserController.php:25
-* @route '/admin/users'
+* @see \App\Http\Controllers\Web\PrizeController::index
+* @see app/Http/Controllers/Web/PrizeController.php:11
+* @route '/prizes'
 */
 index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: index.url(options),
@@ -34,9 +34,9 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 })
 
 /**
-* @see \App\Http\Controllers\Admin\UserController::index
-* @see app/Http/Controllers/Admin/UserController.php:25
-* @route '/admin/users'
+* @see \App\Http\Controllers\Web\PrizeController::index
+* @see app/Http/Controllers/Web/PrizeController.php:11
+* @route '/prizes'
 */
 index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: index.url(options),
@@ -44,9 +44,9 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
-* @see \App\Http\Controllers\Admin\UserController::index
-* @see app/Http/Controllers/Admin/UserController.php:25
-* @route '/admin/users'
+* @see \App\Http\Controllers\Web\PrizeController::index
+* @see app/Http/Controllers/Web/PrizeController.php:11
+* @route '/prizes'
 */
 const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: index.url(options),
@@ -54,9 +54,9 @@ const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => (
 })
 
 /**
-* @see \App\Http\Controllers\Admin\UserController::index
-* @see app/Http/Controllers/Admin/UserController.php:25
-* @route '/admin/users'
+* @see \App\Http\Controllers\Web\PrizeController::index
+* @see app/Http/Controllers/Web/PrizeController.php:11
+* @route '/prizes'
 */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: index.url(options),
@@ -64,9 +64,9 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 })
 
 /**
-* @see \App\Http\Controllers\Admin\UserController::index
-* @see app/Http/Controllers/Admin/UserController.php:25
-* @route '/admin/users'
+* @see \App\Http\Controllers\Web\PrizeController::index
+* @see app/Http/Controllers/Web/PrizeController.php:11
+* @route '/prizes'
 */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
     action: index.url({
@@ -80,6 +80,6 @@ indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 index.form = indexForm
 
-const UserController = { index }
+const PrizeController = { index }
 
-export default UserController
+export default PrizeController

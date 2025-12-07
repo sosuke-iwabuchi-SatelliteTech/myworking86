@@ -1,7 +1,7 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../../wayfinder'
 /**
-* @see \App\Http\Controllers\GachaController::status
-* @see app/Http/Controllers/GachaController.php:23
+* @see \App\Http\Controllers\Api\GachaController::status
+* @see app/Http/Controllers/Api/GachaController.php:24
 * @route '/api/gacha/status'
 */
 export const status = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -15,8 +15,8 @@ status.definition = {
 } satisfies RouteDefinition<["get","head"]>
 
 /**
-* @see \App\Http\Controllers\GachaController::status
-* @see app/Http/Controllers/GachaController.php:23
+* @see \App\Http\Controllers\Api\GachaController::status
+* @see app/Http/Controllers/Api/GachaController.php:24
 * @route '/api/gacha/status'
 */
 status.url = (options?: RouteQueryOptions) => {
@@ -24,8 +24,8 @@ status.url = (options?: RouteQueryOptions) => {
 }
 
 /**
-* @see \App\Http\Controllers\GachaController::status
-* @see app/Http/Controllers/GachaController.php:23
+* @see \App\Http\Controllers\Api\GachaController::status
+* @see app/Http/Controllers/Api/GachaController.php:24
 * @route '/api/gacha/status'
 */
 status.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -34,8 +34,8 @@ status.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 })
 
 /**
-* @see \App\Http\Controllers\GachaController::status
-* @see app/Http/Controllers/GachaController.php:23
+* @see \App\Http\Controllers\Api\GachaController::status
+* @see app/Http/Controllers/Api/GachaController.php:24
 * @route '/api/gacha/status'
 */
 status.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -44,8 +44,8 @@ status.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
-* @see \App\Http\Controllers\GachaController::status
-* @see app/Http/Controllers/GachaController.php:23
+* @see \App\Http\Controllers\Api\GachaController::status
+* @see app/Http/Controllers/Api/GachaController.php:24
 * @route '/api/gacha/status'
 */
 const statusForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -54,8 +54,8 @@ const statusForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => 
 })
 
 /**
-* @see \App\Http\Controllers\GachaController::status
-* @see app/Http/Controllers/GachaController.php:23
+* @see \App\Http\Controllers\Api\GachaController::status
+* @see app/Http/Controllers/Api/GachaController.php:24
 * @route '/api/gacha/status'
 */
 statusForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -64,8 +64,8 @@ statusForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 })
 
 /**
-* @see \App\Http\Controllers\GachaController::status
-* @see app/Http/Controllers/GachaController.php:23
+* @see \App\Http\Controllers\Api\GachaController::status
+* @see app/Http/Controllers/Api/GachaController.php:24
 * @route '/api/gacha/status'
 */
 statusForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -81,8 +81,8 @@ statusForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => (
 status.form = statusForm
 
 /**
-* @see \App\Http\Controllers\GachaController::pull
-* @see app/Http/Controllers/GachaController.php:45
+* @see \App\Http\Controllers\Api\GachaController::pull
+* @see app/Http/Controllers/Api/GachaController.php:46
 * @route '/api/gacha/pull'
 */
 export const pull = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -96,8 +96,8 @@ pull.definition = {
 } satisfies RouteDefinition<["post"]>
 
 /**
-* @see \App\Http\Controllers\GachaController::pull
-* @see app/Http/Controllers/GachaController.php:45
+* @see \App\Http\Controllers\Api\GachaController::pull
+* @see app/Http/Controllers/Api/GachaController.php:46
 * @route '/api/gacha/pull'
 */
 pull.url = (options?: RouteQueryOptions) => {
@@ -105,8 +105,8 @@ pull.url = (options?: RouteQueryOptions) => {
 }
 
 /**
-* @see \App\Http\Controllers\GachaController::pull
-* @see app/Http/Controllers/GachaController.php:45
+* @see \App\Http\Controllers\Api\GachaController::pull
+* @see app/Http/Controllers/Api/GachaController.php:46
 * @route '/api/gacha/pull'
 */
 pull.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -115,8 +115,8 @@ pull.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 })
 
 /**
-* @see \App\Http\Controllers\GachaController::pull
-* @see app/Http/Controllers/GachaController.php:45
+* @see \App\Http\Controllers\Api\GachaController::pull
+* @see app/Http/Controllers/Api/GachaController.php:46
 * @route '/api/gacha/pull'
 */
 const pullForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -125,8 +125,8 @@ const pullForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => (
 })
 
 /**
-* @see \App\Http\Controllers\GachaController::pull
-* @see app/Http/Controllers/GachaController.php:45
+* @see \App\Http\Controllers\Api\GachaController::pull
+* @see app/Http/Controllers/Api/GachaController.php:46
 * @route '/api/gacha/pull'
 */
 pullForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

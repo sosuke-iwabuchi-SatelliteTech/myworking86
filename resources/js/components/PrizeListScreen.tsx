@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { GACHA_ITEMS, GachaRarity } from '../gachaData';
+import { GachaRarity, GachaItem } from '../types';
 import axios from 'axios';
 
 interface UserPrize {
@@ -37,25 +37,35 @@ export default function PrizeListScreen({ onBack }: PrizeListScreenProps) {
     const itemsPerPage = 10;
 
     useEffect(() => {
-        axios.get<UserPrize[]>('/api/user/prizes')
-            .then(res => {
-                const data = res.data;
-                const detailedPrizes = data.map(prize => {
-                    const itemDetails = GACHA_ITEMS.find(item => item.id === prize.prize_id);
+        const fetchData = async () => {
+            try {
+                const [userPrizesRes, masterPrizesRes] = await Promise.all([
+                    axios.get<UserPrize[]>('/api/user/prizes'),
+                    axios.get<{ data: GachaItem[] }>('/api/prizes') // Resource wrap
+                ]);
+
+                const userPrizes = userPrizesRes.data;
+                const masterPrizes = masterPrizesRes.data.data; // API Resource wrapping
+
+                const detailedPrizes = userPrizes.map(prize => {
+                    const itemDetails = masterPrizes.find(item => item.id === prize.prize_id);
                     return {
                         ...prize,
                         name: itemDetails?.name || 'Unknown Prize',
                         description: itemDetails?.description || '',
                         imageUrl: itemDetails?.imageUrl,
+                        type: itemDetails?.type,
                     };
                 });
                 setPrizes(detailedPrizes);
-                setLoading(false);
-            })
-            .catch(err => {
+            } catch (err) {
                 console.error('Failed to fetch prizes:', err);
+            } finally {
                 setLoading(false);
-            });
+            }
+        };
+
+        fetchData();
     }, []);
 
     const getRarityColor = (rarity: GachaRarity) => {

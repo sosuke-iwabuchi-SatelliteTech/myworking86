@@ -1,43 +1,45 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
-use Laravel\Fortify\Features;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\PointController;
+use App\Http\Controllers\Api\UserController as ApiUserController;
+use App\Http\Controllers\Api\PointController;
+use App\Http\Controllers\Api\UserPrizeController;
+use App\Http\Controllers\Api\GachaController;
+use App\Http\Controllers\Api\PrizeController as ApiPrizeController;
+use App\Http\Controllers\Web\HomeController;
+use App\Http\Controllers\Web\DashboardController;
+use App\Http\Controllers\Web\PrizeController as WebPrizeController;
+use App\Http\Controllers\Web\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Web\Admin\UserController as AdminUserController;
 
-Route::post('/login', [UserController::class, 'login']);
+Route::post('/login', [ApiUserController::class, 'login']);
 
 Route::middleware('auth')->prefix('api')->group(function () {
     Route::post('points/award', [PointController::class, 'award']);
     Route::get('points', [PointController::class, 'show']);
 
-    Route::post('user/prizes', [\App\Http\Controllers\UserPrizeController::class, 'store']);
-    Route::get('user/prizes', [\App\Http\Controllers\UserPrizeController::class, 'index']);
+    Route::post('user/prizes', [UserPrizeController::class, 'store']);
+    Route::get('user/prizes', [UserPrizeController::class, 'index']);
 
     // Gacha Routes
-    Route::get('gacha/status', [\App\Http\Controllers\GachaController::class, 'status']);
-    Route::post('gacha/pull', [\App\Http\Controllers\GachaController::class, 'pull']);
+    Route::get('gacha/status', [GachaController::class, 'status']);
+    Route::post('gacha/pull', [GachaController::class, 'pull']);
+
+    // Master Data Routes
+    Route::get('prizes', [ApiPrizeController::class, 'index']);
 });
 
-Route::get('/', function () {
-    return Inertia::render('Home');
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
-
-    Route::get('prizes', function () {
-        return Inertia::render('PrizeList');
-    })->name('prizes.index');
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('prizes', [WebPrizeController::class, 'index'])->name('prizes.index');
 });
 
 
 Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
-    Route::get('users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('users.index');
+    Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+    Route::get('users', [AdminUserController::class, 'index'])->name('users.index');
 });
 
 require __DIR__ . '/settings.php';

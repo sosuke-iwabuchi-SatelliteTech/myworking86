@@ -1,16 +1,10 @@
-import UserController from './UserController'
-import UserPrizeController from './UserPrizeController'
-import GachaController from './GachaController'
-import PointController from './PointController'
-import Admin from './Admin'
+import Api from './Api'
+import Web from './Web'
 import Settings from './Settings'
 
 const Controllers = {
-    UserController: Object.assign(UserController, UserController),
-    UserPrizeController: Object.assign(UserPrizeController, UserPrizeController),
-    GachaController: Object.assign(GachaController, GachaController),
-    PointController: Object.assign(PointController, PointController),
-    Admin: Object.assign(Admin, Admin),
+    Api: Object.assign(Api, Api),
+    Web: Object.assign(Web, Web),
     Settings: Object.assign(Settings, Settings),
 }
 

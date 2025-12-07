@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Models\DailyPlayCount;
 use App\Models\UserPoint;
 use Illuminate\Http\Request;
@@ -57,7 +58,6 @@ class PointController extends Controller
                 'multiplier' => $multiplier,
                 'play_count' => $daily->count,
             ]);
-
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['message' => 'Server Error', 'error' => $e->getMessage()], 500);
