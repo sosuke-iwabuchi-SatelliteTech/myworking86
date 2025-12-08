@@ -70,7 +70,7 @@
         5173
     ],
     // Use 'postCreateCommand' to run commands after the container is created
-    "postCreateCommand": "composer install && npm install",
+    "postCreateCommand": "cp -n .env.example .env || true && composer install && php artisan key:generate && npm install",
     // Use 'postStartCommand' to run commands after the container starts
     "postStartCommand": "touch database/database.sqlite && php artisan migrate --force || true",
     // Comment out to connect as root instead
