@@ -13,6 +13,7 @@ use App\Http\Controllers\Web\Admin\DashboardController as AdminDashboardControll
 use App\Http\Controllers\Web\Admin\UserController as AdminUserController;
 
 Route::post('/login', [ApiUserController::class, 'login']);
+Route::post('/api/user', [ApiUserController::class, 'store']);
 
 Route::middleware('auth')->prefix('api')->group(function () {
     Route::post('points/award', [PointController::class, 'award']);

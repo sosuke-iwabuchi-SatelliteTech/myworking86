@@ -5,10 +5,16 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { PaginatedData } from '@/types/pagination';
 import { Pagination } from '@/components/ui/pagination';
-import { useState, useCallback } from 'react';
+import { useState, useMemo } from 'react';
 import { ChevronUp, ChevronDown, ChevronsUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import debounce from 'lodash/debounce';
+
+const SortIcon = ({ column, sort, direction }: { column: string; sort?: string; direction?: 'asc' | 'desc' }) => {
+    if (sort !== column) return <ChevronsUpDown className="ml-2 h-4 w-4" />;
+    if (direction === 'asc') return <ChevronUp className="ml-2 h-4 w-4" />;
+    return <ChevronDown className="ml-2 h-4 w-4" />;
+};
 
 interface User {
     id: string;
@@ -35,14 +41,15 @@ export default function Index({ users, filters }: IndexProps) {
     const [isPointDialogOpen, setIsPointDialogOpen] = useState(false);
 
     // Debounce search requests
-    const debouncedSearch = useCallback(
-        debounce((value: string) => {
-            router.get(
-                '/admin/users',
-                { ...filters, search: value, page: 1 }, // Reset to page 1 on search
-                { preserveState: true, replace: true, preserveScroll: true }
-            );
-        }, 300),
+    const debouncedSearch = useMemo(
+        () =>
+            debounce((value: string) => {
+                router.get(
+                    '/admin/users',
+                    { ...filters, search: value, page: 1 }, // Reset to page 1 on search
+                    { preserveState: true, replace: true, preserveScroll: true }
+                );
+            }, 300),
         [filters]
     );
 
@@ -68,11 +75,7 @@ export default function Index({ users, filters }: IndexProps) {
         );
     };
 
-    const SortIcon = ({ column }: { column: string }) => {
-        if (filters.sort !== column) return <ChevronsUpDown className="ml-2 h-4 w-4" />;
-        if (filters.direction === 'asc') return <ChevronUp className="ml-2 h-4 w-4" />;
-        return <ChevronDown className="ml-2 h-4 w-4" />;
-    };
+
 
     return (
         <AdminLayout
@@ -107,12 +110,12 @@ export default function Index({ users, filters }: IndexProps) {
                                     <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
                                         <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">
                                             <Button variant="ghost" onClick={() => handleSort('last_login_at')} className="-ml-4 h-8 data-[state=open]:bg-accent">
-                                                Last Login <SortIcon column="last_login_at" />
+                                                Last Login <SortIcon column="last_login_at" sort={filters.sort} direction={filters.direction} />
                                             </Button>
                                         </th>
                                         <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">
                                             <Button variant="ghost" onClick={() => handleSort('points')} className="-ml-4 h-8 data-[state=open]:bg-accent">
-                                                Points <SortIcon column="points" />
+                                                Points <SortIcon column="points" sort={filters.sort} direction={filters.direction} />
                                             </Button>
                                         </th>
                                         <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">
@@ -120,13 +123,13 @@ export default function Index({ users, filters }: IndexProps) {
                                         </th>
                                         <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">
                                             <Button variant="ghost" onClick={() => handleSort('name')} className="-ml-4 h-8 data-[state=open]:bg-accent">
-                                                Name <SortIcon column="name" />
+                                                Name <SortIcon column="name" sort={filters.sort} direction={filters.direction} />
                                             </Button>
                                         </th>
 
                                         <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">
                                             <Button variant="ghost" onClick={() => handleSort('grade')} className="-ml-4 h-8 data-[state=open]:bg-accent">
-                                                Grade <SortIcon column="grade" />
+                                                Grade <SortIcon column="grade" sort={filters.sort} direction={filters.direction} />
                                             </Button>
                                         </th>
                                         <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0">
