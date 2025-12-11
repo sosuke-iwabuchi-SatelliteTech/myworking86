@@ -33,7 +33,7 @@ export default function PointEditDialog({ user, open, onOpenChange }: PointEditD
         if (open) {
             reset();
         }
-    }, [open]);
+    }, [open, reset]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
