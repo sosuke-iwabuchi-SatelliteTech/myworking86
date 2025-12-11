@@ -10,7 +10,7 @@ import {
     SidebarGroup,
     SidebarGroupLabel,
 } from '@/components/ui/sidebar';
-import { type NavItem } from '@/types';
+
 import { Link, usePage } from '@inertiajs/react';
 import { Users, LayoutDashboard } from 'lucide-react';
 import AppLogo from './app-logo';
