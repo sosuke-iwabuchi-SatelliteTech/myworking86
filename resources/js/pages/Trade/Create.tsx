@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import QRCode from 'react-qr-code';
 // import { Html5QrcodeScanner } from 'html5-qrcode'; // Dynamic import better for SSR
 import axios from 'axios';
+import PrizeSelector from '@/components/PrizeSelector';
 
 type Props = {
     initialTargetId?: string;
@@ -191,56 +192,25 @@ export default function TradeCreate({ initialTargetId }: Props) {
 
                         <form onSubmit={handleSubmit}>
                             <div className="mb-4">
-                                <label className="block text-sm font-medium text-gray-700 mb-2">あげる けいひんを えらんでね</label>
-                                <div className="grid grid-cols-2 gap-2 max-h-60 overflow-y-auto border p-2 rounded">
-                                    {myPrizes.map(p => (
-                                        <div
-                                            key={p.id}
-                                            onClick={() => toggleOffer(p.id)}
-                                            className={`p-2 border rounded cursor-pointer flex items-center gap-2 ${selectedOfferIds.includes(p.id) ? 'border-blue-500 bg-blue-50' : ''}`}
-                                        >
-                                            <input
-                                                type="checkbox"
-                                                checked={selectedOfferIds.includes(p.id)}
-                                                readOnly
-                                                className="rounded text-blue-600"
-                                            />
-                                            <div className="text-sm">
-                                                <div className="font-bold">{p.prize.name}</div>
-                                                <div className="text-xs text-gray-500">{p.prize.rarity}</div>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
+                                <PrizeSelector
+                                    label="あげる けいひんを えらんでね"
+                                    prizes={myPrizes}
+                                    selectedIds={selectedOfferIds}
+                                    onToggle={toggleOffer}
+                                    color="blue"
+                                    emptyMessage="トレードできる けいひんが ありません"
+                                />
                             </div>
 
-
                             <div className="mb-4">
-                                <label className="block text-sm font-medium text-gray-700 mb-2">あいてから もらうもの (ほしいもの)</label>
-                                {targetPrizes.length > 0 ? (
-                                    <div className="grid grid-cols-2 gap-2 max-h-60 overflow-y-auto border p-2 rounded">
-                                        {targetPrizes.map(p => (
-                                            <div
-                                                key={p.id}
-                                                onClick={() => toggleRequest(p.id)}
-                                                className={`p-2 border rounded cursor-pointer flex items-center gap-2 ${selectedRequestIds.includes(p.id) ? 'border-green-500 bg-green-50' : ''}`}
-                                            >
-                                                <input
-                                                    type="checkbox"
-                                                    checked={selectedRequestIds.includes(p.id)}
-                                                    readOnly
-                                                    className="rounded text-green-600"
-                                                />
-                                                <div className="text-sm">
-                                                    <div className="font-bold">{p.prize.name}</div>
-                                                    <div className="text-xs text-gray-500">{p.prize.rarity}</div>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <p className="text-sm text-gray-500">あいては トレードできる けいひんを もっていません</p>
-                                )}
+                                <PrizeSelector
+                                    label="あいてから もらうもの (ほしいもの)"
+                                    prizes={targetPrizes}
+                                    selectedIds={selectedRequestIds}
+                                    onToggle={toggleRequest}
+                                    color="green"
+                                    emptyMessage="あいては トレードできる けいひんを もっていません"
+                                />
                             </div>
 
                             <div className="mb-4">
