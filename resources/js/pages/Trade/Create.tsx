@@ -120,13 +120,18 @@ export default function TradeCreate({ initialTargetId }: Props) {
     const stopScanner = async () => {
         if (scannerRef.current) {
             try {
-                if (scannerRef.current.isScanning) {
-                    await scannerRef.current.stop();
-                }
+                // Try to stop, ignore if fails (e.g. not running)
+                await scannerRef.current.stop();
+            } catch (e) {
+                // console.error("Stop error (likely not running)", e);
+            }
+
+            try {
                 await scannerRef.current.clear();
             } catch (e) {
-                console.error("Stop scanner error", e);
+                console.error("Clear error", e);
             }
+
             scannerRef.current = null;
         }
         setIsScanning(false);
