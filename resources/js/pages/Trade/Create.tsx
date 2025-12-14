@@ -34,8 +34,11 @@ export default function TradeCreate({ initialTargetId }: Props) {
     useEffect(() => {
         if (targetId) {
             // Load my prizes to offer
-            axios.get('/api/user/prizes').then(res => {
-                setMyPrizes(res.data.data); // Assuming paginated
+            axios.get('/api/user/prizes/tradable').then(res => {
+                setMyPrizes(res.data.data || []);
+            }).catch(e => {
+                console.error("Failed to load prizes", e);
+                setMyPrizes([]);
             });
         }
     }, [targetId]);
@@ -177,7 +180,7 @@ export default function TradeCreate({ initialTargetId }: Props) {
                                         <div
                                             key={p.id}
                                             onClick={() => toggleOffer(p.id)}
-                                            className={`p - 2 border rounded cursor - pointer flex items - center gap - 2 ${selectedOfferIds.includes(p.id) ? 'border-blue-500 bg-blue-50' : ''} `}
+                                            className={`p-2 border rounded cursor-pointer flex items-center gap-2 ${selectedOfferIds.includes(p.id) ? 'border-blue-500 bg-blue-50' : ''}`}
                                         >
                                             <input
                                                 type="checkbox"

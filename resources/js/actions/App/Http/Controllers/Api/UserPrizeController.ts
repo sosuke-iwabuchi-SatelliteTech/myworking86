@@ -136,6 +136,87 @@ indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 index.form = indexForm
 
-const UserPrizeController = { store, index }
+/**
+* @see \App\Http\Controllers\Api\UserPrizeController::tradable
+* @see app/Http/Controllers/Api/UserPrizeController.php:57
+* @route '/api/user/prizes/tradable'
+*/
+export const tradable = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: tradable.url(options),
+    method: 'get',
+})
+
+tradable.definition = {
+    methods: ["get","head"],
+    url: '/api/user/prizes/tradable',
+} satisfies RouteDefinition<["get","head"]>
+
+/**
+* @see \App\Http\Controllers\Api\UserPrizeController::tradable
+* @see app/Http/Controllers/Api/UserPrizeController.php:57
+* @route '/api/user/prizes/tradable'
+*/
+tradable.url = (options?: RouteQueryOptions) => {
+    return tradable.definition.url + queryParams(options)
+}
+
+/**
+* @see \App\Http\Controllers\Api\UserPrizeController::tradable
+* @see app/Http/Controllers/Api/UserPrizeController.php:57
+* @route '/api/user/prizes/tradable'
+*/
+tradable.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: tradable.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Api\UserPrizeController::tradable
+* @see app/Http/Controllers/Api/UserPrizeController.php:57
+* @route '/api/user/prizes/tradable'
+*/
+tradable.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: tradable.url(options),
+    method: 'head',
+})
+
+/**
+* @see \App\Http\Controllers\Api\UserPrizeController::tradable
+* @see app/Http/Controllers/Api/UserPrizeController.php:57
+* @route '/api/user/prizes/tradable'
+*/
+const tradableForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: tradable.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Api\UserPrizeController::tradable
+* @see app/Http/Controllers/Api/UserPrizeController.php:57
+* @route '/api/user/prizes/tradable'
+*/
+tradableForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: tradable.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Api\UserPrizeController::tradable
+* @see app/Http/Controllers/Api/UserPrizeController.php:57
+* @route '/api/user/prizes/tradable'
+*/
+tradableForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: tradable.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+tradable.form = tradableForm
+
+const UserPrizeController = { store, index, tradable }
 
 export default UserPrizeController
