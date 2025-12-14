@@ -4,11 +4,10 @@ namespace App\Http\Controllers\Web\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Repositories\UserRepository;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Http\Request;
-
-use App\Repositories\UserRepository;
 
 class UserController extends Controller
 {
@@ -25,7 +24,7 @@ class UserController extends Controller
     public function index(Request $request): Response
     {
         $search = $request->input('search');
-        $sort = $request->input('sort', 'created_at');
+        $sort = $request->input('sort', 'last_login_at');
         $direction = $request->input('direction', 'desc');
 
         $users = $this->userRepository->getPaginatedUsers($search, $sort, $direction, 50)
@@ -36,6 +35,7 @@ class UserController extends Controller
             'filters' => $request->only(['search', 'sort', 'direction']),
         ]);
     }
+
     public function updatePoints(Request $request, User $user)
     {
         $request->validate([
