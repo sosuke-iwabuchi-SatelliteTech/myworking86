@@ -63,4 +63,17 @@ class UserPrizeController extends Controller
 
         return response()->json(['data' => $userPrizes]);
     }
+
+    /**
+     * Get list of individual prizes for trading for a specific user.
+     */
+    public function userTradable($userId)
+    {
+        $userPrizes = UserPrize::where('user_id', $userId)
+            ->with('prize')
+            ->orderBy('obtained_at', 'desc')
+            ->get();
+
+        return response()->json(['data' => $userPrizes]);
+    }
 }

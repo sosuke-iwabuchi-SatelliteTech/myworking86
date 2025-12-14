@@ -117,13 +117,13 @@ function WrappedContent({ trade, onAction, processing }: any) {
                             </div>
                             <div>
                                 <h3 className="font-bold text-lg mb-4 text-green-600">
-                                    {trade.receiver?.name || 'だれか'}が もらうもの:
+                                    {trade.receiver?.name || 'だれか'}さんが 出すもの:
                                 </h3>
                                 <div className="space-y-4">
                                     {requestedItems.length > 0 ? requestedItems.map((item: any) => (
                                         <ItemCard key={item.id} item={item} />
                                     )) : (
-                                        <p className="text-gray-400 italic">指定なし (プレゼント/そうだん)</p>
+                                        <p className="text-gray-400 italic">指定なし (プレゼント)</p>
                                     )}
                                 </div>
                             </div>

@@ -24,6 +24,7 @@ Route::middleware('auth')->prefix('api')->group(function () {
     Route::post('user/prizes', [UserPrizeController::class, 'store']);
     Route::get('user/prizes', [UserPrizeController::class, 'index']);
     Route::get('user/prizes/tradable', [UserPrizeController::class, 'tradable']);
+    Route::get('users/{user}/prizes/tradable', [UserPrizeController::class, 'userTradable']);
 
     // Gacha Routes
     Route::get('gacha/status', [GachaController::class, 'status']);

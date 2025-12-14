@@ -27,7 +27,9 @@ export default function TradeCreate({ initialTargetId }: Props) {
 
     // Form State
     const [myPrizes, setMyPrizes] = useState<UserPrize[]>([]);
+    const [targetPrizes, setTargetPrizes] = useState<UserPrize[]>([]);
     const [selectedOfferIds, setSelectedOfferIds] = useState<string[]>([]);
+    const [selectedRequestIds, setSelectedRequestIds] = useState<string[]>([]);
     const [message, setMessage] = useState('');
     const [submitting, setSubmitting] = useState(false);
 
@@ -37,8 +39,16 @@ export default function TradeCreate({ initialTargetId }: Props) {
             axios.get('/api/user/prizes/tradable').then(res => {
                 setMyPrizes(res.data.data || []);
             }).catch(e => {
-                console.error("Failed to load prizes", e);
+                console.error("Failed to load my prizes", e);
                 setMyPrizes([]);
+            });
+
+            // Load target user's prizes to request
+            axios.get(`/api/users/${targetId}/prizes/tradable`).then(res => {
+                setTargetPrizes(res.data.data || []);
+            }).catch(e => {
+                console.error("Failed to load target prizes", e);
+                setTargetPrizes([]);
             });
         }
     }, [targetId]);
@@ -147,6 +157,7 @@ export default function TradeCreate({ initialTargetId }: Props) {
             await axios.post('/api/trades', {
                 receiver_id: targetId,
                 offered_user_prize_ids: selectedOfferIds,
+                requested_user_prize_ids: selectedRequestIds,
                 message: message
             });
             router.visit('/trades');
@@ -159,6 +170,12 @@ export default function TradeCreate({ initialTargetId }: Props) {
 
     const toggleOffer = (id: string) => {
         setSelectedOfferIds(prev =>
+            prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+        );
+    };
+
+    const toggleRequest = (id: string) => {
+        setSelectedRequestIds(prev =>
             prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
         );
     };
@@ -197,6 +214,35 @@ export default function TradeCreate({ initialTargetId }: Props) {
                                 </div>
                             </div>
 
+
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">あいてから もらうもの (ほしいもの)</label>
+                                {targetPrizes.length > 0 ? (
+                                    <div className="grid grid-cols-2 gap-2 max-h-60 overflow-y-auto border p-2 rounded">
+                                        {targetPrizes.map(p => (
+                                            <div
+                                                key={p.id}
+                                                onClick={() => toggleRequest(p.id)}
+                                                className={`p-2 border rounded cursor-pointer flex items-center gap-2 ${selectedRequestIds.includes(p.id) ? 'border-green-500 bg-green-50' : ''}`}
+                                            >
+                                                <input
+                                                    type="checkbox"
+                                                    checked={selectedRequestIds.includes(p.id)}
+                                                    readOnly
+                                                    className="rounded text-green-600"
+                                                />
+                                                <div className="text-sm">
+                                                    <div className="font-bold">{p.prize.name}</div>
+                                                    <div className="text-xs text-gray-500">{p.prize.rarity}</div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <p className="text-sm text-gray-500">あいては トレードできる けいひんを もっていません</p>
+                                )}
+                            </div>
+
                             <div className="mb-4">
                                 <label className="block text-sm font-medium text-gray-700">メッセージ</label>
                                 <textarea
@@ -211,7 +257,7 @@ export default function TradeCreate({ initialTargetId }: Props) {
                                 <button type="button" onClick={() => setTargetId(null)} className="px-4 py-2 text-gray-600">やめる</button>
                                 <button
                                     type="submit"
-                                    disabled={submitting || selectedOfferIds.length === 0}
+                                    disabled={submitting || (selectedOfferIds.length === 0 && selectedRequestIds.length === 0)}
                                     className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-50"
                                 >
                                     {submitting ? 'おくっています...' : 'おねがいする'}
