@@ -11,10 +11,13 @@ type Props = {
 // Types (should be shared)
 // ... (Reusing same types or similar)
 
+import CelebrationModal from '@/components/ui/CelebrationModal';
+
 export default function TradeShow({ tradeId }: Props) {
     const [trade, setTrade] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [processing, setProcessing] = useState(false);
+    const [showCelebration, setShowCelebration] = useState(false);
 
     useEffect(() => {
         axios.get(`/api/trades/${tradeId}`)
@@ -33,7 +36,12 @@ export default function TradeShow({ tradeId }: Props) {
             // Reload page data
             const res = await axios.get(`/api/trades/${tradeId}`);
             setTrade(res.data);
-            alert(`${actionJp} しました。`);
+
+            if (action === 'accept') {
+                setShowCelebration(true);
+            } else {
+                alert(`${actionJp} しました。`);
+            }
         } catch (error: any) {
             alert('しっぱいしました: ' + (error.response?.data?.message || 'エラーが おきました'));
         } finally {
@@ -44,16 +52,15 @@ export default function TradeShow({ tradeId }: Props) {
     if (loading) return <div className="p-12 text-center">よみこみ中...</div>;
     if (!trade) return <div className="p-12 text-center">こうかんが みつかりません</div>;
 
-    const isSender = trade.sender_id === trade.sender.id; // Logic depends on auth user, need to check how to know current user logic client side or assume simple
-    // Ideally we check against auth.user.id but let's infer from UI needs
-    // Actually we need current user ID to know which buttons to show.
-    // Let's assume we can pass auth user via Inertia page props.
-
-    // For now, I'll rely on the API response structure to know roles if possible, or just show buttons based on status 
-    // and rely on backend 403. But better UX is to hide irrelevant buttons.
-    // I'll grab user from page props.
-
-    return <TradeShowContent trade={trade} onAction={handleAction} processing={processing} />;
+    return (
+        <>
+            <TradeShowContent trade={trade} onAction={handleAction} processing={processing} />
+            <CelebrationModal
+                isOpen={showCelebration}
+                onClose={() => setShowCelebration(false)}
+            />
+        </>
+    );
 }
 
 function TradeShowContent({ trade, onAction, processing }: any) {
