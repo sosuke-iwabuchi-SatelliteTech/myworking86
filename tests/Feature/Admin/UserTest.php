@@ -29,8 +29,8 @@ class UserTest extends TestCase
     public function test_user_list_search()
     {
         $admin = User::factory()->create(['role' => 'admin']);
-        User::factory()->create(['name' => 'John Doe', 'email' => 'john@example.com']);
-        User::factory()->create(['name' => 'Jane Doe', 'email' => 'jane@example.com']);
+        User::factory()->create(['name' => 'John Doe', 'email' => 'john@example.com', 'role' => 'user']);
+        User::factory()->create(['name' => 'Jane Doe', 'email' => 'jane@example.com', 'role' => 'user']);
 
         $response = $this->actingAs($admin)
             ->get('/admin/users?search=John');
@@ -47,7 +47,7 @@ class UserTest extends TestCase
     public function test_user_list_pagination()
     {
         $admin = User::factory()->create(['role' => 'admin']);
-        User::factory()->count(51)->create();
+        User::factory()->count(51)->create(['role' => 'user']);
 
         $response = $this->actingAs($admin)
             ->get('/admin/users');

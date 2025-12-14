@@ -16,13 +16,13 @@ class UserSortTest extends TestCase
     {
         $admin = User::factory()->create(['role' => 'admin']);
 
-        $user1 = User::factory()->create(['name' => 'User Low']);
+        $user1 = User::factory()->create(['name' => 'User Low', 'role' => 'user']);
         UserPoint::create(['user_id' => $user1->id, 'points' => 10]);
 
-        $user2 = User::factory()->create(['name' => 'User High']);
+        $user2 = User::factory()->create(['name' => 'User High', 'role' => 'user']);
         UserPoint::create(['user_id' => $user2->id, 'points' => 100]);
 
-        $user3 = User::factory()->create(['name' => 'User Zero']);
+        $user3 = User::factory()->create(['name' => 'User Zero', 'role' => 'user']);
         // No UserPoint record, implies 0 or null depending on join
 
         // Ascending
@@ -33,8 +33,8 @@ class UserSortTest extends TestCase
         $responseAsc->assertInertia(
             fn (Assert $page) => $page
                 ->component('Admin/Users/Index')
-                ->has('users.data', 5) // admin + 3 users + potentially one more from test isolation
-            // Logic: user3 (null/0), user1 (10), user2 (100). Admin? 0.
+                ->has('users.data', 3) // Only regular users (admin excluded)
+            // Logic: user3 (null/0), user1 (10), user2 (100)
             // We just check the order of specific users we know.
         );
 
@@ -60,8 +60,8 @@ class UserSortTest extends TestCase
     {
         $admin = User::factory()->create(['role' => 'admin']);
 
-        $userOld = User::factory()->create(['name' => 'Old', 'last_login_at' => now()->subDays(10)]);
-        $userNew = User::factory()->create(['name' => 'New', 'last_login_at' => now()->subMinutes(1)]);
+        $userOld = User::factory()->create(['name' => 'Old', 'last_login_at' => now()->subDays(10), 'role' => 'user']);
+        $userNew = User::factory()->create(['name' => 'New', 'last_login_at' => now()->subMinutes(1), 'role' => 'user']);
 
         // Descending (Default usually shows newest first)
         $responseDesc = $this->actingAs($admin)
@@ -88,9 +88,9 @@ class UserSortTest extends TestCase
     {
         $admin = User::factory()->create(['role' => 'admin', 'last_login_at' => now()->subDays(5)]);
 
-        $userOld = User::factory()->create(['name' => 'Old Login', 'last_login_at' => now()->subDays(10)]);
-        $userNew = User::factory()->create(['name' => 'New Login', 'last_login_at' => now()->subMinutes(1)]);
-        $userMid = User::factory()->create(['name' => 'Mid Login', 'last_login_at' => now()->subDays(3)]);
+        $userOld = User::factory()->create(['name' => 'Old Login', 'last_login_at' => now()->subDays(10), 'role' => 'user']);
+        $userNew = User::factory()->create(['name' => 'New Login', 'last_login_at' => now()->subMinutes(1), 'role' => 'user']);
+        $userMid = User::factory()->create(['name' => 'Mid Login', 'last_login_at' => now()->subDays(3), 'role' => 'user']);
 
         // No sort or direction parameters - should use default
         $response = $this->actingAs($admin)
