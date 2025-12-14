@@ -79,6 +79,22 @@ class User extends Authenticatable
         return $this->hasOne(UserPoint::class);
     }
 
+    public function userPrizes()
+    {
+        return $this->hasMany(UserPrize::class);
+    }
+
+    public function tradesSent()
+    {
+        return $this->hasMany(TradeRequest::class, 'sender_id');
+    }
+
+    public function tradesReceived()
+    {
+        return $this->hasMany(TradeRequest::class, 'receiver_id');
+    }
+
+
     /**
      * @return bool
      */

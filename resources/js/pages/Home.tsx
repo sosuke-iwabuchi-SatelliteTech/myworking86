@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { router } from "@inertiajs/react";
 import WelcomeScreen from "../components/WelcomeScreen";
 import QuizScreen from "../components/QuizScreen";
 import ResultScreen from "../components/ResultScreen";
@@ -205,6 +206,10 @@ export default function Home() {
         setIsServerFailureModalOpen(false);
     };
 
+    const handleGoToTrade = () => {
+        router.visit('/trades');
+    };
+
     return (
         <div className="flex flex-col items-center pt-1 min-h-screen bg-blue-50">
             <div className={`w-full p-6 ${screen === 'quiz' ? 'max-w-7xl' : 'max-w-md'}`}>
@@ -221,6 +226,7 @@ export default function Home() {
                         onGoToSettings={handleGoToSettings}
                         onGoToGacha={handleGoToGacha}
                         onGoToPrizeList={handleGoToPrizeList}
+                        onGoToTrade={handleGoToTrade}
                         userProfile={userProfile}
                         onOpenUserSwitch={handleOpenUserSwitch}
                     />

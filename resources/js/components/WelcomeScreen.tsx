@@ -40,6 +40,10 @@ interface WelcomeScreenProps {
    * 景品一覧画面へ遷移するボタンがクリックされたときに呼び出されるコールバック関数
    */
   onGoToPrizeList: () => void;
+  /**
+   * トレード画面へ遷移するボタンがクリックされたときに呼び出されるコールバック関数
+   */
+  onGoToTrade: () => void;
 }
 
 /**
@@ -56,6 +60,7 @@ export default function WelcomeScreen({
   userProfile,
   onOpenUserSwitch,
   onGoToPrizeList,
+  onGoToTrade,
 }: WelcomeScreenProps) {
   const [selectedGrade, setSelectedGrade] = useState<number | null>(null);
 
@@ -94,6 +99,12 @@ export default function WelcomeScreen({
           🏆 けいひん
         </button>
       </div>
+      <button
+        onClick={onGoToTrade}
+        className="w-full mt-4 bg-green-100 hover:bg-green-200 text-green-600 font-black text-xl py-4 rounded-2xl shadow-[0_6px_0_rgb(134,239,172)] active:shadow-[0_0px_0_rgb(134,239,172)] active:translate-y-[6px] transition-all"
+      >
+        🤝 トレード
+      </button>
     </div>
   );
 
