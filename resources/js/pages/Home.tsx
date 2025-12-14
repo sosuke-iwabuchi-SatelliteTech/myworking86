@@ -1,4 +1,6 @@
+import axios from 'axios';
 import { useState, useEffect } from "react";
+import { router } from "@inertiajs/react";
 import WelcomeScreen from "../components/WelcomeScreen";
 import QuizScreen from "../components/QuizScreen";
 import ResultScreen from "../components/ResultScreen";
@@ -56,12 +58,25 @@ export default function Home() {
     const [quizKey, setQuizKey] = useState(0);
     const [earnedPoints, setEarnedPoints] = useState<number | null>(null);
     const [isServerFailureModalOpen, setIsServerFailureModalOpen] = useState(false);
+    const [pendingTradeCount, setPendingTradeCount] = useState(0);
+    // Initialize isRelogging to true if we have a userProfile (expecting auto-login), false otherwise
+    const [isRelogging, setIsRelogging] = useState<boolean>(() => !!getUserProfile());
 
     useEffect(() => {
         // Track user properties if profile is loaded on mount
         if (userProfile) {
             setUserProperties(userProfile.nickname, String(userProfile.grade));
-            loginUser(userProfile.id, userProfile.nickname, userProfile.grade).catch((e) => console.error("Auto-login failed", e));
+            loginUser(userProfile.id, userProfile.nickname, userProfile.grade)
+                .then(() => {
+                    // Fetch pending trade count after successful login
+                    axios.get('/api/trades/pending-count').then(res => {
+                        setPendingTradeCount(res.data.count);
+                    }).catch(console.error);
+                })
+                .catch((e) => console.error("Auto-login failed", e))
+                .finally(() => setIsRelogging(false));
+        } else {
+            setIsRelogging(false);
         }
     }, [userProfile]);
 
@@ -205,6 +220,10 @@ export default function Home() {
         setIsServerFailureModalOpen(false);
     };
 
+    const handleGoToTrade = () => {
+        router.visit('/trades');
+    };
+
     return (
         <div className="flex flex-col items-center pt-1 min-h-screen bg-blue-50">
             <div className={`w-full p-6 ${screen === 'quiz' ? 'max-w-7xl' : 'max-w-md'}`}>
@@ -221,8 +240,11 @@ export default function Home() {
                         onGoToSettings={handleGoToSettings}
                         onGoToGacha={handleGoToGacha}
                         onGoToPrizeList={handleGoToPrizeList}
+                        onGoToTrade={handleGoToTrade}
                         userProfile={userProfile}
                         onOpenUserSwitch={handleOpenUserSwitch}
+                        pendingTradeCount={pendingTradeCount}
+                        isRelogging={isRelogging}
                     />
                 )}
                 {screen === "history" && (

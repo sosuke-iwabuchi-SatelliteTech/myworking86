@@ -6,11 +6,13 @@ use App\Http\Controllers\Api\PointController;
 use App\Http\Controllers\Api\UserPrizeController;
 use App\Http\Controllers\Api\GachaController;
 use App\Http\Controllers\Api\PrizeController as ApiPrizeController;
+use App\Http\Controllers\Api\TradeController;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\PrizeController as WebPrizeController;
 use App\Http\Controllers\Web\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Web\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Web\TradeController as WebTradeController;
 
 Route::post('/api/user/login', [ApiUserController::class, 'login']);
 Route::post('/api/user', [ApiUserController::class, 'store']);
@@ -21,13 +23,25 @@ Route::middleware('auth')->prefix('api')->group(function () {
 
     Route::post('user/prizes', [UserPrizeController::class, 'store']);
     Route::get('user/prizes', [UserPrizeController::class, 'index']);
+    Route::get('user/prizes/tradable', [UserPrizeController::class, 'tradable']);
+    Route::get('users/{user}/prizes/tradable', [UserPrizeController::class, 'userTradable']);
 
     // Gacha Routes
     Route::get('gacha/status', [GachaController::class, 'status']);
     Route::post('gacha/pull', [GachaController::class, 'pull']);
 
     // Master Data Routes
+    // Master Data Routes
     Route::get('prizes', [ApiPrizeController::class, 'index']);
+
+    // Trade Routes
+    Route::post('trades', [TradeController::class, 'store']);
+    Route::get('trades', [TradeController::class, 'index']);
+    Route::get('trades/pending-count', [TradeController::class, 'pendingCount']);
+    Route::get('trades/{id}', [TradeController::class, 'show']);
+    Route::put('trades/{id}/accept', [TradeController::class, 'accept']);
+    Route::put('trades/{id}/reject', [TradeController::class, 'reject']);
+    Route::put('trades/{id}/cancel', [TradeController::class, 'cancel']);
 });
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -35,6 +49,11 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('prizes', [WebPrizeController::class, 'index'])->name('prizes.index');
+
+    // Web Trade Routes
+    Route::get('trades', [WebTradeController::class, 'index'])->name('trades.index');
+    Route::get('trades/create', [WebTradeController::class, 'create'])->name('trades.create');
+    Route::get('trades/{id}', [WebTradeController::class, 'show'])->name('trades.show');
 });
 
 

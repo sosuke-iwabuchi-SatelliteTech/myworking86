@@ -9,24 +9,21 @@ class UserRepository
 {
     /**
      * Get paginated users with search and sort options.
-     *
-     * @param string|null $search
-     * @param string $sort
-     * @param string $direction
-     * @param int $perPage
-     * @return LengthAwarePaginator
      */
     public function getPaginatedUsers(?string $search = null, string $sort = 'created_at', string $direction = 'desc', int $perPage = 50): LengthAwarePaginator
     {
         $query = User::select('users.*');
-        // Note: select users.* to avoid collision if we join, though 'with' usually executes separately. 
+        // Note: select users.* to avoid collision if we join, though 'with' usually executes separately.
         // For orderBy on related table, we usually need a join.
+
+        // Filter to show only regular users (exclude admins)
+        $query->where('users.role', User::ROLE_USER);
 
         if ($sort === 'points') {
             $query->leftJoin('user_points', 'users.id', '=', 'user_points.user_id')
                 ->select('users.*', 'user_points.points as points_val') // Select points to order by
                 ->orderBy('user_points.points', $direction);
-        } else if (in_array($sort, ['name', 'email', 'grade', 'id', 'created_at', 'last_login_at'])) {
+        } elseif (in_array($sort, ['name', 'email', 'grade', 'id', 'created_at', 'last_login_at'])) {
             $query->orderBy($sort, $direction);
         }
 

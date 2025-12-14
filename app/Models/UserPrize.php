@@ -20,4 +20,14 @@ class UserPrize extends Model
     protected $casts = [
         'obtained_at' => 'datetime',
     ];
+
+    public function prize()
+    {
+        return $this->belongsTo(Prize::class);
+    }
+
+    public function tradeRequestItems()
+    {
+        return $this->hasMany(TradeRequestItem::class);
+    }
 }

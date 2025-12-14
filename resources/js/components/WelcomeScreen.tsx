@@ -40,6 +40,18 @@ interface WelcomeScreenProps {
    * 景品一覧画面へ遷移するボタンがクリックされたときに呼び出されるコールバック関数
    */
   onGoToPrizeList: () => void;
+  /**
+   * トレード画面へ遷移するボタンがクリックされたときに呼び出されるコールバック関数
+   */
+  onGoToTrade: () => void;
+  /**
+   * 保留中のトレード申請数
+   */
+  pendingTradeCount?: number;
+  /**
+   * 自動再ログイン中かどうか
+   */
+  isRelogging?: boolean;
 }
 
 /**
@@ -53,21 +65,24 @@ export default function WelcomeScreen({
   hasHistory,
   onGoToSettings,
   onGoToGacha,
+  onGoToPrizeList,
+  onGoToTrade,
   userProfile,
   onOpenUserSwitch,
-  onGoToPrizeList,
+  pendingTradeCount = 0,
+  isRelogging = false,
 }: WelcomeScreenProps) {
   const [selectedGrade, setSelectedGrade] = useState<number | null>(null);
 
   const gradeSelection = (
     <div className="space-y-4">
-      {GRADES.map((grade) => (
+      {GRADES.map((g) => (
         <button
-          key={grade.grade}
-          onClick={() => setSelectedGrade(grade.grade)}
+          key={g.grade}
+          onClick={() => setSelectedGrade(g.grade)}
           className="w-full bg-brand-yellow hover:bg-yellow-300 text-slate-800 font-black text-2xl py-4 rounded-2xl shadow-[0_6px_0_rgb(217,179,16)] active:shadow-[0_0px_0_rgb(217,179,16)] active:translate-y-[6px] transition-all"
         >
-          {grade.name}
+          {g.name}
         </button>
       ))}
       <button
@@ -80,6 +95,7 @@ export default function WelcomeScreen({
       >
         履歴を見る
       </button>
+
       <div className="flex gap-4">
         <button
           onClick={onGoToGacha}
@@ -94,6 +110,19 @@ export default function WelcomeScreen({
           🏆 けいひん
         </button>
       </div>
+
+      <button
+        onClick={isRelogging ? undefined : onGoToTrade}
+        disabled={isRelogging}
+        className={`w-full mt-4 bg-green-100 hover:bg-green-200 text-green-600 font-black text-xl py-4 rounded-2xl shadow-[0_6px_0_rgb(134,239,172)] active:shadow-[0_0px_0_rgb(134,239,172)] active:translate-y-[6px] transition-all relative ${isRelogging ? 'opacity-50 cursor-not-allowed' : ''}`}
+      >
+        🤝 トレード
+        {!isRelogging && pendingTradeCount > 0 && (
+          <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold w-6 h-6 flex items-center justify-center rounded-full border-2 border-white">
+            {pendingTradeCount}
+          </span>
+        )}
+      </button>
     </div>
   );
 
