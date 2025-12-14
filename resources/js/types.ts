@@ -282,4 +282,5 @@ export interface GachaItem {
   rarity: GachaRarity;
   description: string;
   imageUrl?: string; // Optional for now, we'll use emojis/placeholders
+  isNew?: boolean;
 }
