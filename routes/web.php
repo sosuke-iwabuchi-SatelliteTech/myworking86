@@ -42,6 +42,8 @@ Route::middleware('auth')->prefix('api')->group(function () {
     Route::put('trades/{id}/accept', [TradeController::class, 'accept']);
     Route::put('trades/{id}/reject', [TradeController::class, 'reject']);
     Route::put('trades/{id}/cancel', [TradeController::class, 'cancel']);
+
+    Route::get('user/trade-partners', [TradeController::class, 'partners']);
 });
 
 Route::get('/', [HomeController::class, 'index'])->name('home');

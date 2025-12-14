@@ -245,6 +245,15 @@ export default function TradeCreate({ initialTargetId }: Props) {
         ? `${window.location.origin}/trades/create?target_id=${auth.user.id}`
         : ''; // Fallback for SSR
 
+    // Past Partners
+    const [pastPartners, setPastPartners] = useState<any[]>([]);
+
+    useEffect(() => {
+        axios.get('/api/user/trade-partners')
+            .then(res => setPastPartners(res.data))
+            .catch(e => console.error("Failed to load partners", e));
+    }, []);
+
     return (
         <AppLayout breadcrumbs={[{ title: 'こうかんQR', href: '/trades/create' }]}>
             <Head title="こうかんQR" />
@@ -256,6 +265,29 @@ export default function TradeCreate({ initialTargetId }: Props) {
                     </div>
                     <p className="text-sm text-gray-500">おともだちに スキャンしてもらってね</p>
                 </div>
+
+                {pastPartners.length > 0 && (
+                    <div className="bg-white p-6 rounded-lg shadow mb-6">
+                        <h2 className="text-lg font-bold mb-4">さいきん トレードした おともだち</h2>
+                        <div className="grid grid-cols-2 gap-4">
+                            {pastPartners.map(partner => (
+                                <button
+                                    key={partner.id}
+                                    onClick={() => handleFoundId(partner.id)}
+                                    className="p-4 border rounded-lg hover:bg-gray-50 flex flex-col items-center"
+                                >
+                                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-2">
+                                        {/* Avatar placeholder if needed, or initial */}
+                                        <span className="text-xl font-bold text-blue-600">
+                                            {partner.name?.charAt(0) || '?'}
+                                        </span>
+                                    </div>
+                                    <div className="font-bold text-gray-800">{partner.name}</div>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
 
                 {isScanning ? (
                     <div className="bg-white p-4 rounded-lg shadow">
