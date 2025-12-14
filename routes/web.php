@@ -12,7 +12,7 @@ use App\Http\Controllers\Web\PrizeController as WebPrizeController;
 use App\Http\Controllers\Web\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Web\Admin\UserController as AdminUserController;
 
-Route::post('/login', [ApiUserController::class, 'login']);
+Route::post('/api/user/login', [ApiUserController::class, 'login']);
 Route::post('/api/user', [ApiUserController::class, 'store']);
 
 Route::middleware('auth')->prefix('api')->group(function () {
@@ -32,13 +32,13 @@ Route::middleware('auth')->prefix('api')->group(function () {
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('prizes', [WebPrizeController::class, 'index'])->name('prizes.index');
 });
 
 
-Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::get('users', [AdminUserController::class, 'index'])->name('users.index');
     Route::put('users/{user}/points', [AdminUserController::class, 'updatePoints'])->name('users.updatePoints');

@@ -15,6 +15,9 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasApiTokens, HasFactory, HasUuids, Notifiable, TwoFactorAuthenticatable;
 
+    const ROLE_USER = 'user';
+    const ROLE_ADMIN = 'admin';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -26,6 +29,7 @@ class User extends Authenticatable
         'email',
         'password',
         'grade',
+        'role',
         'last_login_at',
     ];
 
@@ -73,5 +77,21 @@ class User extends Authenticatable
     public function userPoint()
     {
         return $this->hasOne(UserPoint::class);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === self::ROLE_ADMIN;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUser(): bool
+    {
+        return $this->role === self::ROLE_USER;
     }
 }
