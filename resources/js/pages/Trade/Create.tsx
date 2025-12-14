@@ -33,6 +33,13 @@ export default function TradeCreate({ initialTargetId }: Props) {
     const [selectedRequestIds, setSelectedRequestIds] = useState<string[]>([]);
     const [message, setMessage] = useState('');
     const [submitting, setSubmitting] = useState(false);
+    const [pastPartners, setPastPartners] = useState<any[]>([]);
+
+    useEffect(() => {
+        axios.get('/api/user/trade-partners')
+            .then(res => setPastPartners(res.data))
+            .catch(e => console.error("Failed to load partners", e));
+    }, []);
 
     useEffect(() => {
         if (targetId) {
@@ -245,14 +252,6 @@ export default function TradeCreate({ initialTargetId }: Props) {
         ? `${window.location.origin}/trades/create?target_id=${auth.user.id}`
         : ''; // Fallback for SSR
 
-    // Past Partners
-    const [pastPartners, setPastPartners] = useState<any[]>([]);
-
-    useEffect(() => {
-        axios.get('/api/user/trade-partners')
-            .then(res => setPastPartners(res.data))
-            .catch(e => console.error("Failed to load partners", e));
-    }, []);
 
     return (
         <AppLayout breadcrumbs={[{ title: 'こうかんQR', href: '/trades/create' }]}>
