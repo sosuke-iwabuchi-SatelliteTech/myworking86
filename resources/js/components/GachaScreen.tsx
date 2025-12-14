@@ -51,6 +51,31 @@ const GachaCapsule: React.FC<{ type: VisualType; color?: string; className?: str
   );
 };
 
+// New Badge Component
+const NewBadge: React.FC = () => (
+  <div className="absolute top-2 right-2 rotate-12 z-50 animate-bounce-slow">
+    <div className="relative">
+      {/* Background shape */}
+      <svg width="100" height="80" viewBox="0 0 100 80" className="drop-shadow-lg">
+        <path
+          d="M10,40 Q20,10 50,10 Q80,10 90,40 Q100,70 50,70 Q0,70 10,40 Z"
+          fill="white"
+          s-trokeWidth="3"
+          className="animate-pulse-slow"
+        />
+      </svg>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <span className="text-red-500 font-black text-2xl tracking-tighter transform -rotate-6" style={{ fontFamily: '"Comic Sans MS", "Chalkboard SE", sans-serif' }}>
+          New!
+        </span>
+      </div>
+      {/* Sparkles around badge */}
+      <div className="absolute -top-2 left-0 text-yellow-400 text-sm animate-sparkle">✨</div>
+      <div className="absolute bottom-0 right-0 text-yellow-400 text-sm animate-sparkle" style={{ animationDelay: '0.5s' }}>✨</div>
+    </div>
+  </div>
+);
+
 const GachaScreen: React.FC<GachaScreenProps> = ({ onBack }) => {
   const [status, setStatus] = useState<GachaState>('idle');
   const [result, setResult] = useState<GachaItem | null>(null);
@@ -89,7 +114,10 @@ const GachaScreen: React.FC<GachaScreenProps> = ({ onBack }) => {
       const res = await axios.post('/api/gacha/pull');
       const data = res.data;
 
-      const item: GachaItem = data.result;
+      const item: GachaItem = {
+        ...data.result,
+        isNew: data.isNew
+      };
       setResult(item);
       setPoints(data.points);
       setIsFreeAvailable(data.isFreeAvailable);
@@ -139,6 +167,7 @@ const GachaScreen: React.FC<GachaScreenProps> = ({ onBack }) => {
       setLoading(false); // Reset loading only on error, otherwise animation handles state flow?
       // Actually, if we start animation, we are technically "busy" until reset.
       // But `loading` blocks the request.
+      // We can set loading false here, as `status !== 'idle'` will block button.
       // We can set loading false here, as `status !== 'idle'` will block button.
     } finally {
       // If successful, status changes to 'dropping', which disables button.
@@ -320,6 +349,9 @@ const GachaScreen: React.FC<GachaScreenProps> = ({ onBack }) => {
 
         {status === 'result' && result && (
           <div className={`relative w-full max-w-sm aspect-square flex flex-col items-center justify-center rounded-2xl shadow-2xl p-6 animate-pop-out overflow-hidden border-4 border-white ${getRarityColor(result.rarity)}`}>
+            {/* New Badge */}
+            {result.isNew && <NewBadge />}
+
             {getResultEffect(result.rarity)}
 
             <div className="z-10 text-center">

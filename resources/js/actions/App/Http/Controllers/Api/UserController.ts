@@ -2,7 +2,7 @@ import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFo
 /**
 * @see \App\Http\Controllers\Api\UserController::login
 * @see app/Http/Controllers/Api/UserController.php:36
-* @route '/login'
+* @route '/api/user/login'
 */
 export const login = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: login.url(options),
@@ -11,13 +11,13 @@ export const login = (options?: RouteQueryOptions): RouteDefinition<'post'> => (
 
 login.definition = {
     methods: ["post"],
-    url: '/login',
+    url: '/api/user/login',
 } satisfies RouteDefinition<["post"]>
 
 /**
 * @see \App\Http\Controllers\Api\UserController::login
 * @see app/Http/Controllers/Api/UserController.php:36
-* @route '/login'
+* @route '/api/user/login'
 */
 login.url = (options?: RouteQueryOptions) => {
     return login.definition.url + queryParams(options)
@@ -26,7 +26,7 @@ login.url = (options?: RouteQueryOptions) => {
 /**
 * @see \App\Http\Controllers\Api\UserController::login
 * @see app/Http/Controllers/Api/UserController.php:36
-* @route '/login'
+* @route '/api/user/login'
 */
 login.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: login.url(options),
@@ -36,7 +36,7 @@ login.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 /**
 * @see \App\Http\Controllers\Api\UserController::login
 * @see app/Http/Controllers/Api/UserController.php:36
-* @route '/login'
+* @route '/api/user/login'
 */
 const loginForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: login.url(options),
@@ -46,7 +46,7 @@ const loginForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => 
 /**
 * @see \App\Http\Controllers\Api\UserController::login
 * @see app/Http/Controllers/Api/UserController.php:36
-* @route '/login'
+* @route '/api/user/login'
 */
 loginForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
     action: login.url(options),

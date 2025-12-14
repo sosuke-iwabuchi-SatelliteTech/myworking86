@@ -30,3 +30,4 @@ yarn-error.log
 /.vscode
 test_output.txt
 /bootstrap/ssr
+*.log

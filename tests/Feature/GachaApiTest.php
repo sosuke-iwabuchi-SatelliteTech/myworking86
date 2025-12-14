@@ -80,4 +80,40 @@ class GachaApiTest extends TestCase
         $response->assertStatus(400);
         $this->assertEquals('ポイントが足りません', $response->json('message'));
     }
+
+    public function test_gacha_pull_returns_is_new_correctly()
+    {
+        Carbon::setTestNow(Carbon::today());
+        $user = User::factory()->create();
+        UserPoint::create(['user_id' => $user->id, 'points' => 300]); // For second pull
+        $this->actingAs($user);
+
+        // Mock GachaService to return a fixed item
+        $mockItem = [
+            'id' => 'prize-123',
+            'name' => 'Test Prize',
+            'rarity' => 'UR',
+            'imageUrl' => '/images/test.png',
+        ];
+
+        $this->mock(\App\Services\GachaService::class, function ($mock) use ($mockItem) {
+            $mock->shouldReceive('pull')->andReturn($mockItem);
+        });
+
+        // First pull (Free)
+        $response = $this->postJson('/api/gacha/pull');
+        $response->assertStatus(200)
+            ->assertJson([
+                'result' => $mockItem,
+                'isNew' => true,
+            ]);
+
+        // Second pull (Points)
+        $response = $this->postJson('/api/gacha/pull');
+        $response->assertStatus(200)
+            ->assertJson([
+                'result' => $mockItem,
+                'isNew' => false,
+            ]);
+    }
 }

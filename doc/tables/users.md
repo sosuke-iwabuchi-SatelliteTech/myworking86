@@ -16,3 +16,4 @@
 | 2段階認証リカバリコード | two_factor_recovery_codes | TEXT | Yes | | |
 | 2段階認証確認日時 | two_factor_confirmed_at | TIMESTAMP | Yes | | |
 | 学年 | grade | INTEGER | Yes | | 学年 (1-6) |
+| 役割 | role | VARCHAR(255) | No | | ユーザー役割 (user/admin) デフォルト: user |

@@ -95,6 +95,12 @@ class GachaController extends Controller
                 // Pull Item
                 $item = $this->gachaService->pull();
 
+                // Check if user already owns this prize (before creating the new record)
+                $alreadyOwned = UserPrize::where('user_id', $user->id)
+                    ->where('prize_id', $item['id'])
+                    ->exists();
+                $isNew = !$alreadyOwned;
+
                 // Save History
                 GachaHistory::create([
                     'user_id' => $user->id,
@@ -113,9 +119,8 @@ class GachaController extends Controller
 
                 return [
                     'result' => $item,
-                    'points' => $userPoint->points, // Refreshed automatically by decrement? No, need to access model.
-                    // Decrement updates DB. Model instance needs refresh?
-                    // $userPoint->refresh() is safer.
+                    'points' => $userPoint->points,
+                    'isNew' => $isNew,
                 ];
             });
 
@@ -126,6 +131,7 @@ class GachaController extends Controller
                 'result' => $result['result'],
                 'points' => $userPoint->points,
                 'isFreeAvailable' => false,
+                'isNew' => $result['isNew'],
             ]);
         } catch (\Exception $e) {
             if ($e->getMessage() === 'Not enough points') {
