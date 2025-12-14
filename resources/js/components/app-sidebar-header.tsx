@@ -13,6 +13,11 @@ export function AppSidebarHeader({
                 <SidebarTrigger className="-ml-1" />
                 <Breadcrumbs breadcrumbs={breadcrumbs} />
             </div>
-        </header>
+            <div className="ml-auto">
+                <a href="/" className="text-sm font-bold bg-brand-orange text-white px-3 py-1.5 rounded-full hover:bg-orange-600 transition shadow-sm">
+                    クイズTOP
+                </a>
+            </div>
+        </header >
     );
 }

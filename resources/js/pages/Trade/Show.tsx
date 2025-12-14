@@ -78,88 +78,104 @@ function WrappedContent({ trade, onAction, processing }: any) {
     const offeredItems = trade.items.filter((i: any) => i.type === 'offer');
     const requestedItems = trade.items.filter((i: any) => i.type === 'request');
 
+    const statusMap: Record<string, string> = {
+        pending: 'いらいちゅう',
+        accepted: 'せいりつ',
+        rejected: 'ことわられた',
+        cancelled: 'とりけし',
+        completed: 'かんりょう'
+    };
+
+    const statusColors: Record<string, string> = {
+        pending: 'bg-yellow-100 text-yellow-800',
+        accepted: 'bg-blue-100 text-blue-800',
+        rejected: 'bg-red-100 text-red-800',
+        cancelled: 'bg-gray-100 text-gray-800',
+        completed: 'bg-green-100 text-green-800'
+    };
+
     return (
-        <AppLayout breadcrumbs={[{ title: 'こうかんの けっか', href: `/trades/${trade.id}` }]}>
-            <Head title={`こうかん #${trade.id.substring(0, 8)}`} />
+        <AppLayout breadcrumbs={[{ title: 'こうかん', href: '/trades' }, { title: 'こうかんの けっか', href: '#' }]}>
+            <Head title="こうかんの けっか" />
 
-            <div className="py-12 max-w-4xl mx-auto px-4">
-                <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div className="p-6">
-                        <div className="flex justify-between mb-8 border-b pb-4">
-                            <div>
-                                <h2 className="text-2xl font-bold mb-1">
-                                    {isSender ? trade.receiver?.name : trade.sender.name}さんとの こうかん
-                                </h2>
-                                <p className="text-gray-500 text-sm">つくったひ: {new Date(trade.created_at).toLocaleString()}</p>
-                            </div>
-                            <div className="text-xl font-bold text-gray-700 uppercase tracking-widest">
-                                {trade.status}
+            <div className="py-12 max-w-2xl mx-auto px-4">
+                <div className="bg-white p-6 rounded-lg shadow">
+                    <div className="flex justify-between items-start mb-6">
+                        <div>
+                            <h2 className="text-xl font-bold mb-1">
+                                {trade.sender.name}さんとの こうかん
+                            </h2>
+                            <div className="text-sm text-gray-500">
+                                つくったひ: {new Date(trade.created_at).toLocaleString()}
                             </div>
                         </div>
+                        <span className={`px-3 py-1 rounded-full text-sm font-bold ${statusColors[trade.status] || 'bg-gray-100'}`}>
+                            {statusMap[trade.status] || trade.status}
+                        </span>
+                    </div>
 
-                        {trade.message && (
-                            <div className="bg-gray-50 p-4 rounded mb-8">
-                                <h3 className="font-bold text-sm text-gray-500 mb-1">メッセージ</h3>
-                                <p>{trade.message}</p>
-                            </div>
-                        )}
+                    {trade.message && (
+                        <div className="bg-gray-50 p-4 rounded mb-8">
+                            <h3 className="font-bold text-sm text-gray-500 mb-1">メッセージ</h3>
+                            <p>{trade.message}</p>
+                        </div>
+                    )}
 
-                        <div className="grid md:grid-cols-2 gap-8 mb-8">
-                            <div>
-                                <h3 className="font-bold text-lg mb-4 text-blue-600">
-                                    {trade.sender.name}さんが 出すもの:
-                                </h3>
-                                <div className="space-y-4">
-                                    {offeredItems.map((item: any) => (
-                                        <ItemCard key={item.id} item={item} />
-                                    ))}
-                                </div>
-                            </div>
-                            <div>
-                                <h3 className="font-bold text-lg mb-4 text-green-600">
-                                    {trade.receiver?.name || 'だれか'}さんが 出すもの:
-                                </h3>
-                                <div className="space-y-4">
-                                    {requestedItems.length > 0 ? requestedItems.map((item: any) => (
-                                        <ItemCard key={item.id} item={item} />
-                                    )) : (
-                                        <p className="text-gray-400 italic">指定なし (プレゼント)</p>
-                                    )}
-                                </div>
+                    <div className="grid md:grid-cols-2 gap-8 mb-8">
+                        <div>
+                            <h3 className="font-bold text-lg mb-4 text-blue-600">
+                                {trade.sender.name}さんが 出すもの:
+                            </h3>
+                            <div className="space-y-4">
+                                {offeredItems.map((item: any) => (
+                                    <ItemCard key={item.id} item={item} />
+                                ))}
                             </div>
                         </div>
+                        <div>
+                            <h3 className="font-bold text-lg mb-4 text-green-600">
+                                {trade.receiver?.name || 'だれか'}さんが 出すもの:
+                            </h3>
+                            <div className="space-y-4">
+                                {requestedItems.length > 0 ? requestedItems.map((item: any) => (
+                                    <ItemCard key={item.id} item={item} />
+                                )) : (
+                                    <p className="text-gray-400 italic">指定なし (プレゼント)</p>
+                                )}
+                            </div>
+                        </div>
+                    </div>
 
-                        {/* Actions */}
-                        {trade.status === 'pending' && (
-                            <div className="flex justify-end gap-4 border-t pt-6">
-                                {isSender && (
+                    {/* Actions */}
+                    {trade.status === 'pending' && (
+                        <div className="flex justify-end gap-4 border-t pt-6">
+                            {isSender && (
+                                <ActionButton
+                                    label="とりけす"
+                                    onClick={() => onAction('cancel')}
+                                    color="red"
+                                    disabled={processing}
+                                />
+                            )}
+                            {isReceiver && (
+                                <>
                                     <ActionButton
-                                        label="とりけす"
-                                        onClick={() => onAction('cancel')}
+                                        label="ことわる"
+                                        onClick={() => onAction('reject')}
                                         color="red"
+                                        outline
                                         disabled={processing}
                                     />
-                                )}
-                                {isReceiver && (
-                                    <>
-                                        <ActionButton
-                                            label="ことわる"
-                                            onClick={() => onAction('reject')}
-                                            color="red"
-                                            outline
-                                            disabled={processing}
-                                        />
-                                        <ActionButton
-                                            label="こうかんする！"
-                                            onClick={() => onAction('accept')}
-                                            color="green"
-                                            disabled={processing}
-                                        />
-                                    </>
-                                )}
-                            </div>
-                        )}
-                    </div>
+                                    <ActionButton
+                                        label="こうかんする！"
+                                        onClick={() => onAction('accept')}
+                                        color="green"
+                                        disabled={processing}
+                                    />
+                                </>
+                            )}
+                        </div>
+                    )}
                 </div>
             </div>
         </AppLayout>

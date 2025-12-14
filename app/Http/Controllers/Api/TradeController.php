@@ -36,6 +36,18 @@ class TradeController extends Controller
     }
 
     /**
+     * Get the count of pending trades for the current user (received).
+     */
+    public function pendingCount()
+    {
+        $count = TradeRequest::where('receiver_id', Auth::id())
+            ->where('status', TradeRequest::STATUS_PENDING)
+            ->count();
+
+        return response()->json(['count' => $count]);
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)

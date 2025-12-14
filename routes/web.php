@@ -37,6 +37,7 @@ Route::middleware('auth')->prefix('api')->group(function () {
     // Trade Routes
     Route::post('trades', [TradeController::class, 'store']);
     Route::get('trades', [TradeController::class, 'index']);
+    Route::get('trades/pending-count', [TradeController::class, 'pendingCount']);
     Route::get('trades/{id}', [TradeController::class, 'show']);
     Route::put('trades/{id}/accept', [TradeController::class, 'accept']);
     Route::put('trades/{id}/reject', [TradeController::class, 'reject']);
