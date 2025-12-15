@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import QRCode from 'react-qr-code';
 // import { Html5QrcodeScanner } from 'html5-qrcode'; // Dynamic import better for SSR
 import axios from 'axios';
+import PrizeSelector from '@/components/PrizeSelector';
 
 type Props = {
     initialTargetId?: string;
@@ -32,6 +33,13 @@ export default function TradeCreate({ initialTargetId }: Props) {
     const [selectedRequestIds, setSelectedRequestIds] = useState<string[]>([]);
     const [message, setMessage] = useState('');
     const [submitting, setSubmitting] = useState(false);
+    const [pastPartners, setPastPartners] = useState<any[]>([]);
+
+    useEffect(() => {
+        axios.get('/api/user/trade-partners')
+            .then(res => setPastPartners(res.data))
+            .catch(e => console.error("Failed to load partners", e));
+    }, []);
 
     useEffect(() => {
         if (targetId) {
@@ -191,56 +199,25 @@ export default function TradeCreate({ initialTargetId }: Props) {
 
                         <form onSubmit={handleSubmit}>
                             <div className="mb-4">
-                                <label className="block text-sm font-medium text-gray-700 mb-2">あげる けいひんを えらんでね</label>
-                                <div className="grid grid-cols-2 gap-2 max-h-60 overflow-y-auto border p-2 rounded">
-                                    {myPrizes.map(p => (
-                                        <div
-                                            key={p.id}
-                                            onClick={() => toggleOffer(p.id)}
-                                            className={`p-2 border rounded cursor-pointer flex items-center gap-2 ${selectedOfferIds.includes(p.id) ? 'border-blue-500 bg-blue-50' : ''}`}
-                                        >
-                                            <input
-                                                type="checkbox"
-                                                checked={selectedOfferIds.includes(p.id)}
-                                                readOnly
-                                                className="rounded text-blue-600"
-                                            />
-                                            <div className="text-sm">
-                                                <div className="font-bold">{p.prize.name}</div>
-                                                <div className="text-xs text-gray-500">{p.prize.rarity}</div>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
+                                <PrizeSelector
+                                    label="あげる けいひんを えらんでね"
+                                    prizes={myPrizes}
+                                    selectedIds={selectedOfferIds}
+                                    onToggle={toggleOffer}
+                                    color="blue"
+                                    emptyMessage="トレードできる けいひんが ありません"
+                                />
                             </div>
 
-
                             <div className="mb-4">
-                                <label className="block text-sm font-medium text-gray-700 mb-2">あいてから もらうもの (ほしいもの)</label>
-                                {targetPrizes.length > 0 ? (
-                                    <div className="grid grid-cols-2 gap-2 max-h-60 overflow-y-auto border p-2 rounded">
-                                        {targetPrizes.map(p => (
-                                            <div
-                                                key={p.id}
-                                                onClick={() => toggleRequest(p.id)}
-                                                className={`p-2 border rounded cursor-pointer flex items-center gap-2 ${selectedRequestIds.includes(p.id) ? 'border-green-500 bg-green-50' : ''}`}
-                                            >
-                                                <input
-                                                    type="checkbox"
-                                                    checked={selectedRequestIds.includes(p.id)}
-                                                    readOnly
-                                                    className="rounded text-green-600"
-                                                />
-                                                <div className="text-sm">
-                                                    <div className="font-bold">{p.prize.name}</div>
-                                                    <div className="text-xs text-gray-500">{p.prize.rarity}</div>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <p className="text-sm text-gray-500">あいては トレードできる けいひんを もっていません</p>
-                                )}
+                                <PrizeSelector
+                                    label="あいてから もらうもの (ほしいもの)"
+                                    prizes={targetPrizes}
+                                    selectedIds={selectedRequestIds}
+                                    onToggle={toggleRequest}
+                                    color="green"
+                                    emptyMessage="あいては トレードできる けいひんを もっていません"
+                                />
                             </div>
 
                             <div className="mb-4">
@@ -275,6 +252,7 @@ export default function TradeCreate({ initialTargetId }: Props) {
         ? `${window.location.origin}/trades/create?target_id=${auth.user.id}`
         : ''; // Fallback for SSR
 
+
     return (
         <AppLayout breadcrumbs={[{ title: 'こうかんQR', href: '/trades/create' }]}>
             <Head title="こうかんQR" />
@@ -286,6 +264,29 @@ export default function TradeCreate({ initialTargetId }: Props) {
                     </div>
                     <p className="text-sm text-gray-500">おともだちに スキャンしてもらってね</p>
                 </div>
+
+                {pastPartners.length > 0 && (
+                    <div className="bg-white p-6 rounded-lg shadow mb-6">
+                        <h2 className="text-lg font-bold mb-4">さいきん トレードした おともだち</h2>
+                        <div className="grid grid-cols-2 gap-4">
+                            {pastPartners.map(partner => (
+                                <button
+                                    key={partner.id}
+                                    onClick={() => handleFoundId(partner.id)}
+                                    className="p-4 border rounded-lg hover:bg-gray-50 flex flex-col items-center"
+                                >
+                                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-2">
+                                        {/* Avatar placeholder if needed, or initial */}
+                                        <span className="text-xl font-bold text-blue-600">
+                                            {partner.name?.charAt(0) || '?'}
+                                        </span>
+                                    </div>
+                                    <div className="font-bold text-gray-800">{partner.name}</div>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
 
                 {isScanning ? (
                     <div className="bg-white p-4 rounded-lg shadow">

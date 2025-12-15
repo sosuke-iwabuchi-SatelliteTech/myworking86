@@ -263,4 +263,36 @@ class TradeController extends Controller
 
         return response()->json(['message' => 'Trade cancelled.']);
     }
+    /**
+     * Get list of users the current user has traded with.
+     */
+    public function partners()
+    {
+        $userId = Auth::id();
+
+        // Get Completed Trades involving user
+        $trades = TradeRequest::where('status', TradeRequest::STATUS_COMPLETED)
+            ->where(function ($q) use ($userId) {
+                $q->where('sender_id', $userId)
+                    ->orWhere('receiver_id', $userId);
+            })
+            ->with(['sender', 'receiver'])
+            ->latest()
+            ->get();
+
+        $partners = collect();
+
+        foreach ($trades as $trade) {
+            if ((string) $trade->sender_id === (string) $userId) {
+                $partners->push($trade->receiver);
+            } else {
+                $partners->push($trade->sender);
+            }
+        }
+
+        // Unique by ID and values
+        $uniquePartners = $partners->unique('id')->values();
+
+        return response()->json($uniquePartners);
+    }
 }
