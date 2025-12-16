@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use App\Http\Resources\TradeRequestResource;
 
 class TradeController extends Controller
 {
@@ -160,7 +161,7 @@ class TradeController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        return response()->json($trade);
+        return new TradeRequestResource($trade);
     }
 
     /**
