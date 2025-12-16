@@ -13,7 +13,7 @@ class DashboardTest extends TestCase
 
     public function test_admin_dashboard_can_be_rendered()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create(['role' => User::ROLE_ADMIN]);
 
         $response = $this->actingAs($user)
             ->get('/admin/dashboard');

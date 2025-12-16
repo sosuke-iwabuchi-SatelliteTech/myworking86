@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\UserPrize;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Http\Resources\UserPrizeResource;
 
 class UserPrizeController extends Controller
 {
@@ -61,7 +62,7 @@ class UserPrizeController extends Controller
             ->orderBy('obtained_at', 'desc')
             ->get();
 
-        return response()->json(['data' => $userPrizes]);
+        return UserPrizeResource::collection($userPrizes);
     }
 
     /**
@@ -69,11 +70,22 @@ class UserPrizeController extends Controller
      */
     public function userTradable($userId)
     {
+        $user = \App\Models\User::find($userId);
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
         $userPrizes = UserPrize::where('user_id', $userId)
             ->with('prize')
             ->orderBy('obtained_at', 'desc')
             ->get();
 
-        return response()->json(['data' => $userPrizes]);
+        return UserPrizeResource::collection($userPrizes)->additional([
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+            ]
+        ]);
     }
 }

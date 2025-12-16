@@ -88,4 +88,36 @@ class UserPrizeApiTest extends TestCase
 
         $this->getJson('/api/user/prizes')->assertStatus(401);
     }
+
+    public function test_user_tradable_returns_user_info_and_prizes()
+    {
+        $user = User::factory()->create(['name' => 'TargetUser']);
+        $observer = User::factory()->create();
+        $this->actingAs($observer);
+
+        UserPrize::factory()->create(['user_id' => $user->id, 'prize_id' => 'p1', 'rarity' => 'R']);
+
+        $response = $this->getJson("/api/users/{$user->id}/prizes/tradable");
+
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'data',
+                'user' => ['id', 'name']
+            ])
+            ->assertJsonPath('user.name', 'TargetUser')
+            ->assertJsonCount(1, 'data');
+    }
+
+    public function test_user_tradable_returns_404_if_user_not_found()
+    {
+        $observer = User::factory()->create();
+        $this->actingAs($observer);
+
+        // Using a UUID that definitely doesn't exist
+        $nonExistentId = (string) Str::uuid();
+
+        $response = $this->getJson("/api/users/{$nonExistentId}/prizes/tradable");
+
+        $response->assertStatus(404);
+    }
 }
