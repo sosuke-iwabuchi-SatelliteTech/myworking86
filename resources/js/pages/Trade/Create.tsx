@@ -14,7 +14,7 @@ type UserPrize = {
     id: string;
     prize: {
         name: string;
-        image_url: string;
+        imageUrl: string;
         rarity: string;
     };
 };
