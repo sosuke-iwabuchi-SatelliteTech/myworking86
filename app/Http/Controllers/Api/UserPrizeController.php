@@ -70,11 +70,22 @@ class UserPrizeController extends Controller
      */
     public function userTradable($userId)
     {
+        $user = \App\Models\User::find($userId);
+
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
         $userPrizes = UserPrize::where('user_id', $userId)
             ->with('prize')
             ->orderBy('obtained_at', 'desc')
             ->get();
 
-        return UserPrizeResource::collection($userPrizes);
+        return UserPrizeResource::collection($userPrizes)->additional([
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+            ]
+        ]);
     }
 }

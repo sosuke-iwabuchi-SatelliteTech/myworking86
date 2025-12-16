@@ -3,6 +3,7 @@ import { Head, usePage, router } from '@inertiajs/react'; // Corrected import
 import { useState, useEffect, useRef } from 'react';
 import QRCode from 'react-qr-code';
 // import { Html5QrcodeScanner } from 'html5-qrcode'; // Dynamic import better for SSR
+import type { Html5Qrcode } from 'html5-qrcode';
 import axios from 'axios';
 import PrizeSelector from '@/components/PrizeSelector';
 
@@ -20,11 +21,12 @@ type UserPrize = {
 };
 
 export default function TradeCreate({ initialTargetId }: Props) {
-    const { auth } = usePage().props as any;
+    const { auth } = usePage().props as unknown as { auth: { user: { id: string } } };
     const [targetId, setTargetId] = useState<string | null>(initialTargetId || null);
+    const [targetName, setTargetName] = useState<string | null>(null);
     const [isScanning, setIsScanning] = useState(false);
-    const [scannerError, setScannerError] = useState<string | null>(null);
-    const scannerRef = useRef<any>(null);
+    // const [scannerError, setScannerError] = useState<string | null>(null);
+    const scannerRef = useRef<Html5Qrcode | null>(null);
 
     // Form State
     const [myPrizes, setMyPrizes] = useState<UserPrize[]>([]);
@@ -33,7 +35,7 @@ export default function TradeCreate({ initialTargetId }: Props) {
     const [selectedRequestIds, setSelectedRequestIds] = useState<string[]>([]);
     const [message, setMessage] = useState('');
     const [submitting, setSubmitting] = useState(false);
-    const [pastPartners, setPastPartners] = useState<any[]>([]);
+    const [pastPartners, setPastPartners] = useState<{ id: string; name: string }[]>([]);
 
     useEffect(() => {
         axios.get('/api/user/trade-partners')
@@ -54,9 +56,13 @@ export default function TradeCreate({ initialTargetId }: Props) {
             // Load target user's prizes to request
             axios.get(`/api/users/${targetId}/prizes/tradable`).then(res => {
                 setTargetPrizes(res.data.data || []);
+                if (res.data.user) {
+                    setTargetName(res.data.user.name);
+                }
             }).catch(e => {
                 console.error("Failed to load target prizes", e);
                 setTargetPrizes([]);
+                setTargetName(null);
             });
         }
     }, [targetId]);
@@ -96,13 +102,13 @@ export default function TradeCreate({ initialTargetId }: Props) {
                                 console.error(e);
                             }
                         },
-                        (errorMessage: any) => {
+                        () => {
                             // parse error, ignore it.
                         }
                     );
                 } catch (err) {
                     console.error("Error starting scanner", err);
-                    setScannerError("カメラを 起動できませんでした");
+                    // setScannerError("カメラを 起動できませんでした");
                     setIsScanning(false);
                 }
             }
@@ -125,12 +131,19 @@ export default function TradeCreate({ initialTargetId }: Props) {
                 if (scanner.isScanning) {
                     scanner.stop()
                         .then(() => scanner.clear())
-                        .catch((err: any) => console.error("Cleanup error", err));
+                        .catch((err: unknown) => console.error("Cleanup error", err));
                 } else {
-                    scanner.clear().catch((err: any) => console.error("Cleanup clear error", err));
+                    (async () => {
+                        try {
+                            await scanner.clear();
+                        } catch (err) {
+                            console.error("Cleanup clear error", err);
+                        }
+                    })();
                 }
             }
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isScanning]);
 
     const handleFoundId = async (id: string) => {
@@ -143,7 +156,7 @@ export default function TradeCreate({ initialTargetId }: Props) {
             try {
                 // Try to stop, ignore if fails (e.g. not running)
                 await scannerRef.current.stop();
-            } catch (e) {
+            } catch {
                 // console.error("Stop error (likely not running)", e);
             }
 
@@ -169,8 +182,12 @@ export default function TradeCreate({ initialTargetId }: Props) {
                 message: message
             });
             router.visit('/trades');
-        } catch (error: any) {
-            alert('しんぱいです: ' + (error.response?.data?.message || 'エラーが おきました'));
+            router.visit('/trades');
+        } catch (error: unknown) {
+            const msg = axios.isAxiosError(error)
+                ? error.response?.data?.message
+                : 'エラーが おきました';
+            alert('しんぱいです: ' + (msg || 'エラーが おきました'));
         } finally {
             setSubmitting(false);
         }
@@ -195,7 +212,7 @@ export default function TradeCreate({ initialTargetId }: Props) {
                 <Head title="こうかんする" />
                 <div className="py-12 max-w-2xl mx-auto px-4">
                     <div className="bg-white p-6 rounded-lg shadow">
-                        <h2 className="text-xl font-bold mb-4">{targetId}さんに こうかんを おねがいする</h2>
+                        <h2 className="text-xl font-bold mb-4">{targetName || targetId}さんに こうかんを おねがいする</h2>
 
                         <form onSubmit={handleSubmit}>
                             <div className="mb-4">
