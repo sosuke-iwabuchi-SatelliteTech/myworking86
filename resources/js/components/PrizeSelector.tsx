@@ -5,7 +5,7 @@ export type TradePrize = {
     id: string;
     prize: {
         name: string;
-        image_url: string;
+        imageUrl: string;
         rarity: string;
         description?: string; // Optional as it might not always be present or needed
     };
@@ -162,8 +162,8 @@ export default function PrizeSelector({
 
                                     {/* Image */}
                                     <div className="w-16 h-16 mb-2 mt-1 bg-gray-100 rounded-full flex items-center justify-center overflow-hidden border">
-                                        {p.prize.image_url ? (
-                                            <img src={p.prize.image_url} alt={p.prize.name} className="w-full h-full object-cover" />
+                                        {p.prize.imageUrl ? (
+                                            <img src={p.prize.imageUrl} alt={p.prize.name} className="w-full h-full object-cover" />
                                         ) : (
                                             <span className="text-2xl">🎁</span>
                                         )}

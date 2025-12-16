@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\UserPrize;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Http\Resources\UserPrizeResource;
 
 class UserPrizeController extends Controller
 {
@@ -61,7 +62,7 @@ class UserPrizeController extends Controller
             ->orderBy('obtained_at', 'desc')
             ->get();
 
-        return response()->json(['data' => $userPrizes]);
+        return UserPrizeResource::collection($userPrizes);
     }
 
     /**
@@ -74,6 +75,6 @@ class UserPrizeController extends Controller
             ->orderBy('obtained_at', 'desc')
             ->get();
 
-        return response()->json(['data' => $userPrizes]);
+        return UserPrizeResource::collection($userPrizes);
     }
 }
