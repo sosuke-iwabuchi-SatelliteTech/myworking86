@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\Api\TradeController::store
-* @see app/Http/Controllers/Api/TradeController.php:53
+* @see Http/Controllers/Api/TradeController.php:53
 * @route '/api/trades'
 */
 export const store = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -16,7 +16,7 @@ store.definition = {
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::store
-* @see app/Http/Controllers/Api/TradeController.php:53
+* @see Http/Controllers/Api/TradeController.php:53
 * @route '/api/trades'
 */
 store.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ store.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::store
-* @see app/Http/Controllers/Api/TradeController.php:53
+* @see Http/Controllers/Api/TradeController.php:53
 * @route '/api/trades'
 */
 store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -35,7 +35,7 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::store
-* @see app/Http/Controllers/Api/TradeController.php:53
+* @see Http/Controllers/Api/TradeController.php:53
 * @route '/api/trades'
 */
 const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -45,7 +45,7 @@ const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => 
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::store
-* @see app/Http/Controllers/Api/TradeController.php:53
+* @see Http/Controllers/Api/TradeController.php:53
 * @route '/api/trades'
 */
 storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -57,7 +57,7 @@ store.form = storeForm
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::index
-* @see app/Http/Controllers/Api/TradeController.php:20
+* @see Http/Controllers/Api/TradeController.php:20
 * @route '/api/trades'
 */
 export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -72,7 +72,7 @@ index.definition = {
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::index
-* @see app/Http/Controllers/Api/TradeController.php:20
+* @see Http/Controllers/Api/TradeController.php:20
 * @route '/api/trades'
 */
 index.url = (options?: RouteQueryOptions) => {
@@ -81,7 +81,7 @@ index.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::index
-* @see app/Http/Controllers/Api/TradeController.php:20
+* @see Http/Controllers/Api/TradeController.php:20
 * @route '/api/trades'
 */
 index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -91,7 +91,7 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::index
-* @see app/Http/Controllers/Api/TradeController.php:20
+* @see Http/Controllers/Api/TradeController.php:20
 * @route '/api/trades'
 */
 index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -101,7 +101,7 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::index
-* @see app/Http/Controllers/Api/TradeController.php:20
+* @see Http/Controllers/Api/TradeController.php:20
 * @route '/api/trades'
 */
 const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -111,7 +111,7 @@ const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => (
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::index
-* @see app/Http/Controllers/Api/TradeController.php:20
+* @see Http/Controllers/Api/TradeController.php:20
 * @route '/api/trades'
 */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -121,7 +121,7 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::index
-* @see app/Http/Controllers/Api/TradeController.php:20
+* @see Http/Controllers/Api/TradeController.php:20
 * @route '/api/trades'
 */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -138,7 +138,7 @@ index.form = indexForm
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::pendingCount
-* @see app/Http/Controllers/Api/TradeController.php:41
+* @see Http/Controllers/Api/TradeController.php:41
 * @route '/api/trades/pending-count'
 */
 export const pendingCount = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -153,7 +153,7 @@ pendingCount.definition = {
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::pendingCount
-* @see app/Http/Controllers/Api/TradeController.php:41
+* @see Http/Controllers/Api/TradeController.php:41
 * @route '/api/trades/pending-count'
 */
 pendingCount.url = (options?: RouteQueryOptions) => {
@@ -162,7 +162,7 @@ pendingCount.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::pendingCount
-* @see app/Http/Controllers/Api/TradeController.php:41
+* @see Http/Controllers/Api/TradeController.php:41
 * @route '/api/trades/pending-count'
 */
 pendingCount.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -172,7 +172,7 @@ pendingCount.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::pendingCount
-* @see app/Http/Controllers/Api/TradeController.php:41
+* @see Http/Controllers/Api/TradeController.php:41
 * @route '/api/trades/pending-count'
 */
 pendingCount.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -182,7 +182,7 @@ pendingCount.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::pendingCount
-* @see app/Http/Controllers/Api/TradeController.php:41
+* @see Http/Controllers/Api/TradeController.php:41
 * @route '/api/trades/pending-count'
 */
 const pendingCountForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -192,7 +192,7 @@ const pendingCountForm = (options?: RouteQueryOptions): RouteFormDefinition<'get
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::pendingCount
-* @see app/Http/Controllers/Api/TradeController.php:41
+* @see Http/Controllers/Api/TradeController.php:41
 * @route '/api/trades/pending-count'
 */
 pendingCountForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -202,7 +202,7 @@ pendingCountForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'>
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::pendingCount
-* @see app/Http/Controllers/Api/TradeController.php:41
+* @see Http/Controllers/Api/TradeController.php:41
 * @route '/api/trades/pending-count'
 */
 pendingCountForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -219,7 +219,7 @@ pendingCount.form = pendingCountForm
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::show
-* @see app/Http/Controllers/Api/TradeController.php:153
+* @see Http/Controllers/Api/TradeController.php:153
 * @route '/api/trades/{id}'
 */
 export const show = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -234,7 +234,7 @@ show.definition = {
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::show
-* @see app/Http/Controllers/Api/TradeController.php:153
+* @see Http/Controllers/Api/TradeController.php:153
 * @route '/api/trades/{id}'
 */
 show.url = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -261,7 +261,7 @@ show.url = (args: { id: string | number } | [id: string | number ] | string | nu
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::show
-* @see app/Http/Controllers/Api/TradeController.php:153
+* @see Http/Controllers/Api/TradeController.php:153
 * @route '/api/trades/{id}'
 */
 show.get = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -271,7 +271,7 @@ show.get = (args: { id: string | number } | [id: string | number ] | string | nu
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::show
-* @see app/Http/Controllers/Api/TradeController.php:153
+* @see Http/Controllers/Api/TradeController.php:153
 * @route '/api/trades/{id}'
 */
 show.head = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -281,7 +281,7 @@ show.head = (args: { id: string | number } | [id: string | number ] | string | n
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::show
-* @see app/Http/Controllers/Api/TradeController.php:153
+* @see Http/Controllers/Api/TradeController.php:153
 * @route '/api/trades/{id}'
 */
 const showForm = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -291,7 +291,7 @@ const showForm = (args: { id: string | number } | [id: string | number ] | strin
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::show
-* @see app/Http/Controllers/Api/TradeController.php:153
+* @see Http/Controllers/Api/TradeController.php:153
 * @route '/api/trades/{id}'
 */
 showForm.get = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -301,7 +301,7 @@ showForm.get = (args: { id: string | number } | [id: string | number ] | string 
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::show
-* @see app/Http/Controllers/Api/TradeController.php:153
+* @see Http/Controllers/Api/TradeController.php:153
 * @route '/api/trades/{id}'
 */
 showForm.head = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -318,7 +318,7 @@ show.form = showForm
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::accept
-* @see app/Http/Controllers/Api/TradeController.php:169
+* @see Http/Controllers/Api/TradeController.php:169
 * @route '/api/trades/{id}/accept'
 */
 export const accept = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -333,7 +333,7 @@ accept.definition = {
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::accept
-* @see app/Http/Controllers/Api/TradeController.php:169
+* @see Http/Controllers/Api/TradeController.php:169
 * @route '/api/trades/{id}/accept'
 */
 accept.url = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -360,7 +360,7 @@ accept.url = (args: { id: string | number } | [id: string | number ] | string | 
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::accept
-* @see app/Http/Controllers/Api/TradeController.php:169
+* @see Http/Controllers/Api/TradeController.php:169
 * @route '/api/trades/{id}/accept'
 */
 accept.put = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -370,7 +370,7 @@ accept.put = (args: { id: string | number } | [id: string | number ] | string | 
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::accept
-* @see app/Http/Controllers/Api/TradeController.php:169
+* @see Http/Controllers/Api/TradeController.php:169
 * @route '/api/trades/{id}/accept'
 */
 const acceptForm = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -385,7 +385,7 @@ const acceptForm = (args: { id: string | number } | [id: string | number ] | str
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::accept
-* @see app/Http/Controllers/Api/TradeController.php:169
+* @see Http/Controllers/Api/TradeController.php:169
 * @route '/api/trades/{id}/accept'
 */
 acceptForm.put = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -402,7 +402,7 @@ accept.form = acceptForm
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::reject
-* @see app/Http/Controllers/Api/TradeController.php:228
+* @see Http/Controllers/Api/TradeController.php:228
 * @route '/api/trades/{id}/reject'
 */
 export const reject = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -417,7 +417,7 @@ reject.definition = {
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::reject
-* @see app/Http/Controllers/Api/TradeController.php:228
+* @see Http/Controllers/Api/TradeController.php:228
 * @route '/api/trades/{id}/reject'
 */
 reject.url = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -444,7 +444,7 @@ reject.url = (args: { id: string | number } | [id: string | number ] | string | 
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::reject
-* @see app/Http/Controllers/Api/TradeController.php:228
+* @see Http/Controllers/Api/TradeController.php:228
 * @route '/api/trades/{id}/reject'
 */
 reject.put = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -454,7 +454,7 @@ reject.put = (args: { id: string | number } | [id: string | number ] | string | 
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::reject
-* @see app/Http/Controllers/Api/TradeController.php:228
+* @see Http/Controllers/Api/TradeController.php:228
 * @route '/api/trades/{id}/reject'
 */
 const rejectForm = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -469,7 +469,7 @@ const rejectForm = (args: { id: string | number } | [id: string | number ] | str
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::reject
-* @see app/Http/Controllers/Api/TradeController.php:228
+* @see Http/Controllers/Api/TradeController.php:228
 * @route '/api/trades/{id}/reject'
 */
 rejectForm.put = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -486,7 +486,7 @@ reject.form = rejectForm
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::cancel
-* @see app/Http/Controllers/Api/TradeController.php:249
+* @see Http/Controllers/Api/TradeController.php:249
 * @route '/api/trades/{id}/cancel'
 */
 export const cancel = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -501,7 +501,7 @@ cancel.definition = {
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::cancel
-* @see app/Http/Controllers/Api/TradeController.php:249
+* @see Http/Controllers/Api/TradeController.php:249
 * @route '/api/trades/{id}/cancel'
 */
 cancel.url = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -528,7 +528,7 @@ cancel.url = (args: { id: string | number } | [id: string | number ] | string | 
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::cancel
-* @see app/Http/Controllers/Api/TradeController.php:249
+* @see Http/Controllers/Api/TradeController.php:249
 * @route '/api/trades/{id}/cancel'
 */
 cancel.put = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
@@ -538,7 +538,7 @@ cancel.put = (args: { id: string | number } | [id: string | number ] | string | 
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::cancel
-* @see app/Http/Controllers/Api/TradeController.php:249
+* @see Http/Controllers/Api/TradeController.php:249
 * @route '/api/trades/{id}/cancel'
 */
 const cancelForm = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -553,7 +553,7 @@ const cancelForm = (args: { id: string | number } | [id: string | number ] | str
 
 /**
 * @see \App\Http\Controllers\Api\TradeController::cancel
-* @see app/Http/Controllers/Api/TradeController.php:249
+* @see Http/Controllers/Api/TradeController.php:249
 * @route '/api/trades/{id}/cancel'
 */
 cancelForm.put = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -568,6 +568,87 @@ cancelForm.put = (args: { id: string | number } | [id: string | number ] | strin
 
 cancel.form = cancelForm
 
-const TradeController = { store, index, pendingCount, show, accept, reject, cancel }
+/**
+* @see \App\Http\Controllers\Api\TradeController::partners
+* @see Http/Controllers/Api/TradeController.php:269
+* @route '/api/user/trade-partners'
+*/
+export const partners = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: partners.url(options),
+    method: 'get',
+})
+
+partners.definition = {
+    methods: ["get","head"],
+    url: '/api/user/trade-partners',
+} satisfies RouteDefinition<["get","head"]>
+
+/**
+* @see \App\Http\Controllers\Api\TradeController::partners
+* @see Http/Controllers/Api/TradeController.php:269
+* @route '/api/user/trade-partners'
+*/
+partners.url = (options?: RouteQueryOptions) => {
+    return partners.definition.url + queryParams(options)
+}
+
+/**
+* @see \App\Http\Controllers\Api\TradeController::partners
+* @see Http/Controllers/Api/TradeController.php:269
+* @route '/api/user/trade-partners'
+*/
+partners.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: partners.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Api\TradeController::partners
+* @see Http/Controllers/Api/TradeController.php:269
+* @route '/api/user/trade-partners'
+*/
+partners.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: partners.url(options),
+    method: 'head',
+})
+
+/**
+* @see \App\Http\Controllers\Api\TradeController::partners
+* @see Http/Controllers/Api/TradeController.php:269
+* @route '/api/user/trade-partners'
+*/
+const partnersForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: partners.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Api\TradeController::partners
+* @see Http/Controllers/Api/TradeController.php:269
+* @route '/api/user/trade-partners'
+*/
+partnersForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: partners.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Api\TradeController::partners
+* @see Http/Controllers/Api/TradeController.php:269
+* @route '/api/user/trade-partners'
+*/
+partnersForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: partners.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+partners.form = partnersForm
+
+const TradeController = { store, index, pendingCount, show, accept, reject, cancel, partners }
 
 export default TradeController

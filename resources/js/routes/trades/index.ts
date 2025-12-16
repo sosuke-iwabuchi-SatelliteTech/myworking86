@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../wayfinder'
 /**
 * @see \App\Http\Controllers\Web\TradeController::index
-* @see app/Http/Controllers/Web/TradeController.php:12
+* @see Http/Controllers/Web/TradeController.php:12
 * @route '/trades'
 */
 export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ index.definition = {
 
 /**
 * @see \App\Http\Controllers\Web\TradeController::index
-* @see app/Http/Controllers/Web/TradeController.php:12
+* @see Http/Controllers/Web/TradeController.php:12
 * @route '/trades'
 */
 index.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ index.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\Web\TradeController::index
-* @see app/Http/Controllers/Web/TradeController.php:12
+* @see Http/Controllers/Web/TradeController.php:12
 * @route '/trades'
 */
 index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -35,7 +35,7 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\Web\TradeController::index
-* @see app/Http/Controllers/Web/TradeController.php:12
+* @see Http/Controllers/Web/TradeController.php:12
 * @route '/trades'
 */
 index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -45,7 +45,7 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\Web\TradeController::index
-* @see app/Http/Controllers/Web/TradeController.php:12
+* @see Http/Controllers/Web/TradeController.php:12
 * @route '/trades'
 */
 const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -55,7 +55,7 @@ const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => (
 
 /**
 * @see \App\Http\Controllers\Web\TradeController::index
-* @see app/Http/Controllers/Web/TradeController.php:12
+* @see Http/Controllers/Web/TradeController.php:12
 * @route '/trades'
 */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -65,7 +65,7 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\Web\TradeController::index
-* @see app/Http/Controllers/Web/TradeController.php:12
+* @see Http/Controllers/Web/TradeController.php:12
 * @route '/trades'
 */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -82,7 +82,7 @@ index.form = indexForm
 
 /**
 * @see \App\Http\Controllers\Web\TradeController::create
-* @see app/Http/Controllers/Web/TradeController.php:17
+* @see Http/Controllers/Web/TradeController.php:17
 * @route '/trades/create'
 */
 export const create = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -97,7 +97,7 @@ create.definition = {
 
 /**
 * @see \App\Http\Controllers\Web\TradeController::create
-* @see app/Http/Controllers/Web/TradeController.php:17
+* @see Http/Controllers/Web/TradeController.php:17
 * @route '/trades/create'
 */
 create.url = (options?: RouteQueryOptions) => {
@@ -106,7 +106,7 @@ create.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\Web\TradeController::create
-* @see app/Http/Controllers/Web/TradeController.php:17
+* @see Http/Controllers/Web/TradeController.php:17
 * @route '/trades/create'
 */
 create.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -116,7 +116,7 @@ create.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\Web\TradeController::create
-* @see app/Http/Controllers/Web/TradeController.php:17
+* @see Http/Controllers/Web/TradeController.php:17
 * @route '/trades/create'
 */
 create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -126,7 +126,7 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\Web\TradeController::create
-* @see app/Http/Controllers/Web/TradeController.php:17
+* @see Http/Controllers/Web/TradeController.php:17
 * @route '/trades/create'
 */
 const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -136,7 +136,7 @@ const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => 
 
 /**
 * @see \App\Http\Controllers\Web\TradeController::create
-* @see app/Http/Controllers/Web/TradeController.php:17
+* @see Http/Controllers/Web/TradeController.php:17
 * @route '/trades/create'
 */
 createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -146,7 +146,7 @@ createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\Web\TradeController::create
-* @see app/Http/Controllers/Web/TradeController.php:17
+* @see Http/Controllers/Web/TradeController.php:17
 * @route '/trades/create'
 */
 createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -163,7 +163,7 @@ create.form = createForm
 
 /**
 * @see \App\Http\Controllers\Web\TradeController::show
-* @see app/Http/Controllers/Web/TradeController.php:24
+* @see Http/Controllers/Web/TradeController.php:24
 * @route '/trades/{id}'
 */
 export const show = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -178,7 +178,7 @@ show.definition = {
 
 /**
 * @see \App\Http\Controllers\Web\TradeController::show
-* @see app/Http/Controllers/Web/TradeController.php:24
+* @see Http/Controllers/Web/TradeController.php:24
 * @route '/trades/{id}'
 */
 show.url = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -205,7 +205,7 @@ show.url = (args: { id: string | number } | [id: string | number ] | string | nu
 
 /**
 * @see \App\Http\Controllers\Web\TradeController::show
-* @see app/Http/Controllers/Web/TradeController.php:24
+* @see Http/Controllers/Web/TradeController.php:24
 * @route '/trades/{id}'
 */
 show.get = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -215,7 +215,7 @@ show.get = (args: { id: string | number } | [id: string | number ] | string | nu
 
 /**
 * @see \App\Http\Controllers\Web\TradeController::show
-* @see app/Http/Controllers/Web/TradeController.php:24
+* @see Http/Controllers/Web/TradeController.php:24
 * @route '/trades/{id}'
 */
 show.head = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -225,7 +225,7 @@ show.head = (args: { id: string | number } | [id: string | number ] | string | n
 
 /**
 * @see \App\Http\Controllers\Web\TradeController::show
-* @see app/Http/Controllers/Web/TradeController.php:24
+* @see Http/Controllers/Web/TradeController.php:24
 * @route '/trades/{id}'
 */
 const showForm = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -235,7 +235,7 @@ const showForm = (args: { id: string | number } | [id: string | number ] | strin
 
 /**
 * @see \App\Http\Controllers\Web\TradeController::show
-* @see app/Http/Controllers/Web/TradeController.php:24
+* @see Http/Controllers/Web/TradeController.php:24
 * @route '/trades/{id}'
 */
 showForm.get = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -245,7 +245,7 @@ showForm.get = (args: { id: string | number } | [id: string | number ] | string 
 
 /**
 * @see \App\Http\Controllers\Web\TradeController::show
-* @see app/Http/Controllers/Web/TradeController.php:24
+* @see Http/Controllers/Web/TradeController.php:24
 * @route '/trades/{id}'
 */
 showForm.head = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({

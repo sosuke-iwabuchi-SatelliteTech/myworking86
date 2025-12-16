@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\Api\UserPrizeController::store
-* @see app/Http/Controllers/Api/UserPrizeController.php:17
+* @see Http/Controllers/Api/UserPrizeController.php:18
 * @route '/api/user/prizes'
 */
 export const store = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -16,7 +16,7 @@ store.definition = {
 
 /**
 * @see \App\Http\Controllers\Api\UserPrizeController::store
-* @see app/Http/Controllers/Api/UserPrizeController.php:17
+* @see Http/Controllers/Api/UserPrizeController.php:18
 * @route '/api/user/prizes'
 */
 store.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ store.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\Api\UserPrizeController::store
-* @see app/Http/Controllers/Api/UserPrizeController.php:17
+* @see Http/Controllers/Api/UserPrizeController.php:18
 * @route '/api/user/prizes'
 */
 store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -35,7 +35,7 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\Api\UserPrizeController::store
-* @see app/Http/Controllers/Api/UserPrizeController.php:17
+* @see Http/Controllers/Api/UserPrizeController.php:18
 * @route '/api/user/prizes'
 */
 const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -45,7 +45,7 @@ const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => 
 
 /**
 * @see \App\Http\Controllers\Api\UserPrizeController::store
-* @see app/Http/Controllers/Api/UserPrizeController.php:17
+* @see Http/Controllers/Api/UserPrizeController.php:18
 * @route '/api/user/prizes'
 */
 storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -57,7 +57,7 @@ store.form = storeForm
 
 /**
 * @see \App\Http\Controllers\Api\UserPrizeController::index
-* @see app/Http/Controllers/Api/UserPrizeController.php:37
+* @see Http/Controllers/Api/UserPrizeController.php:38
 * @route '/api/user/prizes'
 */
 export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -72,7 +72,7 @@ index.definition = {
 
 /**
 * @see \App\Http\Controllers\Api\UserPrizeController::index
-* @see app/Http/Controllers/Api/UserPrizeController.php:37
+* @see Http/Controllers/Api/UserPrizeController.php:38
 * @route '/api/user/prizes'
 */
 index.url = (options?: RouteQueryOptions) => {
@@ -81,7 +81,7 @@ index.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\Api\UserPrizeController::index
-* @see app/Http/Controllers/Api/UserPrizeController.php:37
+* @see Http/Controllers/Api/UserPrizeController.php:38
 * @route '/api/user/prizes'
 */
 index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -91,7 +91,7 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\Api\UserPrizeController::index
-* @see app/Http/Controllers/Api/UserPrizeController.php:37
+* @see Http/Controllers/Api/UserPrizeController.php:38
 * @route '/api/user/prizes'
 */
 index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -101,7 +101,7 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\Api\UserPrizeController::index
-* @see app/Http/Controllers/Api/UserPrizeController.php:37
+* @see Http/Controllers/Api/UserPrizeController.php:38
 * @route '/api/user/prizes'
 */
 const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -111,7 +111,7 @@ const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => (
 
 /**
 * @see \App\Http\Controllers\Api\UserPrizeController::index
-* @see app/Http/Controllers/Api/UserPrizeController.php:37
+* @see Http/Controllers/Api/UserPrizeController.php:38
 * @route '/api/user/prizes'
 */
 indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -121,7 +121,7 @@ indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\Api\UserPrizeController::index
-* @see app/Http/Controllers/Api/UserPrizeController.php:37
+* @see Http/Controllers/Api/UserPrizeController.php:38
 * @route '/api/user/prizes'
 */
 indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -138,7 +138,7 @@ index.form = indexForm
 
 /**
 * @see \App\Http\Controllers\Api\UserPrizeController::tradable
-* @see app/Http/Controllers/Api/UserPrizeController.php:57
+* @see Http/Controllers/Api/UserPrizeController.php:58
 * @route '/api/user/prizes/tradable'
 */
 export const tradable = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -153,7 +153,7 @@ tradable.definition = {
 
 /**
 * @see \App\Http\Controllers\Api\UserPrizeController::tradable
-* @see app/Http/Controllers/Api/UserPrizeController.php:57
+* @see Http/Controllers/Api/UserPrizeController.php:58
 * @route '/api/user/prizes/tradable'
 */
 tradable.url = (options?: RouteQueryOptions) => {
@@ -162,7 +162,7 @@ tradable.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\Api\UserPrizeController::tradable
-* @see app/Http/Controllers/Api/UserPrizeController.php:57
+* @see Http/Controllers/Api/UserPrizeController.php:58
 * @route '/api/user/prizes/tradable'
 */
 tradable.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -172,7 +172,7 @@ tradable.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\Api\UserPrizeController::tradable
-* @see app/Http/Controllers/Api/UserPrizeController.php:57
+* @see Http/Controllers/Api/UserPrizeController.php:58
 * @route '/api/user/prizes/tradable'
 */
 tradable.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -182,7 +182,7 @@ tradable.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\Api\UserPrizeController::tradable
-* @see app/Http/Controllers/Api/UserPrizeController.php:57
+* @see Http/Controllers/Api/UserPrizeController.php:58
 * @route '/api/user/prizes/tradable'
 */
 const tradableForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -192,7 +192,7 @@ const tradableForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> =
 
 /**
 * @see \App\Http\Controllers\Api\UserPrizeController::tradable
-* @see app/Http/Controllers/Api/UserPrizeController.php:57
+* @see Http/Controllers/Api/UserPrizeController.php:58
 * @route '/api/user/prizes/tradable'
 */
 tradableForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -202,7 +202,7 @@ tradableForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => 
 
 /**
 * @see \App\Http\Controllers\Api\UserPrizeController::tradable
-* @see app/Http/Controllers/Api/UserPrizeController.php:57
+* @see Http/Controllers/Api/UserPrizeController.php:58
 * @route '/api/user/prizes/tradable'
 */
 tradableForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -219,7 +219,7 @@ tradable.form = tradableForm
 
 /**
 * @see \App\Http\Controllers\Api\UserPrizeController::userTradable
-* @see app/Http/Controllers/Api/UserPrizeController.php:70
+* @see Http/Controllers/Api/UserPrizeController.php:71
 * @route '/api/users/{user}/prizes/tradable'
 */
 export const userTradable = (args: { user: string | number } | [user: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -234,7 +234,7 @@ userTradable.definition = {
 
 /**
 * @see \App\Http\Controllers\Api\UserPrizeController::userTradable
-* @see app/Http/Controllers/Api/UserPrizeController.php:70
+* @see Http/Controllers/Api/UserPrizeController.php:71
 * @route '/api/users/{user}/prizes/tradable'
 */
 userTradable.url = (args: { user: string | number } | [user: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -261,7 +261,7 @@ userTradable.url = (args: { user: string | number } | [user: string | number ] |
 
 /**
 * @see \App\Http\Controllers\Api\UserPrizeController::userTradable
-* @see app/Http/Controllers/Api/UserPrizeController.php:70
+* @see Http/Controllers/Api/UserPrizeController.php:71
 * @route '/api/users/{user}/prizes/tradable'
 */
 userTradable.get = (args: { user: string | number } | [user: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -271,7 +271,7 @@ userTradable.get = (args: { user: string | number } | [user: string | number ] |
 
 /**
 * @see \App\Http\Controllers\Api\UserPrizeController::userTradable
-* @see app/Http/Controllers/Api/UserPrizeController.php:70
+* @see Http/Controllers/Api/UserPrizeController.php:71
 * @route '/api/users/{user}/prizes/tradable'
 */
 userTradable.head = (args: { user: string | number } | [user: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -281,7 +281,7 @@ userTradable.head = (args: { user: string | number } | [user: string | number ] 
 
 /**
 * @see \App\Http\Controllers\Api\UserPrizeController::userTradable
-* @see app/Http/Controllers/Api/UserPrizeController.php:70
+* @see Http/Controllers/Api/UserPrizeController.php:71
 * @route '/api/users/{user}/prizes/tradable'
 */
 const userTradableForm = (args: { user: string | number } | [user: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -291,7 +291,7 @@ const userTradableForm = (args: { user: string | number } | [user: string | numb
 
 /**
 * @see \App\Http\Controllers\Api\UserPrizeController::userTradable
-* @see app/Http/Controllers/Api/UserPrizeController.php:70
+* @see Http/Controllers/Api/UserPrizeController.php:71
 * @route '/api/users/{user}/prizes/tradable'
 */
 userTradableForm.get = (args: { user: string | number } | [user: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -301,7 +301,7 @@ userTradableForm.get = (args: { user: string | number } | [user: string | number
 
 /**
 * @see \App\Http\Controllers\Api\UserPrizeController::userTradable
-* @see app/Http/Controllers/Api/UserPrizeController.php:70
+* @see Http/Controllers/Api/UserPrizeController.php:71
 * @route '/api/users/{user}/prizes/tradable'
 */
 userTradableForm.head = (args: { user: string | number } | [user: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({

@@ -22,6 +22,7 @@ type UserPrize = {
 export default function TradeCreate({ initialTargetId }: Props) {
     const { auth } = usePage().props as any;
     const [targetId, setTargetId] = useState<string | null>(initialTargetId || null);
+    const [targetName, setTargetName] = useState<string>('');
     const [isScanning, setIsScanning] = useState(false);
     const [scannerError, setScannerError] = useState<string | null>(null);
     const scannerRef = useRef<any>(null);
@@ -54,6 +55,9 @@ export default function TradeCreate({ initialTargetId }: Props) {
             // Load target user's prizes to request
             axios.get(`/api/users/${targetId}/prizes/tradable`).then(res => {
                 setTargetPrizes(res.data.data || []);
+                if (res.data.user) {
+                    setTargetName(res.data.user.name);
+                }
             }).catch(e => {
                 console.error("Failed to load target prizes", e);
                 setTargetPrizes([]);
@@ -195,7 +199,7 @@ export default function TradeCreate({ initialTargetId }: Props) {
                 <Head title="こうかんする" />
                 <div className="py-12 max-w-2xl mx-auto px-4">
                     <div className="bg-white p-6 rounded-lg shadow">
-                        <h2 className="text-xl font-bold mb-4">{targetId}さんに こうかんを おねがいする</h2>
+                        <h2 className="text-xl font-bold mb-4">{targetName || targetId}さんに こうかんを おねがいする</h2>
 
                         <form onSubmit={handleSubmit}>
                             <div className="mb-4">

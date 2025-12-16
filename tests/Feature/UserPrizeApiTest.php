@@ -74,6 +74,31 @@ class UserPrizeApiTest extends TestCase
         $this->assertEquals(2, $data[0]['count']);
     }
 
+    public function test_user_can_get_tradable_prizes_of_another_user()
+    {
+        $user = User::factory()->create();
+        $targetUser = User::factory()->create(['name' => 'Target User']);
+        $this->actingAs($user);
+
+        UserPrize::factory()->create(['user_id' => $targetUser->id, 'prize_id' => 'p-1', 'rarity' => 'C']);
+
+        $response = $this->getJson("/api/users/{$targetUser->id}/prizes/tradable");
+
+        $response->assertStatus(200)
+            ->assertJson([
+                'user' => [
+                    'id' => $targetUser->id,
+                    'name' => 'Target User',
+                ],
+                'data' => [
+                    [
+                        'prize_id' => 'p-1',
+                        'user_id' => $targetUser->id,
+                    ]
+                ]
+            ]);
+    }
+
     public function test_unauthenticated_user_cannot_access_prize_apis()
     {
         // Expect 302 Redirect to login for web auth, NOT 401

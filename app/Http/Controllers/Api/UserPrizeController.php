@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use App\Models\User;
 use App\Models\UserPrize;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -69,11 +70,19 @@ class UserPrizeController extends Controller
      */
     public function userTradable($userId)
     {
+        $user = User::findOrFail($userId);
+
         $userPrizes = UserPrize::where('user_id', $userId)
             ->with('prize')
             ->orderBy('obtained_at', 'desc')
             ->get();
 
-        return response()->json(['data' => $userPrizes]);
+        return response()->json([
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+            ],
+            'data' => $userPrizes
+        ]);
     }
 }
