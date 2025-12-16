@@ -13,7 +13,7 @@ class UserPointUpdateTest extends TestCase
 
     public function test_admin_can_add_points_to_user()
     {
-        $admin = User::factory()->create(); // Assuming admin logic or generic auth for now
+        $admin = User::factory()->create(['role' => User::ROLE_ADMIN]);
         // If there's specific admin role/gate, we might need to adjust. 
         // Based on routes, it's just 'auth' and 'verified' and prefix 'admin'.
         // Wait, route middleware is 'auth', 'verified'. Is there an admin gate?
@@ -38,7 +38,7 @@ class UserPointUpdateTest extends TestCase
 
     public function test_admin_can_subtract_points_from_user()
     {
-        $admin = User::factory()->create();
+        $admin = User::factory()->create(['role' => User::ROLE_ADMIN]);
         $user = User::factory()->create();
         UserPoint::create(['user_id' => $user->id, 'points' => 100]);
 
@@ -57,7 +57,7 @@ class UserPointUpdateTest extends TestCase
 
     public function test_admin_can_set_points_for_user()
     {
-        $admin = User::factory()->create();
+        $admin = User::factory()->create(['role' => User::ROLE_ADMIN]);
         $user = User::factory()->create();
         UserPoint::create(['user_id' => $user->id, 'points' => 100]);
 
@@ -76,7 +76,7 @@ class UserPointUpdateTest extends TestCase
 
     public function test_points_cannot_be_negative()
     {
-        $admin = User::factory()->create();
+        $admin = User::factory()->create(['role' => User::ROLE_ADMIN]);
         $user = User::factory()->create();
         UserPoint::create(['user_id' => $user->id, 'points' => 10]);
 

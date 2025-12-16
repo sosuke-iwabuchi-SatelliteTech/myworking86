@@ -17,7 +17,7 @@ class LastLoginUpdateTest extends TestCase
         // Using the API login route as defined in routes/web.php or api.php
         // Route::post('/login', [ApiUserController::class, 'login']); is in web.php (odd place but okay)
 
-        $response = $this->postJson('/login', [
+        $response = $this->postJson('/api/user/login', [
             'id' => $user->id,
             'name' => $user->name, // Optional but good practice
             'grade' => $user->grade,
