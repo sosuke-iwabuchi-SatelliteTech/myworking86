@@ -31,3 +31,5 @@ yarn-error.log
 test_output.txt
 /bootstrap/ssr
 *.log
+/test-results
+/playwright-report
