@@ -190,11 +190,11 @@ function WrappedContent({ trade, onAction, processing }: any) {
 }
 
 function ItemCard({ item }: any) {
-    const prize = item.user_prize.prize;
+    const prize = item.userPrize.prize;
     return (
         <div className="flex items-center gap-4 p-3 border rounded shadow-sm">
-            {prize.image_url && (
-                <img src={prize.image_url} alt={prize.name} className="w-12 h-12 object-cover rounded" />
+            {prize.imageUrl && (
+                <img src={prize.imageUrl} alt={prize.name} className="w-12 h-12 object-cover rounded" />
             )}
             <div>
                 <div className="font-bold">{prize.name}</div>

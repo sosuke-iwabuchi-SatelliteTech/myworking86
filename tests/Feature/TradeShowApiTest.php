@@ -53,20 +53,18 @@ class TradeShowApiTest extends TestCase
 
         // Verify Structure
         $response->assertJsonStructure([
-            'data' => [
-                'id',
-                'sender_id',
-                'receiver_id',
-                'status',
-                'message',
-                'items' => [
-                    '*' => [
+            'id',
+            'sender_id',
+            'receiver_id',
+            'status',
+            'message',
+            'items' => [
+                '*' => [
+                    'id',
+                    'userPrize' => [
                         'id',
-                        'userPrize' => [
-                            'id',
-                            'prize' => [
-                                'imageUrl' // Key we are testing
-                            ]
+                        'prize' => [
+                            'imageUrl' // Key we are testing
                         ]
                     ]
                 ]
@@ -74,7 +72,7 @@ class TradeShowApiTest extends TestCase
         ]);
 
         // Verify Image URL
-        $data = $response->json('data');
+        $data = $response->json();
         $this->assertEquals('https://example.com/test-image.png', $data['items'][0]['userPrize']['prize']['imageUrl']);
     }
 }
