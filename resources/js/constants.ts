@@ -85,3 +85,8 @@ export const USER_LIST_STORAGE_KEY = "quiz_users";
  * localStorageに現在のユーザーIDを保存する際のキー
  */
 export const CURRENT_USER_ID_STORAGE_KEY = "quiz_current_user_id";
+
+/**
+ * 景品のレアリティの表示順
+ */
+export const RARITY_ORDER = ['UR', 'SR', 'R', 'UC', 'C'] as const;

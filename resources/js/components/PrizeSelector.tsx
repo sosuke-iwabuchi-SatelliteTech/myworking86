@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { RARITY_ORDER } from '@/constants';
 
 // Define types compatible with what Trade/Create.tsx expects and what API returns
 export type TradePrize = {
@@ -36,8 +37,16 @@ export default function PrizeSelector({
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 6; // Compact view for trade screen
 
+    // Memoize the sorted prize list to prevent re-sorting on every render
+    const sortedPrizes = useMemo(() => {
+        return [...prizes].sort((a, b) => {
+            return RARITY_ORDER.indexOf(a.prize.rarity) - RARITY_ORDER.indexOf(b.prize.rarity);
+        });
+    }, [prizes]);
+
     // All available rarities from the current prize list
-    const availableRarities = Array.from(new Set(prizes.map(p => p.prize.rarity))).sort();
+    const availableRarities = Array.from(new Set(prizes.map(p => p.prize.rarity)))
+        .sort((a, b) => RARITY_ORDER.indexOf(a) - RARITY_ORDER.indexOf(b));
 
     // Reset page when filters change
     useEffect(() => {
@@ -55,7 +64,7 @@ export default function PrizeSelector({
     };
 
     // Filter Logic
-    const filteredPrizes = prizes.filter(p => {
+    const filteredPrizes = sortedPrizes.filter(p => {
         const matchesText = searchText === '' ||
             p.prize.name.toLowerCase().includes(searchText.toLowerCase());
         // Description might not be available on this object structure depending on API, 
