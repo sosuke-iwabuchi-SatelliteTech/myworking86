@@ -1,5 +1,4 @@
 import React from 'react';
-import { Dialog, DialogContent, DialogTitle } from '@radix-ui/react-dialog';
 
 interface CelebrationModalProps {
     isOpen: boolean;
@@ -7,6 +6,28 @@ interface CelebrationModalProps {
     title?: string;
     message?: string;
 }
+
+interface ConfettiItem {
+    id: number;
+    left: string;
+    width: string;
+    height: string;
+    backgroundColor: string;
+    animationDelay: string;
+    animationClass: string;
+}
+
+// Generate confetti items outside the component to satisfy React purity rules.
+// They are generated once at module load time.
+const CONFETTI_STUBS = [...Array(30)].map((_, i) => ({
+    id: i,
+    left: `${Math.random() * 100}%`,
+    width: `${Math.random() * 10 + 5}px`,
+    height: `${Math.random() * 5 + 5}px`,
+    backgroundColor: ['#FFC700', '#FF0000', '#2E3192', '#41BBC7'][Math.floor(Math.random() * 4)],
+    animationDelay: `${Math.random() * 1}s`,
+    animationClass: ['confetti--animation-slow', 'confetti--animation-medium', 'confetti--animation-fast'][Math.floor(Math.random() * 3)]
+}));
 
 export default function CelebrationModal({
     isOpen,
@@ -72,16 +93,15 @@ export default function CelebrationModal({
 
                 {/* Confetti Elements */}
                 <div className="confetti-container fixed inset-0">
-                    {[...Array(30)].map((_, i) => {
+                    {CONFETTI_STUBS.map((item: ConfettiItem) => {
                         const style = {
-                            left: `${Math.random() * 100}%`,
-                            width: `${Math.random() * 10 + 5}px`,
-                            height: `${Math.random() * 5 + 5}px`,
-                            backgroundColor: ['#FFC700', '#FF0000', '#2E3192', '#41BBC7'][Math.floor(Math.random() * 4)],
-                            animationDelay: `${Math.random() * 1}s`
+                            left: item.left,
+                            width: item.width,
+                            height: item.height,
+                            backgroundColor: item.backgroundColor,
+                            animationDelay: item.animationDelay
                         };
-                        const animationClass = ['confetti--animation-slow', 'confetti--animation-medium', 'confetti--animation-fast'][Math.floor(Math.random() * 3)];
-                        return <div key={i} className={`confetti ${animationClass}`} style={style} />;
+                        return <div key={item.id} className={`confetti ${item.animationClass}`} style={style} />;
                     })}
                 </div>
 
@@ -106,9 +126,9 @@ export default function CelebrationModal({
                     </svg>
                 </div>
 
-                <DialogTitle className="text-2xl font-black text-orange-500 mb-2">
+                <h2 className="text-2xl font-black text-orange-500 mb-2">
                     {title}
-                </DialogTitle>
+                </h2>
 
                 <p className="text-gray-600 font-bold mb-8">
                     {message}
