@@ -37,7 +37,12 @@ export default function PrizeSelector({
     const itemsPerPage = 6; // Compact view for trade screen
 
     // All available rarities from the current prize list
-    const availableRarities = Array.from(new Set(prizes.map(p => p.prize.rarity))).sort();
+    const rarityOrder: Record<string, number> = { 'UR': 0, 'SR': 1, 'R': 2, 'UC': 3, 'C': 4 };
+    const availableRarities = Array.from(new Set(prizes.map(p => p.prize.rarity))).sort((a, b) => {
+        const orderA = rarityOrder[a] ?? 99;
+        const orderB = rarityOrder[b] ?? 99;
+        return orderA - orderB;
+    });
 
     // Reset page when filters change
     useEffect(() => {
