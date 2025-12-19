@@ -125,13 +125,29 @@ const GachaScreen: React.FC<GachaScreenProps> = ({ onBack }) => {
       // Start Image Preloading
       if (item.imageUrl && (item.imageUrl.startsWith('/') || item.imageUrl.startsWith('http'))) {
         imageLoadPromiseRef.current = new Promise((resolve) => {
+          let resolved = false;
+          const resolveOnce = () => {
+            if (!resolved) {
+              resolved = true;
+              resolve();
+            }
+          };
+
           const img = new Image();
           img.src = item.imageUrl!;
-          img.onload = () => resolve();
+          img.onload = resolveOnce;
           img.onerror = () => {
             console.error("Failed to preload image:", item.imageUrl);
-            resolve();
+            resolveOnce();
           };
+
+          // Safety timeout
+          setTimeout(() => {
+            if (!resolved) {
+              console.warn("Image preload timed out for:", item.imageUrl);
+              resolveOnce();
+            }
+          }, 5000);
         });
       } else {
         imageLoadPromiseRef.current = Promise.resolve();

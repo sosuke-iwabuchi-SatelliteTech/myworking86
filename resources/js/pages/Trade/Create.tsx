@@ -238,8 +238,9 @@ export default function TradeCreate({ initialTargetId }: Props) {
                             </div>
 
                             <div className="mb-4">
-                                <label className="block text-sm font-medium text-gray-700">メッセージ</label>
+                                <label htmlFor="message" className="block text-sm font-medium text-gray-700">メッセージ</label>
                                 <textarea
+                                    id="message"
                                     className="w-full border-gray-300 rounded-md shadow-sm"
                                     rows={3}
                                     value={message}

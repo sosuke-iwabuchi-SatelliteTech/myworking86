@@ -23,10 +23,10 @@ export default defineConfig({
         },
     ],
     webServer: {
-        command: 'php artisan serve --env=testing --port=8081',
+        command: 'php artisan serve --env=testing --port=8081 --no-reload',
         url: 'http://127.0.0.1:8081',
         reuseExistingServer: !process.env.CI,
-        stdout: 'pipe',
-        stderr: 'pipe',
+        stdout: 'ignore',
+        stderr: 'ignore',
     },
 });
