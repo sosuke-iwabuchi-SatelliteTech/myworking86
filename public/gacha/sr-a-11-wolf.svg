@@ -1,4 +1,4 @@
-<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#F0F8FF"/> <!-- Wolf -->
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"> <!-- Wolf -->
         <path d="M25,25 L35,40 L45,30" fill="#A9A9A9"/> <!-- Ear -->
         <path d="M75,25 L65,40 L55,30" fill="#A9A9A9"/>
         <circle cx="50" cy="50" r="30" fill="#A9A9A9"/>

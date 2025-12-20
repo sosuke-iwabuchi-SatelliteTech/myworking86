@@ -1,4 +1,4 @@
-<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#F5F5DC"/>
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
         <circle cx="50" cy="50" r="35" fill="#696969"/> <!-- Keukegen: Hairball -->
         <path d="M15,50 Q50,10 85,50 Q50,90 15,50" fill="none" stroke="#A9A9A9" stroke-width="2"/> <!-- Hairs -->
         <circle cx="40" cy="45" r="4" fill="white"/><circle cx="40" cy="45" r="1.5" fill="black"/>
