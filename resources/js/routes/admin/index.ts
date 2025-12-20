@@ -1,5 +1,6 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../wayfinder'
 import users from './users'
+import trades from './trades'
 /**
 * @see \App\Http\Controllers\Web\Admin\DashboardController::dashboard
 * @see app/Http/Controllers/Web/Admin/DashboardController.php:18
@@ -84,6 +85,7 @@ dashboard.form = dashboardForm
 const admin = {
     dashboard: Object.assign(dashboard, dashboard),
     users: Object.assign(users, users),
+    trades: Object.assign(trades, trades),
 }
 
 export default admin

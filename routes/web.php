@@ -63,6 +63,10 @@ Route::middleware(['auth', 'verified', 'role:admin'])->prefix('admin')->name('ad
     Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     Route::get('users', [AdminUserController::class, 'index'])->name('users.index');
     Route::put('users/{user}/points', [AdminUserController::class, 'updatePoints'])->name('users.updatePoints');
+
+    // Admin Trade Routes
+    Route::get('trades', [App\Http\Controllers\Web\Admin\TradeController::class, 'index'])->name('trades.index');
+    Route::get('trades/{id}', [App\Http\Controllers\Web\Admin\TradeController::class, 'show'])->name('trades.show');
 });
 
 require __DIR__ . '/settings.php';

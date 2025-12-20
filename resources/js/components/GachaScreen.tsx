@@ -99,7 +99,9 @@ const GachaScreen: React.FC<GachaScreenProps> = ({ onBack }) => {
         setIsFreeAvailable(res.data.isFreeAvailable);
         setCost(res.data.cost);
       })
-      .catch(err => console.error("Failed to fetch gacha status:", err));
+      .catch(err => {
+        console.error("Failed to fetch gacha status:", err);
+      });
   };
 
   // Use a ref to store the image loading promise so we can check it in useEffect
