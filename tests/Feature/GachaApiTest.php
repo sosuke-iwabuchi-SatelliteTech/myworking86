@@ -34,6 +34,7 @@ class GachaApiTest extends TestCase
         Carbon::setTestNow(Carbon::today());
         $user = User::factory()->create();
         UserPoint::create(['user_id' => $user->id, 'points' => 500]);
+        $this->seed(\Database\Seeders\PrizeSeeder::class);
 
         // Create a history to consume free pull
         GachaHistory::create([
