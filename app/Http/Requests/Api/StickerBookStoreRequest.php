@@ -22,6 +22,7 @@ class StickerBookStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'background_color' => 'nullable|string|max:7', // Hex color #RRGGBB
             'items' => 'present|array',
             'items.*.user_prize_id' => 'required|exists:user_prizes,id',
             'items.*.position_x' => 'required|integer',

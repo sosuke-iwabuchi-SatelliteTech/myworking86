@@ -17,14 +17,29 @@ class StickerBookController extends Controller
      */
     public function index($userId = null)
     {
-        $id = $userId ?: Auth::id();
+        $user = $userId ? \App\Models\User::findOrFail($userId) : Auth::user();
 
-        $items = StickerBookItem::where('user_id', $id)
+        // Get or create default sticker book
+        $book = $user->stickerBooks()->firstOrCreate(
+            [], // search attributes
+            ['name' => 'My Sticker Book'] // creation attributes
+        );
+
+        $items = $book->items()
             ->with(['userPrize.prize'])
-            ->orderBy('z_index', 'asc') // Render order: low z-index (back) to high (front)
+            ->orderBy('z_index', 'asc')
             ->get();
 
-        return \App\Http\Resources\StickerBookItemResource::collection($items);
+        return \App\Http\Resources\StickerBookItemResource::collection($items)
+            ->additional([
+                'meta' => [
+                    'sticker_book' => [
+                        'id' => $book->id,
+                        'name' => $book->name,
+                        'background_color' => $book->background_color,
+                    ]
+                ]
+            ]);
     }
 
     /**
@@ -35,52 +50,73 @@ class StickerBookController extends Controller
         $user = Auth::user();
         $validated = $request->validated();
 
+        // Get or create default sticker book
+        $book = $user->stickerBooks()->firstOrCreate(
+            [],
+            ['name' => 'My Sticker Book']
+        );
+
         // 1. Ownership & Trade status validation
         $userPrizeIds = collect($validated['items'])->pluck('user_prize_id')->all();
 
-        // Check if all user_prizes belong to the user
-        $prizesCount = UserPrize::where('user_id', $user->id)
-            ->whereIn('id', $userPrizeIds)
-            ->count();
+        if (!empty($userPrizeIds)) {
+            // Check if all user_prizes belong to the user
+            $prizesCount = UserPrize::where('user_id', $user->id)
+                ->whereIn('id', $userPrizeIds)
+                ->count();
 
-        if ($prizesCount !== count(array_unique($userPrizeIds))) {
-            return response()->json(['message' => 'Invalid user prize selection'], 422);
+            if ($prizesCount !== count(array_unique($userPrizeIds))) {
+                return response()->json(['message' => 'Invalid user prize selection'], 422);
+            }
+
+            // Check if any of the prizes are in a pending trade
+            $pendingTradeItems = DB::table('trade_request_items')
+                ->join('trade_requests', 'trade_request_items.trade_request_id', '=', 'trade_requests.id')
+                ->where('trade_requests.status', TradeRequest::STATUS_PENDING)
+                ->whereIn('trade_request_items.user_prize_id', $userPrizeIds)
+                ->exists();
+
+            if ($pendingTradeItems) {
+                return response()->json(['message' => 'One or more items are currently in a pending trade'], 422);
+            }
         }
 
-        // Check if any of the prizes are in a pending trade
-        $pendingTradeItems = DB::table('trade_request_items')
-            ->join('trade_requests', 'trade_request_items.trade_request_id', '=', 'trade_requests.id')
-            ->where('trade_requests.status', TradeRequest::STATUS_PENDING)
-            ->whereIn('trade_request_items.user_prize_id', $userPrizeIds)
-            ->exists();
+        return DB::transaction(function () use ($book, $validated) {
+            // Update Book Settings
+            if (array_key_exists('background_color', $validated)) {
+                $book->update(['background_color' => $validated['background_color']]);
+            }
 
-        if ($pendingTradeItems) {
-            return response()->json(['message' => 'One or more items are currently in a pending trade'], 422);
-        }
-
-        return DB::transaction(function () use ($user, $validated) {
-            // Delete existing items
-            StickerBookItem::where('user_id', $user->id)->delete();
+            // Sync Items
+            // Delete existing items for this book
+            $book->items()->delete();
 
             // Create new items
-            $items = collect($validated['items'])->map(function ($item) use ($user) {
-                return [
-                    'id' => \Illuminate\Support\Str::uuid(),
-                    'user_id' => $user->id,
-                    'user_prize_id' => $item['user_prize_id'],
-                    'position_x' => $item['position_x'],
-                    'position_y' => $item['position_y'],
-                    'scale' => $item['scale'],
-                    'rotation' => $item['rotation'],
-                    'z_index' => $item['z_index'] ?? 0,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
-            })->all();
+            if (!empty($validated['items'])) {
+                $items = collect($validated['items'])->map(function ($item) use ($book) {
+                    return [
+                        'id' => \Illuminate\Support\Str::uuid(),
+                        'sticker_book_id' => $book->id,
+                        'user_prize_id' => $item['user_prize_id'],
+                        'position_x' => $item['position_x'],
+                        'position_y' => $item['position_y'],
+                        'scale' => $item['scale'],
+                        'rotation' => $item['rotation'],
+                        'z_index' => $item['z_index'] ?? 0,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                })->all();
 
-            StickerBookItem::insert($items);
+                StickerBookItem::insert($items);
+            }
 
-            return response()->json(['message' => 'Sticker book saved successfully'], 201);
+            return response()->json([
+                'message' => 'Sticker book saved successfully',
+                'data' => [
+                    'background_color' => $book->background_color
+                ]
+            ], 200);
         });
     }
 }

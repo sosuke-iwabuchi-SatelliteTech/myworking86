@@ -29,12 +29,12 @@ class StickerBookItem extends Model
         'z_index' => 'integer',
     ];
 
-    public function user(): BelongsTo
+    public function book()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(StickerBook::class, 'sticker_book_id');
     }
 
-    public function userPrize(): BelongsTo
+    public function userPrize()
     {
         return $this->belongsTo(UserPrize::class);
     }
