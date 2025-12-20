@@ -127,10 +127,20 @@ export default function StickerBookScreen() {
     };
 
     const removeSticker = (index: number) => {
+        const itemToRemove = stickers[index];
         const newStickers = [...stickers];
         newStickers.splice(index, 1);
         setStickers(newStickers);
         setSelectedIndex(null);
+
+        // Restore to owned prizes list
+        if (itemToRemove.userPrize) {
+            const restoredPrize: TradePrize = {
+                id: itemToRemove.user_prize_id,
+                prize: itemToRemove.userPrize.prize,
+            };
+            setOwnedPrizes([...ownedPrizes, restoredPrize]);
+        }
     };
 
     const canvasWidth = 375;
@@ -224,9 +234,9 @@ export default function StickerBookScreen() {
                             newStickers[selectedIndex].rotation = beforeRotate;
                             setStickers(newStickers);
                         }}
-                        onScale={({ drag }) => {
+                        onScale={({ target, scale, drag }) => {
                             const newStickers = [...stickers];
-                            newStickers[selectedIndex].scale = drag.beforeScale[0];
+                            newStickers[selectedIndex].scale = scale[0];
                             newStickers[selectedIndex].position_x = drag.beforeTranslate[0];
                             newStickers[selectedIndex].position_y = drag.beforeTranslate[1];
                             setStickers(newStickers);
