@@ -153,7 +153,7 @@ class PrizeSeeder extends Seeder
             ['id' => 'c-a-12', 'name' => 'カメ', 'type' => 'animal', 'rarity' => 'C', 'description' => 'Cランクのどうぶつ: のろまなカメ', 'image_url' => '/gacha/c-a-12-turtle.svg', 'created_at' => now(), 'updated_at' => now()],
             ['id' => 'c-a-13', 'name' => 'カタツムリ', 'type' => 'animal', 'rarity' => 'C', 'description' => 'Cランクのどうぶつ: 家持ちカタツムリ', 'image_url' => '/gacha/c-a-13-snail.svg', 'created_at' => now(), 'updated_at' => now()],
             ['id' => 'c-a-14', 'name' => 'アリ', 'type' => 'animal', 'rarity' => 'C', 'description' => 'Cランクのどうぶつ: 働き者のアリ', 'image_url' => '/gacha/c-a-14-ant.svg', 'created_at' => now(), 'updated_at' => now()],
-            ['id' => 'c-a-15', 'name' => 'ハチ', 'type' => 'animal', 'rarity' => 'C', 'description' => 'Cランクのどうぶつ: ブンブンハチ', 'image_url' => '/gacha/c-a-15-bee.svg', 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 'c-a-15', 'name' => 'ハチ', 'type' => 'animal', 'rarity' => 'C', 'description' => 'Cランクのどうぶつ: ブンブンハチ', 'image_url' => '/gacha/c-a-15-bee.png', 'created_at' => now(), 'updated_at' => now()],
             ['id' => 'c-y-1', 'name' => 'あしがるおばけ', 'type' => 'yokai', 'rarity' => 'C', 'description' => 'Cランクのようかい: 落ち武者足軽お化け', 'image_url' => '/gacha/c-y-1-ashigaru.svg', 'created_at' => now(), 'updated_at' => now()],
             ['id' => 'c-y-2', 'name' => 'ゆうれい', 'type' => 'yokai', 'rarity' => 'C', 'description' => 'Cランクのようかい: うらめしや幽霊', 'image_url' => '/gacha/c-y-2-yurei.svg', 'created_at' => now(), 'updated_at' => now()],
             ['id' => 'c-y-3', 'name' => 'ひとだま', 'type' => 'yokai', 'rarity' => 'C', 'description' => 'Cランクのようかい: 青白い人魂', 'image_url' => '/gacha/c-y-3-hitodama.svg', 'created_at' => now(), 'updated_at' => now()],
@@ -174,6 +174,7 @@ class PrizeSeeder extends Seeder
         // Calculate hash ignoring timestamps
         $hashItems = array_map(function ($item) {
             unset($item['created_at'], $item['updated_at']);
+
             return $item;
         }, $items);
         $currentHash = md5(json_encode($hashItems));
@@ -185,6 +186,7 @@ class PrizeSeeder extends Seeder
         if ($lastVersion && $lastVersion->hash === $currentHash && config('app.env') !== 'testing') {
             // Skip if hash is same and not in testing environment
             $this->command->info("Skipping $className: No changes detected.");
+
             return;
         }
 
