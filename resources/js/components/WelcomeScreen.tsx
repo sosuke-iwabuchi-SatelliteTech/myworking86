@@ -49,6 +49,10 @@ interface WelcomeScreenProps {
    */
   pendingTradeCount?: number;
   /**
+   * シール帳画面へ遷移するボタンがクリックされたときに呼び出されるコールバック関数
+   */
+  onGoToStickerBook: () => void;
+  /**
    * 自動再ログイン中かどうか
    */
   isRelogging?: boolean;
@@ -67,6 +71,7 @@ export default function WelcomeScreen({
   onGoToGacha,
   onGoToPrizeList,
   onGoToTrade,
+  onGoToStickerBook,
   userProfile,
   onOpenUserSwitch,
   pendingTradeCount = 0,
@@ -108,6 +113,12 @@ export default function WelcomeScreen({
           className="flex-1 bg-pink-100 hover:bg-pink-200 text-pink-600 font-black text-xl py-4 rounded-2xl shadow-[0_6px_0_rgb(249,168,212)] active:shadow-[0_0px_0_rgb(249,168,212)] active:translate-y-[6px] transition-all"
         >
           🏆 けいひん
+        </button>
+        <button
+          onClick={onGoToStickerBook}
+          className="flex-1 bg-orange-100 hover:bg-orange-200 text-orange-600 font-black text-xl py-4 rounded-2xl shadow-[0_6px_0_rgb(253,186,116)] active:shadow-[0_0px_0_rgb(253,186,116)] active:translate-y-[6px] transition-all"
+        >
+          🖼️ シール帳
         </button>
       </div>
 

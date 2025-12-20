@@ -41,23 +41,23 @@ class UserController extends Controller
             'grade' => 'nullable|integer',
         ]);
 
-        $user = User::find($request->id);
+        $user = User::where('id', $request->id)->first();
 
-        if ($user) {
-            if ($user->isAdmin()) {
-                return response()->json(['message' => '管理者アカウントはこの方法でログインできません。'], 403);
-            }
+        if ($user && $user->isAdmin()) {
+            return response()->json(['message' => '管理者アカウントはこの方法でログインできません。'], 403);
         }
 
         if (!$user) {
-            $user = User::create([
-                'id' => $request->id,
-                'name' => $request->name ?? 'Unknown',
-                'grade' => (int) ($request->grade ?? 1),
-                'email' => $request->id . '@example.com', // Dummy email
-                'password' => bcrypt('password'), // Dummy password
-                'role' => User::ROLE_USER,
-            ]);
+            $user = User::firstOrCreate(
+                ['id' => $request->id],
+                [
+                    'name' => $request->name ?? 'Unknown',
+                    'grade' => (int) ($request->grade ?? 1),
+                    'email' => $request->id . '@example.com', // Dummy email
+                    'password' => bcrypt('password'), // Dummy password
+                    'role' => User::ROLE_USER,
+                ]
+            );
         }
 
         Auth::login($user);

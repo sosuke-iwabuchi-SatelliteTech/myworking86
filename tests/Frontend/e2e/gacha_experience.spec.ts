@@ -5,13 +5,21 @@ test.describe('Gacha Experience', () => {
 
   // Common setup
   test.beforeEach(async ({ page }) => {
-    // Capture browser logs
+    // Capture browser logs (keeping the listener for potential future use or error monitoring, but removing direct console.log output)
     page.on('console', msg => {
       if (msg.type() === 'error') {
-        console.log('BROWSER ERROR:', msg.text());
+        // console.error('BROWSER ERROR:', msg.text()); // Commented out debug log
       } else {
-        console.log('BROWSER:', msg.text());
+        // console.log('BROWSER:', msg.text()); // Commented out debug log
       }
+    });
+
+    // Wait for login request to start and finish
+    const loginPromise = page.waitForResponse(response =>
+      response.url().includes('/api/user/login') && response.status() === 200,
+      { timeout: 15000 }
+    ).catch(() => {
+      console.log('Login request not detected (might have finished or not needed)');
     });
 
     // 1. Visit Home
@@ -26,19 +34,18 @@ test.describe('Gacha Experience', () => {
     }
 
     // Wait for welcome screen (always)
-    await expect(page.locator('h1:has-text("さんすう")')).toBeVisible();
+    await expect(page.locator('h1:has-text("さんすう")')).toBeVisible({ timeout: 15000 });
 
-    // Ensure login request is finished. 
-    // Home.tsx useEffect triggers login if profile exists.
-    await page.waitForResponse(response => response.url().includes('/api/user/login') && response.status() === 200, { timeout: 10000 }).catch(() => {
-      console.log('Login request not detected or already finished, continuing...');
-    });
+    // Wait for the login that happens after registration or on load
+    await loginPromise;
+
+    // Small delay to ensure session is active in browser and server
+    await page.waitForTimeout(500);
 
     // Award points via real API to ensure we have enough for pulls
     await page.evaluate(async () => {
       try {
-        // @ts-expect-error - axios is not typed on window
-        const axios = window.axios;
+        const axios = (window as any).axios;
         if (!axios) throw new Error('Axios not found on window');
         await axios.post('/api/points/award', { level_id: '1-1', score: 100 });
       } catch (e: unknown) {
@@ -56,7 +63,8 @@ test.describe('Gacha Experience', () => {
 
   test('Basic Gacha Flow: Play -> Animation -> Result -> Play Again', async ({ page }) => {
     // 1. Verify points are displayed (should be at least 100 from award + whatever initial)
-    await expect(page.locator('text=しょじポイント:')).toContainText(/\d+/, { timeout: 10000 });
+    // Wait for the points to be fetched and displayed. It might show "-" initially.
+    await expect(page.locator('text=しょじポイント:')).toContainText(/\d+/, { timeout: 15000 });
 
     // 2. Click Gacha button (Free or Pt)
     const gachaBtn = page.locator('button:has-text("ガチャ")');

@@ -27,6 +27,8 @@ export default function UserRegistrationScreen({ onComplete }: UserRegistrationS
           id,
           name: nickname,
           grade: gradeNum,
+          password: 'password',
+          password_confirmation: 'password',
         });
 
         // axios throws on non-2xx by default, so we don't need manual check unless validateStatus is changed
@@ -46,8 +48,10 @@ export default function UserRegistrationScreen({ onComplete }: UserRegistrationS
         let message = '予期せぬエラーが発生しました';
         if (axios.isAxiosError(err) && err.response?.data?.message) {
           message = err.response.data.message;
+          console.error('Registration API Error:', err.response.data);
         } else if (err instanceof Error) {
           message = err.message;
+          console.error('Registration Error:', err.message);
         }
         setError(message);
       } finally {

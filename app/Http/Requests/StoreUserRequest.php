@@ -25,6 +25,7 @@ class StoreUserRequest extends FormRequest
             'id' => ['required', 'uuid', 'unique:users,id'],
             'name' => ['required', 'string', 'max:255'],
             'grade' => ['required', 'integer', 'between:1,6'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
         ];
     }
 

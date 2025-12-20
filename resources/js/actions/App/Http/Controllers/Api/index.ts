@@ -4,6 +4,7 @@ import UserPrizeController from './UserPrizeController'
 import GachaController from './GachaController'
 import PrizeController from './PrizeController'
 import TradeController from './TradeController'
+import StickerBookController from './StickerBookController'
 
 const Api = {
     UserController: Object.assign(UserController, UserController),
@@ -12,6 +13,7 @@ const Api = {
     GachaController: Object.assign(GachaController, GachaController),
     PrizeController: Object.assign(PrizeController, PrizeController),
     TradeController: Object.assign(TradeController, TradeController),
+    StickerBookController: Object.assign(StickerBookController, StickerBookController),
 }
 
 export default Api

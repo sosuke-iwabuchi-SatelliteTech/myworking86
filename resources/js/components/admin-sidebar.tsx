@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/sidebar';
 
 import { Link, usePage } from '@inertiajs/react';
-import { Users, LayoutDashboard } from 'lucide-react';
+import { Users, LayoutDashboard, ArrowLeftRight } from 'lucide-react';
 import AppLogo from './app-logo';
 
 
@@ -65,6 +65,24 @@ export function AdminSidebar() {
                                 <Link href="/admin/users">
                                     <Users />
                                     <span>List</span>
+                                </Link>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+                    </SidebarMenu>
+                </SidebarGroup>
+
+                <SidebarGroup>
+                    <SidebarGroupLabel>Trades</SidebarGroupLabel>
+                    <SidebarMenu>
+                        <SidebarMenuItem>
+                            <SidebarMenuButton
+                                asChild
+                                isActive={page.url.startsWith('/admin/trades')}
+                                tooltip="History"
+                            >
+                                <Link href="/admin/trades">
+                                    <ArrowLeftRight />
+                                    <span>History</span>
                                 </Link>
                             </SidebarMenuButton>
                         </SidebarMenuItem>

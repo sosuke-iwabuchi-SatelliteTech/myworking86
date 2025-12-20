@@ -58,6 +58,7 @@ class UserPrizeController extends Controller
     public function tradable()
     {
         $userPrizes = UserPrize::where('user_id', Auth::id())
+            ->whereDoesntHave('stickerBookItem')
             ->with('prize')
             ->orderBy('obtained_at', 'desc')
             ->get();
@@ -77,6 +78,7 @@ class UserPrizeController extends Controller
         }
 
         $userPrizes = UserPrize::where('user_id', $userId)
+            ->whereDoesntHave('stickerBookItem')
             ->with('prize')
             ->orderBy('obtained_at', 'desc')
             ->get();

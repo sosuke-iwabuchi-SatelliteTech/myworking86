@@ -224,6 +224,10 @@ export default function Home() {
         router.visit('/trades');
     };
 
+    const handleGoToStickerBook = () => {
+        router.visit('/sticker-book');
+    };
+
     return (
         <div className="flex flex-col items-center pt-1 min-h-screen bg-blue-50">
             <div className={`w-full p-6 ${screen === 'quiz' ? 'max-w-7xl' : 'max-w-md'}`}>
@@ -241,6 +245,7 @@ export default function Home() {
                         onGoToGacha={handleGoToGacha}
                         onGoToPrizeList={handleGoToPrizeList}
                         onGoToTrade={handleGoToTrade}
+                        onGoToStickerBook={handleGoToStickerBook}
                         userProfile={userProfile}
                         onOpenUserSwitch={handleOpenUserSwitch}
                         pendingTradeCount={pendingTradeCount}
