@@ -22,6 +22,7 @@ class StickerBookItemResource extends JsonResource
             'position_y' => $this->position_y,
             'scale' => (float) $this->scale,
             'rotation' => (float) $this->rotation,
+            'z_index' => (int) $this->z_index,
             'userPrize' => new UserPrizeResource($this->whenLoaded('userPrize')),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

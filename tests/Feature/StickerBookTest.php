@@ -182,4 +182,57 @@ class StickerBookTest extends TestCase
         $response = $this->actingAs($this->user)->getJson('/api/user/prizes/tradable');
         $response->assertJsonMissing(['id' => $userPrize->id]);
     }
+    public function test_user_can_save_sticker_book_with_z_index_and_retrieves_ordered()
+    {
+        $userPrize1 = UserPrize::create([
+            'user_id' => $this->user->id,
+            'prize_id' => $this->prizes[0]->id,
+            'rarity' => 'C',
+            'obtained_at' => now(),
+        ]);
+
+        $userPrize2 = UserPrize::create([
+            'user_id' => $this->user->id,
+            'prize_id' => $this->prizes[1]->id,
+            'rarity' => 'C',
+            'obtained_at' => now(),
+        ]);
+
+        $data = [
+            'items' => [
+                [
+                    'user_prize_id' => $userPrize1->id,
+                    'position_x' => 10,
+                    'position_y' => 20,
+                    'scale' => 1.0,
+                    'rotation' => 0,
+                    'z_index' => 10,
+                ],
+                [
+                    'user_prize_id' => $userPrize2->id,
+                    'position_x' => 30,
+                    'position_y' => 40,
+                    'scale' => 1.0,
+                    'rotation' => 0,
+                    'z_index' => 5,
+                ]
+            ]
+        ];
+
+        // Save
+        $this->actingAs($this->user)->postJson('/api/sticker-book', $data)->assertStatus(201);
+
+        // Fetch and verify order (should be sorted by z_index ASC: 5 then 10)
+        $response = $this->actingAs($this->user)->getJson('/api/sticker-book');
+
+        $response->assertStatus(200);
+        $items = $response->json('data');
+
+        $this->assertCount(2, $items);
+        $this->assertEquals($userPrize2->id, $items[0]['user_prize_id']); // z_index 5
+        $this->assertEquals(5, $items[0]['z_index']);
+
+        $this->assertEquals($userPrize1->id, $items[1]['user_prize_id']); // z_index 10
+        $this->assertEquals(10, $items[1]['z_index']);
+    }
 }

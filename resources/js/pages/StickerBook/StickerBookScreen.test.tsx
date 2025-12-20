@@ -11,7 +11,10 @@ vi.mock('@inertiajs/react', () => ({
     usePage: vi.fn(),
 }));
 
+import axios from 'axios';
+
 vi.mock('axios');
+const mockedAxios = axios as any; // Simple cast to avoid type issues with vitest mocking
 
 vi.mock('react-moveable', () => ({
     default: () => <div data-testid="moveable-mock">Moveable</div>
@@ -39,6 +42,9 @@ describe('StickerBookScreen', () => {
                 auth: { user: { id: 1 } },
             },
         });
+
+        mockedAxios.get.mockResolvedValue({ data: { data: [] } });
+        mockedAxios.post.mockResolvedValue({});
     });
 
     it('renders the initial empty state correctly', () => {
