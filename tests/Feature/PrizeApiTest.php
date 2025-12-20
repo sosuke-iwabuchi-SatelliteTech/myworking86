@@ -16,8 +16,8 @@ class PrizeApiTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        // Data is already populated by migration 2025_12_07_092120_insert_initial_prizes_data
-        // $this->seed(\Database\Seeders\PrizeSeeder::class);
+        // Populate prizes data
+        $this->seed(\Database\Seeders\PrizeSeeder::class);
 
         $response = $this->getJson('/api/prizes');
         // Since we defined route in 'web.php' under 'api' prefix but 'web.php' usually does NOT have 'api' prefix automatically unless grouped.

@@ -9,7 +9,7 @@ export default defineConfig({
     fullyParallel: false,
     forbidOnly: !!process.env.CI,
     retries: process.env.CI ? 2 : 0,
-    workers: 1,
+    workers: 2,
     reporter: 'html',
     use: {
         baseURL: 'http://127.0.0.1:8081',
@@ -23,7 +23,7 @@ export default defineConfig({
         },
     ],
     webServer: {
-        command: 'php artisan serve --env=testing --port=8081 --no-reload',
+        command: 'php artisan migrate:fresh --env=testing --seed --force && php artisan serve --env=testing --port=8081 --no-reload',
         url: 'http://127.0.0.1:8081',
         reuseExistingServer: !process.env.CI,
         stdout: 'ignore',
