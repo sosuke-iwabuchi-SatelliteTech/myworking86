@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\UserPrizeController;
 use App\Http\Controllers\Api\GachaController;
 use App\Http\Controllers\Api\PrizeController as ApiPrizeController;
 use App\Http\Controllers\Api\TradeController;
+use App\Http\Controllers\Api\StickerBookController;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\PrizeController as WebPrizeController;
@@ -44,6 +45,11 @@ Route::middleware('auth')->prefix('api')->group(function () {
     Route::put('trades/{id}/cancel', [TradeController::class, 'cancel']);
 
     Route::get('user/trade-partners', [TradeController::class, 'partners']);
+
+    // Sticker Book Routes
+    Route::get('sticker-book', [StickerBookController::class, 'index']);
+    Route::get('users/{user}/sticker-book', [StickerBookController::class, 'index']);
+    Route::post('sticker-book', [StickerBookController::class, 'store']);
 });
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -56,6 +62,9 @@ Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
     Route::get('trades', [WebTradeController::class, 'index'])->name('trades.index');
     Route::get('trades/create', [WebTradeController::class, 'create'])->name('trades.create');
     Route::get('trades/{id}', [WebTradeController::class, 'show'])->name('trades.show');
+    Route::get('sticker-book', function () {
+        return inertia('StickerBook/StickerBookScreen');
+    })->name('sticker-book.index');
 });
 
 

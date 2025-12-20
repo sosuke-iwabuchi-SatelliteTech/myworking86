@@ -94,6 +94,12 @@ class User extends Authenticatable
         return $this->hasMany(TradeRequest::class, 'receiver_id');
     }
 
+    public function stickerBookItems()
+    {
+        return $this->hasMany(StickerBookItem::class);
+    }
+
+
 
     /**
      * @return bool

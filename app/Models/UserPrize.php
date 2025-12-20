@@ -30,4 +30,9 @@ class UserPrize extends Model
     {
         return $this->hasMany(TradeRequestItem::class);
     }
+
+    public function stickerBookItem()
+    {
+        return $this->hasOne(StickerBookItem::class);
+    }
 }

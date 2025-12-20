@@ -219,7 +219,7 @@ tradable.form = tradableForm
 
 /**
 * @see \App\Http\Controllers\Api\UserPrizeController::userTradable
-* @see app/Http/Controllers/Api/UserPrizeController.php:71
+* @see app/Http/Controllers/Api/UserPrizeController.php:72
 * @route '/api/users/{user}/prizes/tradable'
 */
 export const userTradable = (args: { user: string | number } | [user: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -234,7 +234,7 @@ userTradable.definition = {
 
 /**
 * @see \App\Http\Controllers\Api\UserPrizeController::userTradable
-* @see app/Http/Controllers/Api/UserPrizeController.php:71
+* @see app/Http/Controllers/Api/UserPrizeController.php:72
 * @route '/api/users/{user}/prizes/tradable'
 */
 userTradable.url = (args: { user: string | number } | [user: string | number ] | string | number, options?: RouteQueryOptions) => {
@@ -261,7 +261,7 @@ userTradable.url = (args: { user: string | number } | [user: string | number ] |
 
 /**
 * @see \App\Http\Controllers\Api\UserPrizeController::userTradable
-* @see app/Http/Controllers/Api/UserPrizeController.php:71
+* @see app/Http/Controllers/Api/UserPrizeController.php:72
 * @route '/api/users/{user}/prizes/tradable'
 */
 userTradable.get = (args: { user: string | number } | [user: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -271,7 +271,7 @@ userTradable.get = (args: { user: string | number } | [user: string | number ] |
 
 /**
 * @see \App\Http\Controllers\Api\UserPrizeController::userTradable
-* @see app/Http/Controllers/Api/UserPrizeController.php:71
+* @see app/Http/Controllers/Api/UserPrizeController.php:72
 * @route '/api/users/{user}/prizes/tradable'
 */
 userTradable.head = (args: { user: string | number } | [user: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -281,7 +281,7 @@ userTradable.head = (args: { user: string | number } | [user: string | number ] 
 
 /**
 * @see \App\Http\Controllers\Api\UserPrizeController::userTradable
-* @see app/Http/Controllers/Api/UserPrizeController.php:71
+* @see app/Http/Controllers/Api/UserPrizeController.php:72
 * @route '/api/users/{user}/prizes/tradable'
 */
 const userTradableForm = (args: { user: string | number } | [user: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -291,7 +291,7 @@ const userTradableForm = (args: { user: string | number } | [user: string | numb
 
 /**
 * @see \App\Http\Controllers\Api\UserPrizeController::userTradable
-* @see app/Http/Controllers/Api/UserPrizeController.php:71
+* @see app/Http/Controllers/Api/UserPrizeController.php:72
 * @route '/api/users/{user}/prizes/tradable'
 */
 userTradableForm.get = (args: { user: string | number } | [user: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -301,7 +301,7 @@ userTradableForm.get = (args: { user: string | number } | [user: string | number
 
 /**
 * @see \App\Http\Controllers\Api\UserPrizeController::userTradable
-* @see app/Http/Controllers/Api/UserPrizeController.php:71
+* @see app/Http/Controllers/Api/UserPrizeController.php:72
 * @route '/api/users/{user}/prizes/tradable'
 */
 userTradableForm.head = (args: { user: string | number } | [user: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
