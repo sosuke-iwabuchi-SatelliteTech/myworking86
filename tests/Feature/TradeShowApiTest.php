@@ -73,6 +73,8 @@ class TradeShowApiTest extends TestCase
 
         // Verify Image URL
         $data = $response->json();
-        $this->assertEquals('https://example.com/test-image.png', $data['items'][0]['userPrize']['prize']['imageUrl']);
+        $prize->refresh(); // Ensure we have the exact DB timestamp
+        $expectedUrl = 'https://example.com/test-image.png?v=' . $prize->updated_at->timestamp;
+        $this->assertEquals($expectedUrl, $data['items'][0]['userPrize']['prize']['imageUrl']);
     }
 }
