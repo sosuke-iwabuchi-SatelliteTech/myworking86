@@ -12,6 +12,13 @@ class GachaService
         'C' => 50,
     ];
 
+    protected $imageUrlService;
+
+    public function __construct(ImageUrlService $imageUrlService)
+    {
+        $this->imageUrlService = $imageUrlService;
+    }
+
     /**
      * ガチャを引く
      *
@@ -40,7 +47,8 @@ class GachaService
             $candidates = \App\Models\Prize::where('rarity', 'C')->get();
         }
 
-        $item = $candidates->random()->toArray();
+        $prize = $candidates->random();
+        $item = $prize->toArray();
 
         // image_url -> imageUrl への変換とホスト付与はAPIリソースやフロント側で行うべきだが、
         // 現状の仕様に合わせてここで変換する。フロントエンドの修正後に整理する。
@@ -48,9 +56,8 @@ class GachaService
         $item['imageUrl'] = $item['image_url'];
         unset($item['image_url']);
 
-        // Prepend Image Host
-        $imageHost = config('gacha.image_host');
-        $item['imageUrl'] = $imageHost . $item['imageUrl'];
+        // Prepend Image Host with Cache Buster
+        $item['imageUrl'] = $this->imageUrlService->getUrl($item['imageUrl'], $prize->updated_at);
 
         return $item;
     }
