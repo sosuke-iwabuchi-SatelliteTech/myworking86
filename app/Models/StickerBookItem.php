@@ -18,6 +18,7 @@ class StickerBookItem extends Model
         'position_y',
         'scale',
         'rotation',
+        'z_index',
     ];
 
     protected $casts = [
@@ -25,6 +26,7 @@ class StickerBookItem extends Model
         'position_y' => 'integer',
         'scale' => 'decimal:2',
         'rotation' => 'decimal:2',
+        'z_index' => 'integer',
     ];
 
     public function user(): BelongsTo

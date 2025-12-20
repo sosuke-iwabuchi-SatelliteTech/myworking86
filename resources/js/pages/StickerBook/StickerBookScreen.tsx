@@ -14,6 +14,7 @@ interface StickerItem {
     position_y: number;
     scale: number;
     rotation: number;
+    z_index: number;
     userPrize?: {
         prize: {
             name: string;
@@ -68,10 +69,11 @@ export default function StickerBookScreen() {
             await axios.post('/api/sticker-book', {
                 items: stickers.map(s => ({
                     user_prize_id: s.user_prize_id,
-                    position_x: s.position_x,
-                    position_y: s.position_y,
+                    position_x: Math.round(s.position_x),
+                    position_y: Math.round(s.position_y),
                     scale: s.scale,
                     rotation: s.rotation,
+                    z_index: s.z_index,
                 }))
             });
             toast.success('保存しました！');
@@ -94,12 +96,22 @@ export default function StickerBookScreen() {
             return;
         }
 
+        // Calculate offset to prevent stacking
+        const offsetLimit = 5;
+        const offsetIndex = stickers.length % offsetLimit;
+        const offsetX = offsetIndex * 20;
+        const offsetY = offsetIndex * 20;
+
+        // Calculate max z-index
+        const maxZIndex = stickers.reduce((max, s) => Math.max(max, s.z_index || 0), 0);
+
         const newItem: StickerItem = {
             user_prize_id: prizeId,
-            position_x: 50,
-            position_y: 50,
+            position_x: 50 + offsetX,
+            position_y: 50 + offsetY,
             scale: 1,
             rotation: 0,
+            z_index: maxZIndex + 1,
             userPrize: {
                 prize: {
                     name: prize.prize.name,
@@ -172,6 +184,7 @@ export default function StickerBookScreen() {
                         style={{
                             transform: `translate(${sticker.position_x}px, ${sticker.position_y}px) rotate(${sticker.rotation}deg) scale(${sticker.scale})`,
                             transformOrigin: 'center center',
+                            zIndex: sticker.z_index,
                         }}
                         onClick={(e) => {
                             if (isEditMode) {
@@ -186,17 +199,7 @@ export default function StickerBookScreen() {
                             className="w-20 h-20 object-contain"
                             draggable={false}
                         />
-                        {isEditMode && selectedIndex === index && (
-                            <button
-                                className="absolute -top-4 -right-4 bg-red-500 text-white rounded-full p-1 shadow-md hover:bg-red-600 transition-colors"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    removeSticker(index);
-                                }}
-                            >
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
-                            </button>
-                        )}
+                        {/* Delete button removed from here to separate toolbar */}
                     </div>
                 ))}
 
@@ -206,8 +209,10 @@ export default function StickerBookScreen() {
                         draggable={true}
                         rotatable={true}
                         scalable={true}
+                        pinchable={true} // Enable pinch gestures
                         keepRatio={true}
                         origin={false}
+                        renderDirections={['nw', 'ne', 'sw', 'se']} // Simpler handles for mobile
                         onDrag={({ beforeTranslate }) => {
                             const newStickers = [...stickers];
                             newStickers[selectedIndex].position_x = beforeTranslate[0];
@@ -229,6 +234,31 @@ export default function StickerBookScreen() {
                     />
                 )}
             </div>
+
+            {/* Sticker Controls Toolbar */}
+            {isEditMode && selectedIndex !== null && (
+                <div className="mt-4 flex gap-4 justify-center">
+                    <Button
+                        variant="destructive"
+                        onClick={() => removeSticker(selectedIndex)}
+                        className="bg-red-500 hover:bg-red-600 text-white rounded-full px-6 shadow-md"
+                    >
+                        🗑️ 剥がす
+                    </Button>
+                    <Button
+                        variant="secondary"
+                        onClick={() => {
+                            const newStickers = [...stickers];
+                            const maxZ = stickers.reduce((max, s) => Math.max(max, s.z_index), 0);
+                            newStickers[selectedIndex].z_index = maxZ + 1;
+                            setStickers(newStickers);
+                        }}
+                        className="bg-white hover:bg-slate-100 text-slate-800 rounded-full px-6 shadow-md border"
+                    >
+                        ⬆️ 手前にする
+                    </Button>
+                </div>
+            )}
 
             {/* Edit Controls */}
             {isEditMode && (

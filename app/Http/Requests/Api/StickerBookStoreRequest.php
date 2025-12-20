@@ -28,6 +28,7 @@ class StickerBookStoreRequest extends FormRequest
             'items.*.position_y' => 'required|integer',
             'items.*.scale' => 'required|numeric|min:0.1|max:5',
             'items.*.rotation' => 'required|numeric|min:-360|max:360',
+            'items.*.z_index' => 'sometimes|integer',
         ];
     }
 }

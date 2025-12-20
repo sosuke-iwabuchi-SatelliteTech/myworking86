@@ -21,6 +21,7 @@ class StickerBookController extends Controller
 
         $items = StickerBookItem::where('user_id', $id)
             ->with(['userPrize.prize'])
+            ->orderBy('z_index', 'asc') // Render order: low z-index (back) to high (front)
             ->get();
 
         return \App\Http\Resources\StickerBookItemResource::collection($items);
@@ -71,6 +72,7 @@ class StickerBookController extends Controller
                     'position_y' => $item['position_y'],
                     'scale' => $item['scale'],
                     'rotation' => $item['rotation'],
+                    'z_index' => $item['z_index'] ?? 0,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];
