@@ -1,4 +1,4 @@
-<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#F0F8FF"/>
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
         <circle cx="50" cy="40" r="25" fill="#E0FFFF" opacity="0.6"/> <!-- Betobeto-san: Transparent -->
         <path d="M40,40 Q50,50 60,40" stroke="black" stroke-width="2" fill="none"/> <!-- Smile -->
         <rect x="35" y="70" width="10" height="5" fill="#8B4513"/> <!-- Clogs -->

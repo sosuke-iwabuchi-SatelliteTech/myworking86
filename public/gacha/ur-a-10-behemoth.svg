@@ -1,4 +1,4 @@
-<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#5D4037"/>
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
         <circle cx="50" cy="60" r="35" fill="#3E2723"/> <!-- Body -->
         <rect x="20" y="80" width="15" height="20" fill="#3E2723"/> <!-- Leg -->
         <rect x="65" y="80" width="15" height="20" fill="#3E2723"/>
