@@ -55,6 +55,17 @@ export default function StickerBookScreen() {
         }
     };
 
+    // Pinch gesture state ref to avoid frequent re-renders during gesture
+    const pinchRef = React.useRef<{
+        startDist: number;
+        startScale: number;
+        isPinching: boolean;
+    }>({
+        startDist: 0,
+        startScale: 1,
+        isPinching: false,
+    });
+
     const fetchOwnedPrizes = async () => {
         try {
             const response = await axios.get('/api/user/prizes/tradable');
@@ -123,7 +134,10 @@ export default function StickerBookScreen() {
 
         setStickers([...stickers, newItem]);
         setIsPrizesModalOpen(false);
-        setSelectedIndex(stickers.length);
+        // Delay selection to ensure DOM element is rendered for Moveable target
+        setTimeout(() => {
+            setSelectedIndex(stickers.length);
+        }, 100);
     };
 
     const removeSticker = (index: number) => {
@@ -141,6 +155,43 @@ export default function StickerBookScreen() {
             };
             setOwnedPrizes([...ownedPrizes, restoredPrize]);
         }
+    };
+
+    // Touch handlers for background pinch
+    const getDistance = (touches: React.TouchList) => {
+        return Math.hypot(
+            touches[0].pageX - touches[1].pageX,
+            touches[0].pageY - touches[1].pageY
+        );
+    };
+
+    const handleTouchStart = (e: React.TouchEvent) => {
+        if (isEditMode && selectedIndex !== null && e.touches.length === 2) {
+            // Start pinching
+            const dist = getDistance(e.touches);
+            pinchRef.current = {
+                startDist: dist,
+                startScale: stickers[selectedIndex].scale,
+                isPinching: true,
+            };
+        }
+    };
+
+    const handleTouchMove = (e: React.TouchEvent) => {
+        if (pinchRef.current.isPinching && e.touches.length === 2 && selectedIndex !== null) {
+            e.preventDefault(); // Prevent page scroll/zoom
+            const dist = getDistance(e.touches);
+            const scaleFactor = dist / pinchRef.current.startDist;
+            const newScale = pinchRef.current.startScale * scaleFactor;
+
+            const newStickers = [...stickers];
+            newStickers[selectedIndex].scale = newScale;
+            setStickers(newStickers);
+        }
+    };
+
+    const handleTouchEnd = () => {
+        pinchRef.current.isPinching = false;
     };
 
     const canvasWidth = 375;
@@ -185,6 +236,9 @@ export default function StickerBookScreen() {
                 className="relative bg-white dark:bg-slate-800 shadow-xl overflow-hidden rounded-xl border-4 border-white dark:border-slate-700"
                 style={{ width: canvasWidth, height: canvasHeight }}
                 onClick={() => isEditMode && setSelectedIndex(null)}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
             >
                 {stickers.map((sticker, index) => (
                     <div
