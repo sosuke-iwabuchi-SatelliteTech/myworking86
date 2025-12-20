@@ -14,7 +14,8 @@ class PrizeResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $imageHost = config('gacha.image_host');
+        /** @var \App\Services\ImageUrlService $imageUrlService */
+        $imageUrlService = app(\App\Services\ImageUrlService::class);
 
         return [
             'id' => $this->id,
@@ -22,7 +23,7 @@ class PrizeResource extends JsonResource
             'type' => $this->type,
             'rarity' => $this->rarity,
             'description' => $this->description,
-            'imageUrl' => $imageHost . $this->image_url,
+            'imageUrl' => $imageUrlService->getUrl($this->image_url, $this->updated_at),
         ];
     }
 }
