@@ -35,6 +35,21 @@ export default function StickerBookScreen() {
 
     const canvasRef = useRef<HTMLDivElement>(null);
 
+    const [backgroundColor, setBackgroundColor] = useState<string | null>(null);
+
+    const BACKGROUND_COLORS = [
+        { name: 'ホワイト', value: null },
+        { name: 'スカイブルー', value: '#e0f2fe' },
+        { name: 'ミントグリーン', value: '#dcfce7' },
+        { name: 'レモンイエロー', value: '#fef9c3' },
+        { name: 'サクラピンク', value: '#fce7f3' },
+        { name: 'ラベンダー', value: '#f3e8ff' },
+        { name: 'アプリコット', value: '#ffedd5' },
+        { name: 'ライトグレー', value: '#f1f5f9' },
+        { name: 'アイスブルー', value: '#ccfbf1' },
+        { name: 'ピーチ', value: '#ffe4e6' },
+    ];
+
     useEffect(() => {
         fetchStickers();
         fetchOwnedPrizes();
@@ -44,8 +59,12 @@ export default function StickerBookScreen() {
         setIsLoading(true);
         try {
             const response = await axios.get('/api/sticker-book');
-            // If it's a Resource collection, it will be in .data.data
-            const items = Array.isArray(response.data) ? response.data : (response.data?.data || []);
+            // Resource collection .data gives items
+            // Additional meta data is in .meta
+            const items = response.data.data || [];
+            if (response.data.meta?.sticker_book) {
+                setBackgroundColor(response.data.meta.sticker_book.background_color);
+            }
             setStickers(items);
         } catch (error) {
             console.error('Failed to fetch stickers', error);
@@ -78,6 +97,7 @@ export default function StickerBookScreen() {
     const handleSave = async () => {
         try {
             await axios.post('/api/sticker-book', {
+                background_color: backgroundColor,
                 items: stickers.map(s => ({
                     user_prize_id: s.user_prize_id,
                     position_x: Math.round(s.position_x),
@@ -233,8 +253,12 @@ export default function StickerBookScreen() {
             {/* Canvas Container */}
             <div
                 ref={canvasRef}
-                className="relative bg-white dark:bg-slate-800 shadow-xl overflow-hidden rounded-xl border-4 border-white dark:border-slate-700"
-                style={{ width: canvasWidth, height: canvasHeight }}
+                className="relative bg-white dark:bg-slate-800 shadow-xl overflow-hidden rounded-xl border-4 border-white dark:border-slate-700 transition-colors duration-300"
+                style={{
+                    width: canvasWidth,
+                    height: canvasHeight,
+                    backgroundColor: backgroundColor || undefined
+                }}
                 onClick={() => isEditMode && setSelectedIndex(null)}
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
@@ -299,42 +323,68 @@ export default function StickerBookScreen() {
                 )}
             </div>
 
-            {/* Sticker Controls Toolbar */}
-            {isEditMode && selectedIndex !== null && (
-                <div className="mt-4 flex gap-4 justify-center">
-                    <Button
-                        variant="destructive"
-                        onClick={() => removeSticker(selectedIndex)}
-                        className="bg-red-500 hover:bg-red-600 text-white rounded-full px-6 shadow-md"
-                    >
-                        🗑️ 剥がす
-                    </Button>
-                    <Button
-                        variant="secondary"
-                        onClick={() => {
-                            const newStickers = [...stickers];
-                            const maxZ = stickers.reduce((max, s) => Math.max(max, s.z_index), 0);
-                            newStickers[selectedIndex].z_index = maxZ + 1;
-                            setStickers(newStickers);
-                        }}
-                        className="bg-white hover:bg-slate-100 text-slate-800 rounded-full px-6 shadow-md border"
-                    >
-                        ⬆️ 手前にする
-                    </Button>
-                </div>
-            )}
-
-            {/* Edit Controls */}
+            {/* Edit Mode Controls */}
             {isEditMode && (
-                <div className="mt-8 text-center">
-                    <Button
-                        variant="default"
-                        size="lg"
-                        onClick={() => setIsPrizesModalOpen(true)}
-                        className="rounded-full px-8 bg-brand-yellow text-slate-800 hover:bg-yellow-400 shadow-lg font-bold"
-                    >
-                        ➕ シールをえらぶ
-                    </Button>
+                <div className="w-full max-w-md mt-4 space-y-4">
+                    {/* Background Color Picker */}
+                    <div className="bg-white dark:bg-slate-800 p-3 rounded-xl shadow-sm">
+                        <div className="text-xs text-slate-500 mb-2 font-bold">背景の色</div>
+                        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                            {BACKGROUND_COLORS.map((color) => (
+                                <button
+                                    key={color.name}
+                                    onClick={() => setBackgroundColor(color.value)}
+                                    className={`w-8 h-8 rounded-full border-2 flex-shrink-0 transition-all ${backgroundColor === color.value
+                                            ? 'border-blue-500 scale-110 shadow-md'
+                                            : 'border-slate-200 dark:border-slate-600 hover:border-blue-300'
+                                        }`}
+                                    style={{ backgroundColor: color.value || '#ffffff' }}
+                                    aria-label={color.name}
+                                    title={color.name}
+                                >
+                                    {backgroundColor === color.value && (
+                                        <span className="flex items-center justify-center h-full w-full text-blue-500 text-xs font-bold">✓</span>
+                                    )}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Sticker Controls Toolbar (Only when selected) */}
+                    {selectedIndex !== null ? (
+                        <div className="flex gap-4 justify-center">
+                            <Button
+                                variant="destructive"
+                                onClick={() => removeSticker(selectedIndex)}
+                                className="bg-red-500 hover:bg-red-600 text-white rounded-full px-6 shadow-md"
+                            >
+                                🗑️ 剥がす
+                            </Button>
+                            <Button
+                                variant="secondary"
+                                onClick={() => {
+                                    const newStickers = [...stickers];
+                                    const maxZ = stickers.reduce((max, s) => Math.max(max, s.z_index), 0);
+                                    newStickers[selectedIndex].z_index = maxZ + 1;
+                                    setStickers(newStickers);
+                                }}
+                                className="bg-white hover:bg-slate-100 text-slate-800 rounded-full px-6 shadow-md border"
+                            >
+                                ⬆️ 手前にする
+                            </Button>
+                        </div>
+                    ) : (
+                        <div className="text-center">
+                            <Button
+                                variant="default"
+                                size="lg"
+                                onClick={() => setIsPrizesModalOpen(true)}
+                                className="rounded-full px-8 bg-brand-yellow text-slate-800 hover:bg-yellow-400 shadow-lg font-bold"
+                            >
+                                ➕ シールをえらぶ
+                            </Button>
+                        </div>
+                    )}
                 </div>
             )}
 

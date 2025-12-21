@@ -185,7 +185,7 @@ export const index = {
 
 /**
 * @see \App\Http\Controllers\Api\StickerBookController::store
-* @see app/Http/Controllers/Api/StickerBookController.php:33
+* @see app/Http/Controllers/Api/StickerBookController.php:48
 * @route '/api/sticker-book'
 */
 export const store = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -200,7 +200,7 @@ store.definition = {
 
 /**
 * @see \App\Http\Controllers\Api\StickerBookController::store
-* @see app/Http/Controllers/Api/StickerBookController.php:33
+* @see app/Http/Controllers/Api/StickerBookController.php:48
 * @route '/api/sticker-book'
 */
 store.url = (options?: RouteQueryOptions) => {
@@ -209,7 +209,7 @@ store.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\Api\StickerBookController::store
-* @see app/Http/Controllers/Api/StickerBookController.php:33
+* @see app/Http/Controllers/Api/StickerBookController.php:48
 * @route '/api/sticker-book'
 */
 store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -219,7 +219,7 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\Api\StickerBookController::store
-* @see app/Http/Controllers/Api/StickerBookController.php:33
+* @see app/Http/Controllers/Api/StickerBookController.php:48
 * @route '/api/sticker-book'
 */
 const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -229,7 +229,7 @@ const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => 
 
 /**
 * @see \App\Http\Controllers\Api\StickerBookController::store
-* @see app/Http/Controllers/Api/StickerBookController.php:33
+* @see app/Http/Controllers/Api/StickerBookController.php:48
 * @route '/api/sticker-book'
 */
 storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
